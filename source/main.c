@@ -18,17 +18,20 @@
 
 // WOW IT CONVERTS TO HEADER FILES COOL
 #include "logo.h"
+#include "sprite.h"
 
 volatile int frame = 0;
 
 void Vblank() {
 	frame++;
 	scanKeys();
+	oamUpdate(&oamSub);
 }
 
 int main(void) {
+	/* Touchscreen position */
 	touchPosition touchXY;
-	/* Initialize Grahpics */
+	int i;
 
 	/* Set the mode for 2 text layers and two extended background layers */
 	videoSetMode(MODE_5_2D);
@@ -63,9 +66,23 @@ int main(void) {
 	u16* gfx = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_256Color);
 
 	/* Sprite color */
-	for (int i = 0; i < 16 * 16 / 2; i++) {
+	for (i = 0; i < 16 * 16 / 2; i++) {
 		gfx[i] = 1 | (1 << 8);
 	}
+
+	Sprite boxOfDoom;
+	Position offset;
+	offset.x = 8;
+	offset.y = 8;
+	boxOfDoom.anchorOffset = offset;
+	boxOfDoom.gfx_buffer = gfx;
+
+	Position targetPos;
+	targetPos.x = 32; 
+	targetPos.y = 32;
+
+	boxOfDoom.pos.x = 16; 
+	boxOfDoom.pos.y = 16;
 
 	/* Hide title */
 	bool bg3_hidden = false;
@@ -83,27 +100,16 @@ int main(void) {
 		// This section below is for touch screen sprite
 		if (keysHeld() & KEY_TOUCH) {
 			touchRead(&touchXY);
+
+			targetPos.x = touchXY.px;
+			targetPos.y = touchXY.py;
 		}
 
+		boxOfDoom.pos.x = (targetPos.x - boxOfDoom.pos.x)/10.0 + boxOfDoom.pos.x;
+		boxOfDoom.pos.y = (targetPos.y - boxOfDoom.pos.y)/10.0 + boxOfDoom.pos.y;
+
+		drawSprite(&boxOfDoom);
 		iprintf("\033[23;0H%d  %d,%d        ", frame, touchXY.px, touchXY.py);
-		oamSet(
-			&oamSub,
-			0, // oam index
-			touchXY.px-8, // x location of sprite
-			touchXY.py-8, // y location of sprite
-			0, // z-index
-			0, // palette index (i have no clue wtf this does)
-			SpriteSize_16x16,
-			SpriteColorFormat_256Color,
-			gfx, // pointer to the actualy graphic
-			-1, // rotation
-			false, // double the size when rotating?
-			false, // hide?
-			false, // vflip
-			false, // hflip
-			false //apply mosaic, what does this do?
-		);
-		oamUpdate(&oamSub);
 	}
 
 	return 0;
