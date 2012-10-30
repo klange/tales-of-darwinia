@@ -2,6 +2,8 @@
 .SUFFIXES:
 #---------------------------------------------------------------------------------
 
+.SECONDARY:
+
 ifeq ($(strip $(DEVKITARM)),)
 $(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM")
 endif
@@ -16,8 +18,10 @@ include $(DEVKITARM)/ds_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	$(shell basename $(CURDIR))
 BUILD		:=	build
-SOURCES		:=	gfx source data  
-INCLUDES	:=	include build
+SOURCES		:=	source
+DATA		:=  
+INCLUDES	:=	include
+GRAPHICS	:=	data
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -25,9 +29,9 @@ INCLUDES	:=	include build
 ARCH	:=	-mthumb -mthumb-interwork
 
 CFLAGS	:=	-g -Wall -O2\
- 			-march=armv5te -mtune=arm946e-s -fomit-frame-pointer\
-			-ffast-math \
-			$(ARCH)
+ 		-march=armv5te -mtune=arm946e-s -fomit-frame-pointer\
+		-ffast-math \
+		$(ARCH)
 
 CFLAGS	+=	$(INCLUDE) -DARM9
 CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions
@@ -56,13 +60,17 @@ ifneq ($(BUILD),$(notdir $(CURDIR)))
  
 export OUTPUT	:=	$(CURDIR)/$(TARGET)
  
-export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir))
+export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
+					$(foreach dir,$(DATA),$(CURDIR)/$(dir)) \
+					$(foreach dir,$(GRAPHICS),$(CURDIR)/$(dir))
+
 export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 
 CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
 CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
-BINFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.bin)))
+BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
+PNGFILES	:=	$(foreach dir,$(GRAPHICS),$(notdir $(wildcard $(dir)/*.png)))
  
 #---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
@@ -78,10 +86,12 @@ else
 endif
 #---------------------------------------------------------------------------------
 
-export OFILES	:=	$(BINFILES:.bin=.o) \
+export OFILES	:=	$(addsuffix .o,$(BINFILES)) \
+					$(PNGFILES:.png=.o) \
 					$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
  
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
+					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
 					-I$(CURDIR)/$(BUILD)
  
@@ -92,7 +102,7 @@ export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 #---------------------------------------------------------------------------------
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
-	@make --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
+	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
  
 #---------------------------------------------------------------------------------
 clean:
@@ -112,12 +122,17 @@ $(OUTPUT).nds	: 	$(OUTPUT).elf
 $(OUTPUT).elf	:	$(OFILES)
  
 #---------------------------------------------------------------------------------
-%.o	:	%.bin
+%.bin.o	:	%.bin
 #---------------------------------------------------------------------------------
 	@echo $(notdir $<)
-	$(bin2o)
- 
- 
+	@$(bin2o)
+
+
+#---------------------------------------------------------------------------------
+%.s %.h	: %.png %.grit
+#---------------------------------------------------------------------------------
+	grit $< -fts -o$*
+
 -include $(DEPENDS)
  
 #---------------------------------------------------------------------------------------

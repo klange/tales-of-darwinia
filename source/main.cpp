@@ -16,50 +16,65 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+// WOW IT CONVERTS TO HEADER FILES COOL
+#include "logo.h"
+
 volatile int frame = 0;
 
 void Vblank() {
 	frame++;
+	scanKeys();
 }
+
 
 int main(void) {
 	touchPosition touchXY;
-	PrintConsole top_screen;
+	/* Initialize Grahpics */
 
-	videoSetMode(MODE_0_2D);
+	/* Set the mode for 2 text layers and two extended background layers */
+	videoSetMode(MODE_5_2D);
+
+	/* Set the mode for text display */
 	videoSetModeSub(MODE_0_2D);
 
-	/* this shit is confusing */
 	vramSetBankA(VRAM_A_MAIN_BG);
+	vramSetBankC(VRAM_C_SUB_BG);
 	vramSetBankD(VRAM_D_SUB_SPRITE);
-	/* that shit was confusing */
 
+	/* Set the default backgorund color */
+	setBackdropColor(0xF);
+	setBackdropColor(0xF);
+
+	/* Iniitate the sprite engine */
 	oamInit(&oamSub, SpriteMapping_1D_32, false);
+	SPRITE_PALETTE_SUB[1] = RGB15(31, 0, 0);
 
+	/* Decompress and show the logo */
+	bgInit(3, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
+	decompress(logoBitmap, BG_GFX, LZ77Vram);
+
+	irqSet(IRQ_VBLANK, Vblank);
+
+	/* Allocate memory for the sprite graphics */
 	u16* gfx = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_256Color);
 
+	/* Sprite color */
 	for (int i = 0; i < 16 * 16 / 2; i++) {
 		gfx[i] = 1 | (1 << 8);
 	}
 
-	SPRITE_PALETTE_SUB[1] = RGB15(31, 0, 0);
-
-	consoleInit(&top_screen, 3,BgType_Text4bpp, BgSize_T_256x256, 31, 0, true, true);
-	irqSet(IRQ_VBLANK, Vblank);
-
-	iprintf("Tales of Darwinia: TRASH EATAR\n");
-
 	while(1) {
 		swiWaitForVBlank();
-		touchRead(&touchXY);
 
-		iprintf("\033[23;0H%d  %d,%d        ", frame, touchXY.px, touchXY.py);
+		if (keysHeld() & KEY_TOUCH) {
+			touchRead(&touchXY);
+		}
 
 		oamSet(
 			&oamSub,
 			0, // oam index
-			touchXY.px, // x location of sprite
-			touchXY.py, // y location of sprite
+			touchXY.px-8, // x location of sprite
+			touchXY.py-8, // y location of sprite
 			0, // z-index
 			0, // palette index (i have no clue wtf this does)
 			SpriteSize_16x16,
@@ -74,9 +89,6 @@ int main(void) {
 		);
 
 		oamUpdate(&oamSub);
-
-
-	
 	}
 
 	return 0;
