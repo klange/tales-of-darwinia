@@ -33,42 +33,29 @@ int main(void) {
 	touchPosition touchXY;
 	int i;
 
-	/* Set the mode for 2 text layers and two extended background layers */
-	videoSetMode(MODE_5_2D);
-
-	/* Set the mode for text display */
-	videoSetModeSub(MODE_0_2D);
-
-	vramSetBankA(VRAM_A_MAIN_BG);
-	vramSetBankC(VRAM_C_SUB_BG);
-	vramSetBankD(VRAM_D_SUB_SPRITE);
-
-	/* Set the default backgorund color */
-	setBackdropColor(0xF);
-	setBackdropColor(0xF);
+	vramSetMainBanks( VRAM_A_MAIN_BG, VRAM_B_MAIN_SPRITE, VRAM_C_SUB_BG, VRAM_D_SUB_SPRITE );
+	videoSetMode(MODE_5_2D | DISPLAY_SPR_ACTIVE | DISPLAY_BG3_ACTIVE);
+	videoSetModeSub(MODE_5_2D | DISPLAY_SPR_ACTIVE | DISPLAY_BG3_ACTIVE);
 
 	/* Set up the console */
-	PrintConsole topScreen;
-	consoleInit(&topScreen, 3, BgType_Text4bpp, BgSize_T_256x256, 31, 0, false, true);
-	consoleSelect(&topScreen);
+	PrintConsole* topScreen = consoleInit(0, 1, BgType_Text4bpp, BgSize_T_256x256, 0, 1, true, true);
+	consoleSelect(topScreen);
+
+	/* Decompress and show the logo */
+	int bg3 = bgInitSub(3, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
+	decompress(logoBitmap, BG_GFX_SUB, LZ77Vram);
+
+	/* Set the vertical blank event */
+	irqSet(IRQ_VBLANK, Vblank);
 
 	/* Iniitate the sprite engine */
 	oamInit(&oamSub, SpriteMapping_1D_32, false);
-	SPRITE_PALETTE_SUB[1] = RGB15(31, 0, 0);
-
-	/* Decompress and show the logo */
-	int bg3 = bgInit(3, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
-	decompress(logoBitmap, BG_GFX, LZ77Vram);
-
-	irqSet(IRQ_VBLANK, Vblank);
 
 	/* Allocate memory for the sprite graphics */
 	u16* gfx = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_256Color);
 
 	/* Sprite color */
-	for (i = 0; i < 16 * 16 / 2; i++) {
-		gfx[i] = 1 | (1 << 8);
-	}
+	dmaFillHalfWords((1<<8)|1, gfx, 32*32);
 
 	Sprite boxOfDoom;
 	Position offset;
@@ -90,6 +77,8 @@ int main(void) {
 	while(1) {
 		swiWaitForVBlank();
 
+		SPRITE_PALETTE_SUB[1] = RGB15(0, frame % 32, 0);
+
 		if (keysUp() & KEY_START) bg3_hidden = !bg3_hidden;
 		if (bg3_hidden) {
 			bgHide(bg3);
@@ -109,7 +98,10 @@ int main(void) {
 		boxOfDoom.pos.y = (targetPos.y - boxOfDoom.pos.y)/10.0 + boxOfDoom.pos.y;
 
 		drawSprite(&boxOfDoom);
-		iprintf("\033[23;0H%d  %d,%d        ", frame, touchXY.px, touchXY.py);
+
+		iprintf("\033[23;0H%d  %d,%d", frame, touchXY.px, touchXY.py);
+
+		bgUpdate();
 	}
 
 	return 0;
