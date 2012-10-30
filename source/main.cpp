@@ -20,12 +20,19 @@ void Vblank() {
 }
 
 int main(void) {
-
 	touchPosition touchXY;
 
-	irqSet(IRQ_VBLANK, Vblank);
+	PrintConsole top_screen;
 
-	consoleDemoInit();
+	videoSetMode(MODE_0_2D);
+	videoSetModeSub(MODE_0_2D);
+
+	vramSetBankA(VRAM_A_MAIN_BG);
+	vramSetBankC(VRAM_C_SUB_BG);
+
+	consoleInit(&top_screen, 3,BgType_Text4bpp, BgSize_T_256x256, 31, 0, true, true);
+
+	irqSet(IRQ_VBLANK, Vblank);
 
 	iprintf("      Hello DS dev'rs\n");
 	iprintf("     \x1b[32mwww.devkitpro.org\n");
