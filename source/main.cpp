@@ -50,7 +50,7 @@ int main(void) {
 	SPRITE_PALETTE_SUB[1] = RGB15(31, 0, 0);
 
 	/* Decompress and show the logo */
-	bgInit(3, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
+	int bg3 = bgInit(3, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
 	decompress(logoBitmap, BG_GFX, LZ77Vram);
 
 	irqSet(IRQ_VBLANK, Vblank);
@@ -63,13 +63,21 @@ int main(void) {
 		gfx[i] = 1 | (1 << 8);
 	}
 
+	/* Hide title */
+	bool bg3_hidden = false;
+
 	while(1) {
 		swiWaitForVBlank();
 
+		if (keysUp() & KEY_START) bg3_hidden = !bg3_hidden;
+		bg3_hidden ? bgHide(bg3) : bgShow(bg3);
+
+		// This section below is for touch screen sprite
 		if (keysHeld() & KEY_TOUCH) {
 			touchRead(&touchXY);
 		}
 
+		iprintf("\033[23;0H%d  %d,%d        ", frame, touchXY.px, touchXY.py);
 		oamSet(
 			&oamSub,
 			0, // oam index
@@ -87,7 +95,6 @@ int main(void) {
 			false, // hflip
 			false //apply mosaic, what does this do?
 		);
-
 		oamUpdate(&oamSub);
 	}
 
