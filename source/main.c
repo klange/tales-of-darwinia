@@ -52,7 +52,7 @@ int main(void) {
 	SPRITE_PALETTE_SUB[1] = RGB15(31, 0, 0);
 
 	/* Decompress and show the logo */
-	bgInit(3, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
+	int bg3 = bgInit(3, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
 	decompress(logoBitmap, BG_GFX, LZ77Vram);
 
 	irqSet(IRQ_VBLANK, Vblank);
@@ -70,6 +70,7 @@ int main(void) {
 	offset.x = 8;
 	offset.y = 8;
 	boxOfDoom.anchorOffset = offset;
+	boxOfDoom.gfx_buffer = gfx;
 
 	Position targetPos;
 	targetPos.x = 32; 
@@ -78,9 +79,16 @@ int main(void) {
 	boxOfDoom.pos.x = 16; 
 	boxOfDoom.pos.y = 16;
 
+	/* Hide title */
+	bool bg3_hidden = false;
+
 	while(1) {
 		swiWaitForVBlank();
 
+		if (keysUp() & KEY_START) bg3_hidden = !bg3_hidden;
+		bg3_hidden ? bgHide(bg3) : bgShow(bg3);
+
+		// This section below is for touch screen sprite
 		if (keysHeld() & KEY_TOUCH) {
 			touchRead(&touchXY);
 
@@ -92,6 +100,7 @@ int main(void) {
 		boxOfDoom.pos.y = (targetPos.y - boxOfDoom.pos.y)/10.0 + boxOfDoom.pos.y;
 
 		drawSprite(&boxOfDoom);
+		iprintf("\033[23;0H%d  %d,%d        ", frame, touchXY.px, touchXY.py);
 	}
 
 	return 0;
