@@ -26,7 +26,6 @@ void Vblank() {
 	scanKeys();
 }
 
-
 int main(void) {
 	touchPosition touchXY;
 	/* Initialize Grahpics */
@@ -44,6 +43,11 @@ int main(void) {
 	/* Set the default backgorund color */
 	setBackdropColor(0xF);
 	setBackdropColor(0xF);
+
+	/* Set up the console */
+	PrintConsole topScreen;
+	consoleInit(&topScreen, 3, BgType_Text4bpp, BgSize_T_256x256, 31, 0, false, true);
+	consoleSelect(&topScreen);
 
 	/* Iniitate the sprite engine */
 	oamInit(&oamSub, SpriteMapping_1D_32, false);
@@ -70,7 +74,11 @@ int main(void) {
 		swiWaitForVBlank();
 
 		if (keysUp() & KEY_START) bg3_hidden = !bg3_hidden;
-		bg3_hidden ? bgHide(bg3) : bgShow(bg3);
+		if (bg3_hidden) {
+			bgHide(bg3);
+		} else {
+			bgShow(bg3);
+		}
 
 		// This section below is for touch screen sprite
 		if (keysHeld() & KEY_TOUCH) {
