@@ -31,23 +31,21 @@ void Vblank() {
 int main(void) {
 	/* Touchscreen position */
 	touchPosition touchXY;
-	int i;
 
 	/* Force the main engine to top screen */
 	lcdMainOnTop();
 
 	/* Set the mode for 2 text layers and two extended background layers */
 	videoSetMode(MODE_5_2D | DISPLAY_BG1_ACTIVE | DISPLAY_BG3_ACTIVE);
-
-	/* Set the mode for sprite display */
-	videoSetModeSub(MODE_0_2D | DISPLAY_SPR_ACTIVE);
-
 	vramSetBankA(VRAM_A_MAIN_BG);
 	vramSetBankB(VRAM_B_MAIN_BG);
+
+	/* Set the mode for sprite display */
+	videoSetModeSub(MODE_5_2D | DISPLAY_SPR_ACTIVE);
+	vramSetBankC(VRAM_C_SUB_BG);
 	vramSetBankD(VRAM_D_SUB_SPRITE);
 
 	/* Set the default backgorund color */
-	setBackdropColor(0xF);
 	setBackdropColor(0xF);
 
 	/* Iniitate the sprite engine */
@@ -55,23 +53,25 @@ int main(void) {
 	SPRITE_PALETTE_SUB[1] = RGB15(31, 0, 0);
 
 	/* Decompress and show the logo */
-	int bg3 = bgInit(3, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
-	decompress(logoBitmap, BG_GFX, LZ77Vram);
+	int bg3 = bgInitSub(3, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
+	decompress(logoBitmap, BG_GFX_SUB, LZ77Vram);
 
 	/* Set up the console */
 	PrintConsole topScreen;
 	int bg1 = bgInit(1, BgType_Text4bpp, BgSize_T_256x256, 0, 0);
 	consoleInit(&topScreen, 1, BgType_Text4bpp, BgSize_T_256x256, 31, 0, true, true);
 
+	/* Set the vertical blank event */
 	irqSet(IRQ_VBLANK, Vblank);
+
+	/* Iniitate the sprite engine */
+	oamInit(&oamSub, SpriteMapping_1D_32, false);
 
 	/* Allocate memory for the sprite graphics */
 	u16* gfx = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_256Color);
 
 	/* Sprite color */
-	for (i = 0; i < 16 * 16 / 2; i++) {
-		gfx[i] = 1 | (1 << 8);
-	}
+	dmaFillHalfWords((1<<8)|1, gfx, 32*32);
 
 	Sprite boxOfDoom;
 	Position offset;
@@ -92,6 +92,8 @@ int main(void) {
 
 	while(1) {
 		swiWaitForVBlank();
+
+		SPRITE_PALETTE_SUB[1] = RGB15(0, frame % 32, 0);
 
 		if (keysUp() & KEY_START) bg3_hidden = !bg3_hidden;
 		if (bg3_hidden) {
@@ -114,7 +116,10 @@ int main(void) {
 		boxOfDoom.pos.y = (targetPos.y - boxOfDoom.pos.y)/10.0 + boxOfDoom.pos.y;
 
 		drawSprite(&boxOfDoom);
-		iprintf("\033[23;0H%d  %d,%d        ", frame, touchXY.px, touchXY.py);
+
+		iprintf("\033[23;0H%d  %d,%d", frame, touchXY.px, touchXY.py);
+
+		bgUpdate();
 	}
 
 	return 0;
