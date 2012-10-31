@@ -19,6 +19,11 @@
 #include "logo.h"
 #include "vector3.h"
 
+// Sound!
+#include <maxmod9.h>
+#include "soundbank.h"
+#include "soundbank_bin.h"
+
 volatile int frame = 0;
 
 void Vblank() {
@@ -62,6 +67,12 @@ int main(void) {
 	bool bg3_hidden = false;
 
 	Vector3<u16>* derp = new Vector3<u16>(1, 2, 3);
+
+	mmInitDefaultMem((mm_addr)soundbank_bin);
+
+	mmLoad(MOD_TECHNO_MOZART);
+
+	mmStart(MOD_TECHNO_MOZART, MM_PLAY_LOOP);
 
 	while(1) {
 		swiWaitForVBlank();
