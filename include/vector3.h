@@ -3,7 +3,10 @@
 
 #include <stdlib.h>
 
-template <class T>
+/**
+ * A 3-vector class that with a parameterized container type
+ */
+template <typename T>
 class Vector3 {
 	public:
 		T* data;
@@ -13,26 +16,35 @@ class Vector3 {
 		Vector3(const Vector3<T> &);
 		~Vector3(void);
 
-		T x(void);
-		T y(void);
-		T w(void);
+		T x(void) const;
+		T y(void) const;
+		T w(void) const;
 		void setX(T);
 		void setY(T);
 		void setW(T);
 
-		void normalize(void);
+		virtual void normalize(void);
 
-		Vector3<T>& operator=(const Vector3<T>&);	
-		Vector3<T>& operator+=(const Vector3<T>&);
-		const Vector3<T> operator+(const Vector3<T>&) const;
+		virtual Vector3<T>& operator=(const Vector3<T> &);	
+
+		virtual Vector3<T> &operator+=(const Vector3<T> &);
+		virtual const Vector3<T> operator+(const Vector3<T> &) const;
+
+		virtual Vector3<T> &operator-=(const Vector3<T> &);
+		virtual const Vector3<T> operator-(const Vector3<T> &) const;
+
+		/* todo: dot product */
+		/* todo: scalar product */
 };
 
-template <class T>
+template <typename T>
 Vector3<T>::Vector3(void) {
 	data = new T[3];
+	T initialValue;
+	data[0] = data[1] = data[2] = initialValue;
 }
 
-template <class T>
+template <typename T>
 Vector3<T>::Vector3(T x, T y, T w) {
 	data = new T[3];
 	data[0] = x;
@@ -40,83 +52,91 @@ Vector3<T>::Vector3(T x, T y, T w) {
 	data[2] = w;
 }
 
-template <class T>
+template <typename T>
 Vector3<T>::Vector3(const Vector3<T>& other) {
 	data = new T[3];
-	data[0] = other.x();
-	data[1] = other.y();
-	data[2] = other.w();
+	memcpy(data, other.data, 3 * sizeof(T));
 }
 
-template <class T>
+template <typename T>
 Vector3<T>::~Vector3(void) {
 	delete data;
 }
 
-template <class T>
-T Vector3<T>::x(void) {
+template <typename T>
+T Vector3<T>::x(void) const {
 	return data[0];
 }
 
-template <class T>
-T Vector3<T>::y(void) {
+template <typename T>
+T Vector3<T>::y(void) const {
 	return data[1];
 }
 
-template <class T>
-T Vector3<T>::w(void) {
+template <typename T>
+T Vector3<T>::w(void) const {
 	return data[2];
 }
 
-template <class T>
+template <typename T>
 void Vector3<T>::setX(T x) {
 	data[0] = x;
 }
 
-template <class T>
+template <typename T>
 void Vector3<T>::setY(T y) {
 	data[1] = y;
 }
 
-template <class T>
+template <typename T>
 void Vector3<T>::setW(T w) {
 	data[2] = w;
 }
 
-template <class T>
+template <typename T>
 void Vector3<T>::normalize(void) {
 	data[0] = x()/w();
 	data[1] = y()/w();
 	data[2] = w()/w();
 }
 
-template <class T>
+template <typename T>
 Vector3<T>& Vector3<T>::operator=(const Vector3<T>& other) {
 	if (this == &other) {
 		return *this;
 	}
-
-	delete data;
-	data = new T[3];
-	data[0] = other.x();
-	data[1] = other.y();
-	data[2] = other.w();
-
+	memcpy(data, other.data, 3 * sizeof(T));
 	return *this;
 }
 
-template <class T>
-Vector3<T>& Vector3<T>::operator+=(const Vector3<T>& other) {
-	data[0] = x() + other.x();
-	data[1] = y() + other.y();
-	data[2] = w() + other.y();
-
+template <typename T>
+Vector3<T> &Vector3<T>::operator+=(const Vector3<T> &other) {
+	for (int lcv = 0; lcv < 3; lcv++) {
+		data[lcv] = data[lcv] + other.data[lcv];
+	}
 	return *this;
 }
 
-template <class T>
-const Vector3<T> Vector3<T>::operator+(const Vector3<T>& other) const {
-	return Vector3<T>(*this) += other;
+template <typename T>
+const Vector3<T> Vector3<T>::operator+(const Vector3<T> &other) const {
+	Vector3<T> result = *this;
+	result += other;
+	return result;
+}
+
+template <typename T>
+Vector3<T> &Vector3<T>::operator-=(const Vector3<T> &other) {
+	for (int lcv = 0; lcv < 3; lcv++) {
+		data[lcv] = data[lcv] - other.data[lcv];
+	}
+	return *this;
+}
+
+template <typename T>
+const Vector3<T> Vector3<T>::operator-(const Vector3<T> &other) const {
+	Vector3<T> result = *this;
+	result -= other;
+	return result;
 }
 
 #endif

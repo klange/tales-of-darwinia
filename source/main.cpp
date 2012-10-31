@@ -17,7 +17,7 @@
 #include <unistd.h>
 
 #include "logo.h"
-#include "vector3.h"
+#include "vector3int32.h"
 
 volatile int frame = 0;
 
@@ -61,8 +61,6 @@ int main(void) {
 	/* Hide title */
 	bool bg3_hidden = false;
 
-	Vector3<u16>* derp = new Vector3<u16>(1, 2, 3);
-
 	while(1) {
 		swiWaitForVBlank();
 
@@ -82,16 +80,7 @@ int main(void) {
 			touchRead(&touchXY);
 		}
 
-		// WHY WON'T YOU WORK WTF :(
-		derp->setX(touchXY.px);
-		derp->setY(touchXY.py);
-
-		// Y U NO WORK
-		u16 asdf[2];
-		asdf[0] = touchXY.px;
-		asdf[1] = touchXY.py;
-
-		iprintf("\033[23;0H%d  %d,%d", frame, asdf[0], asdf[1]);
+		iprintf("\033[23;0H%d  ", frame);
 
 		bgUpdate();
 	}
