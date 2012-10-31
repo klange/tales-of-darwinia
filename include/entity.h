@@ -2,8 +2,8 @@
 #define ENTITY_H_
 
 class IEntity {
-	public
-		virtual ~IEntity() {}
+	public:
+		virtual ~IEntity(void) {};
 
 		/* stuff? */
 		

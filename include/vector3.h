@@ -40,8 +40,6 @@ class Vector3 {
 template <typename T>
 Vector3<T>::Vector3(void) {
 	data = new T[3];
-	T initialValue;
-	data[0] = data[1] = data[2] = initialValue;
 }
 
 template <typename T>

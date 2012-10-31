@@ -17,6 +17,7 @@
 #include <unistd.h>
 
 #include "logo.h"
+#include "sprite.h"
 
 // Sound!
 #include <maxmod9.h>
@@ -28,6 +29,7 @@ volatile int frame = 0;
 void Vblank() {
 	frame++;
 	scanKeys();
+	oamUpdate(&oamSub);
 }
 
 int main(void) {
@@ -58,6 +60,18 @@ int main(void) {
 	PrintConsole topScreen;
 	int bg1 = bgInit(1, BgType_Text4bpp, BgSize_T_256x256, 0, 0);
 	consoleInit(&topScreen, 1, BgType_Text4bpp, BgSize_T_256x256, 31, 0, true, true);
+	oamInit(&oamSub, SpriteMapping_1D_32, false);
+
+	u16* gfx = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_256Color);	
+
+	for (int i = 0; i < 16 * 16 / 2; i++) {
+		gfx[i] = 1 | (1 << 8);
+	}
+
+	SPRITE_PALETTE_SUB[1] = RGB15(31, 0, 0);
+
+	Sprite boxSprite = Sprite(gfx);
+	Vector3<u16> touchPosition;
 
 	/* Set the vertical blank event */
 	irqSet(IRQ_VBLANK, Vblank);
@@ -92,6 +106,12 @@ int main(void) {
 			touchRead(&touchXY);
 		}
 
+		touchPosition.setX(touchXY.px);
+		touchPosition.setY(touchXY.py);
+
+		boxSprite.setPosition(touchPosition);
+
+		boxSprite.draw();
 		iprintf("\033[23;0H%d  ", frame);
 
 		bgUpdate();
