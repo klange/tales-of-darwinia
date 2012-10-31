@@ -87,7 +87,7 @@ int main(void) {
 		derp->setY(touchXY.py);
 
 		// Y U NO WORK
-		u16* asdf = (u16*)malloc(3*sizeof(u16));
+		u16 asdf[2];
 		asdf[0] = touchXY.px;
 		asdf[1] = touchXY.py;
 
