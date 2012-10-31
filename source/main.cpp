@@ -86,7 +86,12 @@ int main(void) {
 		derp->setX(touchXY.px);
 		derp->setY(touchXY.py);
 
-		iprintf("\033[23;0H%d  %d,%d", frame, derp->x(), derp->y());
+		// Y U NO WORK
+		u16* asdf = (u16*)malloc(3*sizeof(u16));
+		asdf[0] = touchXY.px;
+		asdf[1] = touchXY.py;
+
+		iprintf("\033[23;0H%d  %d,%d", frame, asdf[0], asdf[1]);
 
 		bgUpdate();
 	}
