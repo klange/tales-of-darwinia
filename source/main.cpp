@@ -18,7 +18,6 @@
 
 #include "logo.h"
 #include "sprite.h"
-#include "vector3int32.h"
 
 volatile int frame = 0;
 
