@@ -17,7 +17,7 @@
 #include <unistd.h>
 
 #include "logo.h"
-#include "Vector3.h"
+#include "vector3.h"
 
 volatile int frame = 0;
 
