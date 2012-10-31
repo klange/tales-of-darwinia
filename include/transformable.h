@@ -14,5 +14,7 @@ class Transformable {
 		void translate(Vector3<u16>);
 		void rotate(u16 rotValue);
 		void translateRotationAnchor(Vector3<u16>);
+		void setPosition(Vector3<u16>);
+		void setRotation(u16 rotValue);
 };
 #endif

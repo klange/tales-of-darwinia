@@ -4,7 +4,7 @@
 class IRenderable {
 	public:
 		bool hidden;
-		virtual ~IRenderable {};
+		virtual ~IRenderable(void) {};
 		virtual void draw(void) = 0;
 };
 #endif
