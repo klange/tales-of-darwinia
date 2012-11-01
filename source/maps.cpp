@@ -45,19 +45,22 @@ int MapEngine::dumpTilesToVRAM(u8* tile_memory) {
 	for (int i = 0; i < tiles_len; i++) {
 		// Pointer to an array
 		// array of pointers to an array of tile data (64)
+		u8* ptrToTile = (u8*)tiles[i];
 
-		u8 ptrToTile = *(tiles + i);
-
-		for (int j = 0; j < 64; j++) {
-			*(tile_memory + (64*i) + j) = (ptrToTile + j);
-		}
-
-//		swiCopy(tile_list[i], tileMemory + (0 * 64), 32);
+//		for (int j = 0; j < 64; j++) {
+//			*(tile_memory + (64*i) + j) = ptrToTile[j];
+//		}
+		dmaCopy(ptrToTile, (tile_memory + (64*i)), 32);
 	}
 	return 0;
 }
 
 int MapEngine::dumpMapToVRAM(u16* map_memory) {
+	// Load the map for now we assume 64x64
+//	for (int i = 0; i < (map_width * map_height); i++) {
+//		*(map_memory + i) = map[i];
+//	}
+	dmaCopy(map, map_memory, (sizeof(map) * map_width * map_height));
 	return 0;
 }
 

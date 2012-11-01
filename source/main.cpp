@@ -113,9 +113,9 @@ int main(void) {
 	decompress(logoBitmap, BG_GFX_SUB, LZ77Vram);
 
 	/* Set up the console */
-	PrintConsole topScreen;
-	int bg1 = bgInit(1, BgType_Text4bpp, BgSize_T_256x256, 0, 0);
-	consoleInit(&topScreen, 1, BgType_Text4bpp, BgSize_T_256x256, 31, 0, true, true);
+//	PrintConsole topScreen;
+//	int bg1 = bgInit(1, BgType_Text4bpp, BgSize_T_256x256, 0, 0);
+//	consoleInit(&topScreen, 1, BgType_Text4bpp, BgSize_T_256x256, 31, 0, true, true);
 	oamInit(&oamSub, SpriteMapping_1D_32, false);
 
 	u16* gfx = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_256Color);	
@@ -156,9 +156,11 @@ int main(void) {
 		if (keysUp() & KEY_START) bg3_hidden = !bg3_hidden;
 		if (bg3_hidden) {
 			bgHide(bg3);
-			bgShow(bg1);
+//			bgShow(bg1);
+			bgShow(tile);
 		} else {
-			bgHide(bg1);
+//			bgHide(bg1);
+			bgHide(tile);
 			bgShow(bg3);
 		}
 		// This section below is for touch screen sprite
