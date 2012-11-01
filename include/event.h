@@ -12,7 +12,14 @@ enum EventType {
 	COLLISION = 7
 };
 
-/* defines structs for different arguments you can have */
+/** 
+ * Defines an event to be fired upon next invocation of EventDispatcher.dispatchEvents()
+ * enabled - whether this event is enabled, if not, skip over it
+ * type - the type of event to fire, see the enum above
+ * eventCallback - the callback we want to call when an event is detected
+ *
+ * TODO: Make this a class that sets defaults for enabled and type?
+ */
 typedef struct {
 	bool enabled;
 	u8 type;

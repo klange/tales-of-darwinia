@@ -6,13 +6,18 @@
 #include "renderable.h"
 #include "transformable.h"
 
-class Sprite: public IRenderable, public IEntity, public Transformable {
+/**
+ * A class that represents a renderable sprite on the screen.
+ * The sprite can move around, and can be rendered
+ * TODO: Make this an animated sprite
+ */
+class Sprite: public Renderable, public Entity, public Transformable {
+	private:
+		void draw(void);
 	public:
 		u16* gfx_data;
 		Sprite(void);
 		Sprite(u16*);
-
-		void draw(void);
 };
 
 #endif

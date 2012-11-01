@@ -4,6 +4,10 @@
 #include <nds.h>
 #include "vector3.h"
 
+/**
+ * A class representing a transformable object. The object can move in the four cardinal directions,
+ * and can be rotated or scaled.
+ */
 class Transformable {
 	public:
 		Vector3<u16> position;
@@ -15,6 +19,7 @@ class Transformable {
 		void rotate(u16 rotValue);
 		void translateRotationAnchor(Vector3<u16>);
 		void setPosition(Vector3<u16>);
-		void setRotation(u16 rotValue);
+		void setRotation(u16);
+		void setScale(u16);
 };
 #endif

@@ -3,10 +3,12 @@
  *
  * A Game by Yelp Engineers
  *
- * Henri Bai
- * Paul Berens
- * Patrick Tiet
- * Kevin Lange
+ * Henri B
+ * Paul B
+ * Patrick T
+ * Kevin L
+ * Jeryl C
+ * Mike G
  * MAYBE YOU!
  *
  */
@@ -21,6 +23,8 @@
 #include "event.h"
 #include "eventdispatcher.h"
 
+#include "dispatch.h"
+
 // Sound!
 #include <maxmod9.h>
 #include "soundbank.h"
@@ -28,14 +32,12 @@
 
 volatile int frame = 0;
 
-EventDispatcher* dispatcher = new EventDispatcher();
-
 void Vblank() {
 	frame++;
 	scanKeys();
 	oamUpdate(&oamSub);
 
-	dispatcher->dispatchEvents();
+	globalDispatcher->dispatchEvents();
 }
 
 void hahaOhMan(void* eventArgs) {
@@ -98,9 +100,17 @@ int main(void) {
 	derpyEvent->type = BUTTON_HOLD;
 	derpyEvent->enabled = true;
 
+	Event* drawEvent;
+	drawEvent = (Event*)malloc(sizeof(Event));
+	//drawEvent->eventCallback = boxSprite.doRender;
+	drawEvent->type = BUTTON_HOLD;
+	drawEvent->enabled = true;
+
 	while(1) {
 		swiWaitForVBlank();
-		dispatcher->addEvent(derpyEvent);
+		globalDispatcher->addEvent(derpyEvent);
+		//globalDispatcher->addEvent(drawEvent);
+
 		SPRITE_PALETTE_SUB[1] = RGB15(0, frame % 32, 0);
 		if (keysUp() & KEY_START) bg3_hidden = !bg3_hidden;
 		if (bg3_hidden) {
@@ -117,7 +127,7 @@ int main(void) {
 		touchPosition.setX(touchXY.px);
 		touchPosition.setY(touchXY.py);
 		boxSprite.setPosition(touchPosition);
-		boxSprite.draw();
+		boxSprite.doRender(NULL);
 		bgUpdate();
 	}
 
