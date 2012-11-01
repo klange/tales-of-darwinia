@@ -1,16 +1,18 @@
 #include "playerentity.h"
 
-void PlayerEntity::Update()
+void PlayerEntity::Update(InputManager* inputManager)
 {
+	touchPosition* touchXY = inputManager->moveToPosition(getPosition());
+
 	/* Touchscreen position */
-	touchPosition touchXY;
 	Vector3<u16> touchPosition;
 
 	// This section below is for touch screen sprite
-	if (keysHeld() & KEY_TOUCH) {
-		touchRead(&touchXY);
-		touchPosition.setX(touchXY.px);
-		touchPosition.setY(touchXY.py);
+	if (touchXY->px != NO_POSITION_FOUND && touchXY->py != NO_POSITION_FOUND) {
+		touchPosition.setX(touchXY->px);
+		touchPosition.setY(touchXY->py);
 		setPosition(touchPosition);
 	}
+
+	delete touchXY;
 }

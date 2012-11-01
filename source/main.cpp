@@ -74,9 +74,6 @@ void init(void) {
 }
 
 int main(void) {
-	/* Touchscreen position */
-	touchPosition touchXY;
-
 	/* Put any generic engine/game init code in the init () */
 	init();
 
@@ -132,12 +129,8 @@ int main(void) {
 	drawEvent->type = BUTTON_HOLD;
 	drawEvent->enabled = true;
 
-	/* InputManager to handle input and delegate actions */
-	InputManager inputManager;
-
 	while(1) {
 		swiWaitForVBlank();
-		inputManager.handleInput();
 		globalDispatcher->addEvent(derpyEvent);
 		//globalDispatcher->addEvent(drawEvent);
 

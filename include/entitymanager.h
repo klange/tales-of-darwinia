@@ -4,6 +4,8 @@
 #include <nds.h>
 #include <stdint.h>
 
+#include "inputmanager.h"
+
 // Forward declations
 class Entity;
 
@@ -21,6 +23,7 @@ private:
 	// private data
 	u32 mNumEntities;
 	DynamicArray mEntities;
+	InputManager* inputManager;
 
 	friend class Entity;
 	// methods for Entity to add itself to the manager
