@@ -1,12 +1,12 @@
 #ifndef ENEMY_ENTITY_H_
 #define ENEMY_ENTITY_H_
 
-#include "sprite.h"
+#include "livingentity.h"
 
-class EnemyEntity : public Sprite
+class EnemyEntity : public LivingEntity
 {
 public:
-    EnemyEntity(u16* gfx) : Sprite(gfx) {}
+    EnemyEntity(u16* gfx) : LivingEntity(gfx) {}
 	virtual void Update();
 };
 
