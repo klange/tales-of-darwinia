@@ -24,6 +24,7 @@
 #include "entitymanager.h"
 #include "event.h"
 #include "eventdispatcher.h"
+#include "inputmanager.h"
 #include "playerentity.h"
 #include "enemyentity.h"
 

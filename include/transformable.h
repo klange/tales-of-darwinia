@@ -9,6 +9,8 @@
  * and can be rotated or scaled.
  */
 class Transformable {
+
+	// TODO: Convert to use pointers/references
 	public:
 		Vector3<u16> position;
 		Vector3<u16> directionVector;
@@ -19,6 +21,7 @@ class Transformable {
 		void rotate(u16 rotValue);
 		void translateRotationAnchor(Vector3<u16>);
 		void setPosition(Vector3<u16>);
+		Vector3<u16>* getPosition();
 		void setRotation(u16);
 		void setScale(u16);
 };
