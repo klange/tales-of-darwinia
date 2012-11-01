@@ -1,5 +1,5 @@
 #include <nds.h>
-#include "AudioManager.h"
+#include "audiomanager.h"
 #include <maxmod9.h>
 #include "soundbank_bin.h"
 
