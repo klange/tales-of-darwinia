@@ -15,6 +15,7 @@ void PlayerEntity::Update()
 		touchPosition.setX(touchXY.px);
 		touchPosition.setY(touchXY.py);
 		setPosition(touchPosition);
+
 		audioManager.playSound(SFX_PLAYER_MOVE);
 	}
 }
