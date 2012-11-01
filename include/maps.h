@@ -9,13 +9,40 @@
  */
 class MapEngine {
 	private:
-		/**
-		 * Gets the next index of this circular buffer
-		 */
-		u8 dummy(u8);
+		/* The palette for all loaded tiles */
+		const int palette_len;
+		const u16* palette;
+
+		/* The list of all tiles used */
+		const int tiles_len;
+		const u8** tiles;
+
+		/* The actual map data itself */
+		const int map_height;
+		const int map_width;
+		const u16* map;
+
+		/* Current "player" location in tiles unit */
+		int x, y;
+
+		/* Current "display" scroll offset in pixels */
+		int scroll_x, scroll_y;
 
 	public:
-		MapEngine(void);
+		MapEngine(
+			const int palette_len,
+			const u16* palette,
+			const int tiles_len,
+			const u8** tiles,
+			const int map_height,
+			const int map_width,
+			const u16* map
+		);
+
+		int dumpTilesToVRAM(void);
+
+		int getTileX(int screen_pixel_x);
+		int getTileY(int screen_pixel_y);
 };
 
 #endif

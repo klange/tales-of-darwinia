@@ -85,7 +85,7 @@ u8 aquaTile[64] = {
 };
 /* List of tiles */
 int tile_list_len = 6;
-u8* tile_list[6] = {
+const u8* tile_list[6] = {
 	&redTile[0],
 	&greenTile[0],
 	&blueTile[0],
