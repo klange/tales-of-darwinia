@@ -39,7 +39,7 @@ void Vblank() {
 }
 
 void hahaOhMan(void* eventArgs) {
-	iprintf("   \x1b[32;1moh man it works\x1b[39m");
+	iprintf("\033[23;0H%d  ", frame);
 }
 
 int main(void) {
@@ -93,12 +93,15 @@ int main(void) {
 	mmStart(MOD_TECHNO_MOZART, MM_PLAY_LOOP);
 
 	Event* derpyEvent;
+	derpyEvent = (Event*)malloc(sizeof(Event));
+	derpyEvent->eventCallback = hahaOhMan;
+	derpyEvent->type = BUTTON_HOLD;
+	derpyEvent->enabled = true;
 
 	while(1) {
 		swiWaitForVBlank();
-
+		dispatcher->addEvent(derpyEvent);
 		SPRITE_PALETTE_SUB[1] = RGB15(0, frame % 32, 0);
-
 		if (keysUp() & KEY_START) bg3_hidden = !bg3_hidden;
 		if (bg3_hidden) {
 			bgHide(bg3);
@@ -107,25 +110,14 @@ int main(void) {
 			bgHide(bg1);
 			bgShow(bg3);
 		}
-
 		// This section below is for touch screen sprite
 		if (keysHeld() & KEY_TOUCH) {
 			touchRead(&touchXY);
 		}
-
 		touchPosition.setX(touchXY.px);
 		touchPosition.setY(touchXY.py);
-
 		boxSprite.setPosition(touchPosition);
-
 		boxSprite.draw();
-
-		derpyEvent = (Event*)malloc(sizeof(Event));
-		derpyEvent->eventCallback = hahaOhMan;
-		dispatcher->addEvent(derpyEvent);
-
-		iprintf("\033[23;0H%d  ", frame);
-
 		bgUpdate();
 	}
 
