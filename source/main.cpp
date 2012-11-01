@@ -18,6 +18,8 @@
 
 #include "logo.h"
 #include "sprite.h"
+#include "event.h"
+#include "eventdispatcher.h"
 
 // Sound!
 #include <maxmod9.h>
@@ -26,10 +28,18 @@
 
 volatile int frame = 0;
 
+EventDispatcher* dispatcher = new EventDispatcher();
+
 void Vblank() {
 	frame++;
 	scanKeys();
 	oamUpdate(&oamSub);
+
+	dispatcher->dispatchEvents();
+}
+
+void hahaOhMan(void* eventArgs) {
+	iprintf("   \x1b[32;1moh man it works\x1b[39m");
 }
 
 int main(void) {
@@ -78,13 +88,12 @@ int main(void) {
 
 	/* Hide title */
 	bool bg3_hidden = false;
-
 	mmInitDefaultMem((mm_addr)soundbank_bin);
-
 	mmLoad(MOD_TECHNO_MOZART);
-
 	mmStart(MOD_TECHNO_MOZART, MM_PLAY_LOOP);
-	
+
+	Event* derpyEvent;
+
 	while(1) {
 		swiWaitForVBlank();
 
@@ -110,6 +119,11 @@ int main(void) {
 		boxSprite.setPosition(touchPosition);
 
 		boxSprite.draw();
+
+		derpyEvent = (Event*)malloc(sizeof(Event));
+		derpyEvent->eventCallback = hahaOhMan;
+		dispatcher->addEvent(derpyEvent);
+
 		iprintf("\033[23;0H%d  ", frame);
 
 		bgUpdate();
