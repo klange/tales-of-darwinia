@@ -26,6 +26,7 @@
 #include "eventdispatcher.h"
 #include "inputmanager.h"
 #include "playerentity.h"
+#include "enemyentity.h"
 
 #include "dispatch.h"
 
@@ -33,10 +34,7 @@
 #include "maps.h"
 #include "map_data.h"
 
-// Sound!
-#include <maxmod9.h>
-#include "soundbank.h"
-#include "soundbank_bin.h"
+#include "audiomanager.h"
 
 volatile int frame = 0;
 
@@ -100,22 +98,31 @@ int main(void) {
 	oamInit(&oamSub, SpriteMapping_1D_32, false);
 
 	u16* gfx = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_256Color);	
-
 	for (int i = 0; i < 16 * 16 / 2; i++) {
 		gfx[i] = 1 | (1 << 8);
+	}
+
+	u16* gfx2 = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_256Color);	
+	for (int i = 0; i < 16 * 16 / 2; i++) {
+		gfx2[i] = 1 | (1 << 8);
 	}
 
 	SPRITE_PALETTE_SUB[1] = RGB15(31, 0, 0);
 
 	gEntityManager.Init();
+
 	PlayerEntity* playerEntity = new PlayerEntity(gfx);
 	playerEntity->Init();
+	//playerEntity->setPosition(Vector3<u16>(64,90,1));
+
+	EnemyEntity* enemyEntity = new EnemyEntity(gfx2);
+	enemyEntity->Init();
+	//enemyEntity->setPosition(Vector3<u16>(64,90,0));
 
 	/* Hide title */
 	bool bg3_hidden = false;
-	mmInitDefaultMem((mm_addr)soundbank_bin);
-	mmLoad(MOD_TECHNO_MOZART);
-	mmStart(MOD_TECHNO_MOZART, MM_PLAY_LOOP);
+	audioManager.initialize();
+	audioManager.playMusic(MOD_TECHNO_MOZART);
 
 	Event* derpyEvent;
 	derpyEvent = (Event*)malloc(sizeof(Event));
@@ -145,8 +152,8 @@ int main(void) {
 		}
 
 		gEntityManager.Update();
+		gEntityManager.Render();
 
-		playerEntity->doRender(NULL);
 		bgUpdate();
 	}
 

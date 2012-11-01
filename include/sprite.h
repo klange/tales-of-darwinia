@@ -14,10 +14,13 @@
 class Sprite: public Renderable, public Entity, public Transformable {
 	private:
 		void draw(void);
+		int mIndex; // which sprite am I?
+		static int sNextIndex; // the next sprite index to be allocated
 	public:
 		u16* gfx_data;
-		Sprite(void);
-		Sprite(u16*);
+		Sprite(u16* gfx = NULL);
+
+		virtual void Render();
 };
 
 #endif

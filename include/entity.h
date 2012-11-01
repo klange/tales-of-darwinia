@@ -13,6 +13,9 @@ class Entity {
 		virtual void Init();
 		virtual void Update(InputManager* inputManager) {};
 		virtual void Destroy();
+
+		virtual void Update() {};
+		virtual void Render() {};
 };
 
 #endif

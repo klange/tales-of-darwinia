@@ -21,6 +21,15 @@ void EntityManager::Update()
 	}
 }
 
+void EntityManager::Render()
+{
+	for(u32 i=0; i<mNumEntities; i++)
+	{
+		Entity* current = (Entity*) DynamicArrayGet(&mEntities, i);
+		current->Render();
+	}
+}
+
 void EntityManager::Destroy()
 {
 	DynamicArrayDelete(&mEntities);
