@@ -1,5 +1,6 @@
 #include "entity.h"
 #include "entitymanager.h"
+#include "inputmanager.h"
 
 // Singleton
 EntityManager gEntityManager;
@@ -8,6 +9,7 @@ EntityManager gEntityManager;
 void EntityManager::Init()
 {
 	DynamicArrayInit(&mEntities, 16); // initial size
+	inputManager = new InputManager();
 }
 
 void EntityManager::Update()
@@ -15,7 +17,7 @@ void EntityManager::Update()
 	for(u32 i=0; i<mNumEntities; i++)
 	{
 		Entity* current = (Entity*) DynamicArrayGet(&mEntities, i);
-		current->Update();
+		current->Update(inputManager);
 	}
 }
 
