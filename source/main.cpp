@@ -25,6 +25,9 @@
 
 #include "dispatch.h"
 
+/* Maps */
+#include "maps.h"
+
 // Sound!
 #include <maxmod9.h>
 #include "soundbank.h"

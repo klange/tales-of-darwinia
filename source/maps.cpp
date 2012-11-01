@@ -1,16 +1,18 @@
 /* vim: ts=4 sw=4 noexpandtab
- * Tales of Darwinia
  *
- * A Game by Yelp Engineers
- *
- * Henri Bai
- * Paul Berens
- * Patrick Tiet
- * Kevin Lange
- * MAYBE YOU!
- *
+ * Map engine code
  */
 
+#include <nds.h>
+#include "maps.h"
+#include "map_data.h"
+
+MapEngine::MapEngine(void) {}
+
+u8 MapEngine::dummy(u8 a) {}
+
+
+/*
 #include <nds.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -49,4 +51,4 @@ int main(void) {
 		swiWaitForVBlank();
 
 	return 0;
-}
+}*/
