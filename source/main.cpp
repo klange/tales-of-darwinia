@@ -33,10 +33,7 @@
 #include "maps.h"
 #include "map_data.h"
 
-// Sound!
-#include <maxmod9.h>
-#include "soundbank.h"
-#include "soundbank_bin.h"
+#include "audiomanager.h"
 
 volatile int frame = 0;
 
@@ -123,9 +120,8 @@ int main(void) {
 
 	/* Hide title */
 	bool bg3_hidden = false;
-	mmInitDefaultMem((mm_addr)soundbank_bin);
-	mmLoad(MOD_TECHNO_MOZART);
-	mmStart(MOD_TECHNO_MOZART, MM_PLAY_LOOP);
+	audioManager.initialize();
+	audioManager.playMusic(MOD_TECHNO_MOZART);
 
 	Event* derpyEvent;
 	derpyEvent = (Event*)malloc(sizeof(Event));
