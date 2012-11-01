@@ -29,7 +29,35 @@ MapEngine::MapEngine(
 	 */
 }
 
-int MapEngine::dumpTilesToVRAM(void) {
+int MapEngine::dumpPaletteToVRAM(u16* palette_memory) {
+	// Load the palette
+//	for (int i = 0; i < palette_len; i++) {
+//		*(palette_memory + i) = palette[i];
+//	}
+	dmaCopy(palette, palette_memory, (sizeof(palette) * palette_len));
+	return 0;
+}
+
+int MapEngine::dumpTilesToVRAM(u8* tile_memory) {
+	// Since we got an pointer to an array of pointers that
+	// points to each 8x8 array of tiles data, copy each tile
+	// data into the right spot one at a time.
+	for (int i = 0; i < tiles_len; i++) {
+		// Pointer to an array
+		// array of pointers to an array of tile data (64)
+
+		u8 ptrToTile = *(tiles + i);
+
+		for (int j = 0; j < 64; j++) {
+			*(tile_memory + (64*i) + j) = (ptrToTile + j);
+		}
+
+//		swiCopy(tile_list[i], tileMemory + (0 * 64), 32);
+	}
+	return 0;
+}
+
+int MapEngine::dumpMapToVRAM(u16* map_memory) {
 	return 0;
 }
 
@@ -42,17 +70,7 @@ int MapEngine::getTileY(int screen_pixel_y) {
 }
 
 /*
-#include <nds.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-#include "map_data.h"
-
 int maps_main(void) {
-	//set video mode and map vram to the background
-	videoSetMode(MODE_0_2D | DISPLAY_BG0_ACTIVE);
-	vramSetBankA(VRAM_A_MAIN_BG_0x06000000);
 
 	//get the address of the tile and map blocks
 	u8* tileMemory = (u8*)BG_TILE_RAM(1);
@@ -60,11 +78,6 @@ int maps_main(void) {
 
 	//tell the DS where we are putting everything and set 256 color mode and that we are using a 64 by 64 tile map.
 	REG_BG0CNT = BG_64x64 | BG_COLOR_256 | BG_MAP_BASE(0) | BG_TILE_BASE(1);
-
-	// Load the palette
-	for (int i = 0; i < tile_palette_len; i++) {
-		BG_PALETTE[i+1] = tile_palette[i];
-	}
 
 	// Copy each tile block into tile memory
 	for (int i = 0; i < tile_list_len; i++) {

@@ -39,7 +39,9 @@ class MapEngine {
 			const u16* map
 		);
 
-		int dumpTilesToVRAM(void);
+		int dumpPaletteToVRAM(u16* palette_memory);
+		int dumpTilesToVRAM(u8* tile_memory);
+		int dumpMapToVRAM(u16* map_memory);
 
 		int getTileX(int screen_pixel_x);
 		int getTileY(int screen_pixel_y);

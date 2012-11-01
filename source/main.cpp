@@ -54,9 +54,14 @@ void init(void) {
 	lcdMainOnTop();
 
 	/* Set the mode for 2 text layers and two extended background layers */
-	videoSetMode(MODE_5_2D | DISPLAY_BG1_ACTIVE | DISPLAY_BG3_ACTIVE);
+	videoSetMode(MODE_5_2D | DISPLAY_BG0_ACTIVE | DISPLAY_BG1_ACTIVE | DISPLAY_BG3_ACTIVE);
 	vramSetBankA(VRAM_A_MAIN_BG);
 	vramSetBankB(VRAM_B_MAIN_BG);
+
+	//set video mode and map vram to the background
+	videoSetMode(MODE_0_2D | DISPLAY_BG0_ACTIVE);
+	vramSetBankA(VRAM_A_MAIN_BG_0x06000000);
+
 
 	/* Set the mode for sprite display */
 	videoSetModeSub(MODE_5_2D | DISPLAY_SPR_ACTIVE);
@@ -87,7 +92,21 @@ int main(void) {
 		map_width,
 		map
 	);
-	mapEngine.dumpTilesToVRAM();
+
+	/* Tile engine is going to claim BG0 */
+//	REG_BG0CNT = BG_64x64 | BG_COLOR_256 | BG_MAP_BASE(0) | BG_TILE_BASE(1);
+	int tile = bgInit(0, BgType_Text8bpp, BgSize_T_512x512, 0, 1);
+
+	/* Access the addresses for tile, palette, maps */
+	u8* tileMemory = (u8*)BG_TILE_RAM(1); // v Any equiv?
+	u16* mapMemory = (u16*)BG_MAP_RAM(0); // bgGetMapPtr
+	u16* paletteMemory = (u16*)BG_PALETTE[0]; // ^ Any equiv?
+
+	/* Load the relevant data into the VRAM */
+	mapEngine.dumpPaletteToVRAM(paletteMemory);
+	mapEngine.dumpTilesToVRAM(tileMemory);
+	mapEngine.dumpMapToVRAM(mapMemory);
+
 
 	/* Decompress and show the logo */
 	int bg3 = bgInitSub(3, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
