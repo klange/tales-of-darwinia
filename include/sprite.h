@@ -15,10 +15,16 @@
 class Sprite: public Renderable, public Entity, public Transformable {
 	private:
 		SpriteData* spriteData;
-		u8 currentFrame;
+		int8 currentFrame;
+		void boundFrameNumber(void);
+		void copyToGfxBuffer(void);
 	public:
+		bool vflip;
+		bool hflip;
+
 		Sprite(SpriteData*);
 		void nextFrame(void);
+		void prevFrame(void);
 		void draw(void);
 };
 
