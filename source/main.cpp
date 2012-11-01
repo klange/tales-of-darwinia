@@ -22,6 +22,7 @@
 #include "sprite.h"
 #include "event.h"
 #include "eventdispatcher.h"
+#include "inputmanager.h"
 
 #include "dispatch.h"
 
@@ -109,8 +110,12 @@ int main(void) {
 	drawEvent->type = BUTTON_HOLD;
 	drawEvent->enabled = true;
 
+	/* InputManager to handle input and delegate actions */
+	InputManager inputManager;
+
 	while(1) {
 		swiWaitForVBlank();
+		inputManager.handleInput();
 		globalDispatcher->addEvent(derpyEvent);
 		//globalDispatcher->addEvent(drawEvent);
 
