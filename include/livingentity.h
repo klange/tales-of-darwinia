@@ -8,7 +8,6 @@ class LivingEntity : public Sprite
 {
 public:
 	LivingEntity(u16 *gfx) : Sprite(gfx) {}
-	virtual void Update() = 0;
 
 protected:
 	LivingStats mStats;
