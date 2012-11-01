@@ -20,8 +20,10 @@
 
 #include "logo.h"
 #include "sprite.h"
+#include "entitymanager.h"
 #include "event.h"
 #include "eventdispatcher.h"
+#include "playerentity.h"
 
 #include "dispatch.h"
 
@@ -48,9 +50,6 @@ void hahaOhMan(void* eventArgs) {
 }
 
 int main(void) {
-	/* Touchscreen position */
-	touchPosition touchXY;
-
 	/* Force the main engine to top screen */
 	lcdMainOnTop();
 
@@ -85,8 +84,9 @@ int main(void) {
 
 	SPRITE_PALETTE_SUB[1] = RGB15(31, 0, 0);
 
-	Sprite boxSprite = Sprite(gfx);
-	Vector3<u16> touchPosition;
+	gEntityManager.Init();
+	PlayerEntity* playerEntity = new PlayerEntity(gfx);
+	playerEntity->Init();
 
 	/* Set the vertical blank event */
 	irqSet(IRQ_VBLANK, Vblank);
@@ -105,7 +105,7 @@ int main(void) {
 
 	Event* drawEvent;
 	drawEvent = (Event*)malloc(sizeof(Event));
-	//drawEvent->eventCallback = boxSprite.doRender;
+	//drawEvent->eventCallback = playerEntity->doRender;
 	drawEvent->type = BUTTON_HOLD;
 	drawEvent->enabled = true;
 
@@ -123,14 +123,10 @@ int main(void) {
 			bgHide(bg1);
 			bgShow(bg3);
 		}
-		// This section below is for touch screen sprite
-		if (keysHeld() & KEY_TOUCH) {
-			touchRead(&touchXY);
-		}
-		touchPosition.setX(touchXY.px);
-		touchPosition.setY(touchXY.py);
-		boxSprite.setPosition(touchPosition);
-		boxSprite.doRender(NULL);
+
+		gEntityManager.Update();
+
+		playerEntity->doRender(NULL);
 		bgUpdate();
 	}
 
