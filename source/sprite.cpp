@@ -26,5 +26,23 @@ Sprite::Sprite(void) {
 }
 
 Sprite::Sprite(u16** in_gfx_data) {
+	loadGfx(in_gfx_data, 1);
+	currentFrame = 0;
+}
+
+Sprite::Sprite(u16** in_gfx_data, u8 in_max_frames) {
+	loadGfx(in_gfx_data, in_max_frames);
+	currentFrame = 0;
+}
+
+void Sprite::loadGfx(u16** in_gfx_data, u8 in_max_frames) {
 	gfx_data = in_gfx_data;
+	max_frames = in_max_frames;
+}
+
+void Sprite::nextFrame(void) {
+	currentFrame++;
+	if (currentFrame > max_frames) {
+		currentFrame = 0;
+	}
 }
