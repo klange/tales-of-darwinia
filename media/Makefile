@@ -1,6 +1,9 @@
 .PHONY: all clean deploy
 
-all: build/logo.png
+all: build build/logo.png
+
+build:
+	mkdir build
 
 clean:
 	@rm -f build/*
