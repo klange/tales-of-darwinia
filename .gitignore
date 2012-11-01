@@ -2,3 +2,5 @@ build
 *.elf
 *.nds
 *.swp
+.DS_STORE
+prototype
