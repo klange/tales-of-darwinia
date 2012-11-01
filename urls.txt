@@ -1,0 +1,12 @@
+http://dev-scene.com/NDS/DOCgraphicmodes
+http://nocash.emubase.de/gbatek.htm#dsvideodisplaysystemblockdiagram
+http://www.dev-scene.com/NDS/Tutorials_Day_4
+http://cthulhu32.kraln.com/tutorials/source/simple_dynscroll.c
+http://cthulhu32.kraln.com/tutorials/dynamicscroll.html
+http://dspassme.jzdocs.com/programmers_guide/tutorial/using_tiles.html
+http://remar.se/andreas/rage/funcspec1.php
+http://blog.b-ark.ca/NetHackDS
+http://www.dev-scene.com/NDS/Tutorials/Captain_Apathy/Tiling
+http://drunkencoders.com/?system_id=2&page=Tutorials
+http://libnds.devkitpro.org/a00151.html#affd17d691136b146eea14f7f9385bbf1
+http://www.coranac.com/tonc/text/video.htm
