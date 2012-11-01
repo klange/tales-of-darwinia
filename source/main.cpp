@@ -18,8 +18,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "logo.h"
+#include "man.h"
+
 #include "sprite.h"
+#include "spritedata.h"
 #include "event.h"
 #include "eventdispatcher.h"
 
@@ -32,18 +34,17 @@
 
 volatile int frame = 0;
 
+
+
 void Vblank() {
 	frame++;
-	scanKeys();
-	oamUpdate(&oamSub);
-
-	globalDispatcher->dispatchEvents();
-	bgUpdate();
 }
 
 void hahaOhMan(void* eventArgs) {
+	//boxSprite.nextFrame();
 	iprintf("\033[23;0H%d  ", frame);
 }
+
 
 int main(void) {
 	/* Touchscreen position */
@@ -65,37 +66,18 @@ int main(void) {
 	/* Set the default backgorund color */
 	setBackdropColor(0xF);
 
-	/* Decompress and show the logo */
-	int bg3 = bgInitSub(3, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
-	decompress(logoBitmap, BG_GFX_SUB, LZ77Vram);
-
 	/* Set up the console */
 	PrintConsole topScreen;
-	int bg1 = bgInit(1, BgType_Text4bpp, BgSize_T_256x256, 0, 0);
+	bgInit(1, BgType_Text4bpp, BgSize_T_256x256, 0, 0);
 	consoleInit(&topScreen, 1, BgType_Text4bpp, BgSize_T_256x256, 31, 0, true, true);
 	oamInit(&oamSub, SpriteMapping_1D_32, false);
 
-	u16* gfx = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_256Color);	
-
-	u16** gfx_array;
-	gfx_array = (u16**)malloc(sizeof(u16*));
-
-	for (int i = 0; i < 16 * 16 / 2; i++) {
-		gfx[i] = 1 | (1 << 8);
-	}
-
-	gfx_array[0] = gfx;
-
-	SPRITE_PALETTE_SUB[1] = RGB15(31, 0, 0);
-
-	Sprite boxSprite = Sprite(gfx_array);
 	Vector3<u16> touchPosition;
 
 	/* Set the vertical blank event */
 	irqSet(IRQ_VBLANK, Vblank);
 
 	/* Hide title */
-	bool bg3_hidden = false;
 	mmInitDefaultMem((mm_addr)soundbank_bin);
 	mmLoad(MOD_TECHNO_MOZART);
 	mmStart(MOD_TECHNO_MOZART, MM_PLAY_LOOP);
@@ -103,38 +85,34 @@ int main(void) {
 	Event* derpyEvent;
 	derpyEvent = (Event*)malloc(sizeof(Event));
 	derpyEvent->eventCallback = hahaOhMan;
-	derpyEvent->type = BUTTON_HOLD;
+	derpyEvent->type = BUTTON_PRESS;
 	derpyEvent->enabled = true;
 
-	Event* drawEvent;
-	drawEvent = (Event*)malloc(sizeof(Event));
-	//drawEvent->eventCallback = boxSprite.doRender;
-	drawEvent->type = BUTTON_HOLD;
-	drawEvent->enabled = true;
+	SpriteData* manSpriteData = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)manTiles, 3);
+
+	Sprite* manSprite = new Sprite(manSpriteData);
+	dmaCopy(manPal, SPRITE_PALETTE_SUB, 512);
 
 	while(1) {
-		swiWaitForVBlank();
+		scanKeys();
 		globalDispatcher->addEvent(derpyEvent);
-		//globalDispatcher->addEvent(drawEvent);
 
-		SPRITE_PALETTE_SUB[1] = RGB15(0, frame % 32, 0);
-		if (keysUp() & KEY_START) bg3_hidden = !bg3_hidden;
-		if (bg3_hidden) {
-			bgHide(bg3);
-			bgShow(bg1);
-		} else {
-			bgHide(bg1);
-			bgShow(bg3);
-		}
-		// This section below is for touch screen sprite
 		if (keysHeld() & KEY_TOUCH) {
 			touchRead(&touchXY);
 		}
 
 		touchPosition.setX(touchXY.px);
 		touchPosition.setY(touchXY.py);
-		boxSprite.setPosition(touchPosition);
-		boxSprite.doRender(NULL);
+
+		manSprite->setPosition(touchPosition);
+		
+		manSprite->doRender(NULL);
+
+		globalDispatcher->dispatchEvents();
+		oamUpdate(&oamSub);
+		swiWaitForVBlank();
+
+		manSprite->nextFrame();
 	}
 
 	return 0;

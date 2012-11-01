@@ -23,6 +23,7 @@ DATA		:=
 INCLUDES	:=	include
 GRAPHICS	:=	data
 AUDIO		:=	audio
+SPRITES		:=  sprites
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -63,7 +64,8 @@ export OUTPUT	:=	$(CURDIR)/$(TARGET)
  
 export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
 					$(foreach dir,$(DATA),$(CURDIR)/$(dir)) \
-					$(foreach dir,$(GRAPHICS),$(CURDIR)/$(dir))
+					$(foreach dir,$(GRAPHICS),$(CURDIR)/$(dir)) \
+					$(foreach dir,$(SPRITES),$(CURDIR)/$(dir))
 
 export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 
@@ -72,6 +74,7 @@ CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
 BINFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.bin))) soundbank.bin
 PNGFILES	:=	$(foreach dir,$(GRAPHICS),$(notdir $(wildcard $(dir)/*.png)))
+SPRITE_FILES   :=  $(foreach dir, $(SPRITES),$(notdir $(wildcard $(dir)/*.png)))
 
  
 #---------------------------------------------------------------------------------
@@ -90,7 +93,8 @@ endif
 
 export OFILES	:=	$(addsuffix .o,$(BINFILES)) \
 					$(PNGFILES:.png=.o) \
-					$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
+					$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o) \
+					$(SPRITE_FILES:.png=.o)
  
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
@@ -144,6 +148,11 @@ soundbank.bin:	$(AUDIOFILES)
 %.s %.h	: %.png %.grit
 #---------------------------------------------------------------------------------
 	grit $< -fts -o$*
+
+#---------------------------------------------------------------------------------
+%.s %.h : %.png
+	grit $< -ff../sprites/sprite.grit -o$*
+#---------------------------------------------------------------------------------
 
 -include $(DEPENDS)
  
