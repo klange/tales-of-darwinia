@@ -7,7 +7,10 @@
 class Entity {
 	public:
 		virtual ~Entity(void) {};
-		/* stuff? */
+		
+		virtual void Init();
+		virtual void Update() {};
+		virtual void Destroy();
 };
 
 #endif
