@@ -75,4 +75,3 @@ int8 EventDispatcher::dispatchEvents(void) {
 		}
 	}
 }
-

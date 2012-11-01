@@ -38,6 +38,7 @@ void Vblank() {
 	oamUpdate(&oamSub);
 
 	globalDispatcher->dispatchEvents();
+	bgUpdate();
 }
 
 void hahaOhMan(void* eventArgs) {
@@ -76,13 +77,18 @@ int main(void) {
 
 	u16* gfx = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_256Color);	
 
+	u16** gfx_array;
+	gfx_array = (u16**)malloc(sizeof(u16*));
+
 	for (int i = 0; i < 16 * 16 / 2; i++) {
 		gfx[i] = 1 | (1 << 8);
 	}
 
+	gfx_array[0] = gfx;
+
 	SPRITE_PALETTE_SUB[1] = RGB15(31, 0, 0);
 
-	Sprite boxSprite = Sprite(gfx);
+	Sprite boxSprite = Sprite(gfx_array);
 	Vector3<u16> touchPosition;
 
 	/* Set the vertical blank event */
@@ -124,11 +130,11 @@ int main(void) {
 		if (keysHeld() & KEY_TOUCH) {
 			touchRead(&touchXY);
 		}
+
 		touchPosition.setX(touchXY.px);
 		touchPosition.setY(touchXY.py);
 		boxSprite.setPosition(touchPosition);
 		boxSprite.doRender(NULL);
-		bgUpdate();
 	}
 
 	return 0;
