@@ -9,8 +9,10 @@ class Entity {
 		virtual ~Entity(void) {};
 		
 		virtual void Init();
-		virtual void Update() {};
 		virtual void Destroy();
+
+		virtual void Update() {};
+		virtual void Render() {};
 };
 
 #endif

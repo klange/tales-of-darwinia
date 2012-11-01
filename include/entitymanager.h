@@ -14,8 +14,10 @@ class EntityManager
 {
 public:
 	void Init();
-	void Update();
 	void Destroy();
+
+	void Update();
+	void Render();
 
 private:
 	// private data
