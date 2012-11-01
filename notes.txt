@@ -1,0 +1,43 @@
+Tiling Engine Specs
+
+Requirements:
+	Display:
+		- 1 tile = 8x8 pixel
+			- Any other size such as 16x16 tiles == pre process step
+
+		- Dynamic map size
+			- Min 64x64 tiles ~9-18KiB of map data
+			- Max ?x? tiles - Max few hundred kilobytes
+
+	Collision:
+		- Collision is done in an array of u8 the same size as the map
+			1. last bit = no-walk/walk
+			2. next 7 bit for whatever, animation? etc
+
+	Animation:
+		- Use the same array in collision and toggle bit 2 for animation
+			1. Need some way to indicate an animation chain of tile 1 -> tile 2 ...
+			2. Probably an independent supporting data block to be loaded
+
+	Movement:
+		- Sprite is centered within the "center 80%" of the screen then when it
+			approaches the edge the map will start to shift around in the relevant
+			direction
+		- When current display map edge is approached, a new map of the relevant
+			data is loaded into vram and "map positioning" (in pixels) is reset
+		- When there is no more actual data to be loaded, the sprite is then
+			allowed to approach the edge of the screen (uncertain of this)
+			- May be better to just load blank tiles in these and display the
+				remaining 10-20% border
+
+	VRAM req:
+		- 64x64 tiles of 8x8 pixels - u16 indexes of tiles
+		- u8 - 8x8 blocks of paletted data
+		- RGB15 palette - 256 entries
+
+
+Startup requirements:
+	- A struct that has the map dim (x, y) in tiles, then the tiles data
+	- A list of tiles with the tile image data in each
+	- A list of palettes which the actual tiles refers to
+	- A Collision/Animation/Flag map in u8 format and same dim as the tile map
