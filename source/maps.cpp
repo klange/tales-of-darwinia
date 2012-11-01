@@ -20,7 +20,7 @@ u8 MapEngine::dummy(u8 a) {}
 
 #include "map_data.h"
 
-int main(void) {
+int maps_main(void) {
 	//set video mode and map vram to the background
 	videoSetMode(MODE_0_2D | DISPLAY_BG0_ACTIVE);
 	vramSetBankA(VRAM_A_MAIN_BG_0x06000000);
