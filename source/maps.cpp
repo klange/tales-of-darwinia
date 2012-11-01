@@ -5,12 +5,41 @@
 
 #include <nds.h>
 #include "maps.h"
-#include "map_data.h"
 
-MapEngine::MapEngine(void) {}
+MapEngine::MapEngine(
+		const int palette_len,
+		const u16* palette,
+		const int tiles_len,
+		const u8** tiles,
+		const int map_height,
+		const int map_width,
+		const u16* map
+	) : palette_len(palette_len),
+		palette(palette),
+		tiles_len(tiles_len),
+		tiles(tiles),
+		map_height(map_height),
+		map_width(map_width),
+		map(map) {
+	/* Init the tile and scroll position,
+	 * Top-Left corner is 0,0 for screen and tiles
+	 *
+	 * Scroll position is the offset for displaying
+	 * the 64x64 map frame on the display
+	 */
+}
 
-u8 MapEngine::dummy(u8 a) {}
+int MapEngine::dumpTilesToVRAM(void) {
+	return 0;
+}
 
+int MapEngine::getTileX(int screen_pixel_x) {
+	return 0;
+}
+
+int MapEngine::getTileY(int screen_pixel_y) {
+	return 0;
+}
 
 /*
 #include <nds.h>

@@ -8,7 +8,8 @@
  * Patrick T
  * Kevin L
  * Jeryl C
- * Mike G
+ * Matt G
+ * Tom R
  * MAYBE YOU!
  *
  */
@@ -30,6 +31,7 @@
 
 /* Maps */
 #include "maps.h"
+#include "map_data.h"
 
 // Sound!
 #include <maxmod9.h>
@@ -50,7 +52,7 @@ void hahaOhMan(void* eventArgs) {
 	iprintf("\033[23;0H%d  ", frame);
 }
 
-int main(void) {
+void init(void) {
 	/* Force the main engine to top screen */
 	lcdMainOnTop();
 
@@ -66,6 +68,29 @@ int main(void) {
 
 	/* Set the default backgorund color */
 	setBackdropColor(0xF);
+
+	/* Set the vertical blank event */
+	irqSet(IRQ_VBLANK, Vblank);
+}
+
+int main(void) {
+	/* Touchscreen position */
+	touchPosition touchXY;
+
+	/* Put any generic engine/game init code in the init () */
+	init();
+
+	/* Load data from map_data.h into the map engine */
+	MapEngine mapEngine = MapEngine(
+		tile_palette_len,
+		tile_palette,
+		tile_list_len,
+		tile_list,
+		map_height,
+		map_width,
+		map
+	);
+	mapEngine.dumpTilesToVRAM();
 
 	/* Decompress and show the logo */
 	int bg3 = bgInitSub(3, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
@@ -88,9 +113,6 @@ int main(void) {
 	gEntityManager.Init();
 	PlayerEntity* playerEntity = new PlayerEntity(gfx);
 	playerEntity->Init();
-
-	/* Set the vertical blank event */
-	irqSet(IRQ_VBLANK, Vblank);
 
 	/* Hide title */
 	bool bg3_hidden = false;
