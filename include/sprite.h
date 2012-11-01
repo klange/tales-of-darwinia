@@ -14,13 +14,12 @@
  */
 class Sprite: public Renderable, public Entity, public Transformable {
 	private:
-		void draw(void);
 		SpriteData* spriteData;
 		u8 currentFrame;
 	public:
-		/* An array of pointers that points to locations in memory where sprite frames are */
 		Sprite(SpriteData*);
 		void nextFrame(void);
+		void draw(void);
 };
 
 #endif

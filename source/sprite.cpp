@@ -36,6 +36,6 @@ void Sprite::nextFrame(void) {
 		currentFrame = 0;
 	}
 
-	u8* offset = spriteData->spriteTilesMem + currentFrame * 32*32;
+	u8* offset = spriteData->spriteTilesMem + (currentFrame+1*spriteData->maxNumFrames) * 32*32;
 	dmaCopy(offset, spriteData->spriteGfxMem, 32*32);
 }
