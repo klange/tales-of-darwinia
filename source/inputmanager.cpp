@@ -14,7 +14,7 @@ touchPosition* InputManager::getCurrentTouchPosition(){
 	return tap;
 }
 
-//TODO: Let speed be controlled by a variable, right now it's clamped to 5 pixels
+//TODO: Let speed be controlled by a variable, right now it's clamped
 touchPosition* InputManager::moveToPosition(Vector3<u16>* currentPosition){
 	s16 from_x = currentPosition->x();
 	s16 from_y = currentPosition->y();
@@ -42,6 +42,7 @@ touchPosition* InputManager::moveToPosition(Vector3<u16>* currentPosition){
 	return moveToPosition;
 }
 
+// This is really shitty...figure out a way to move once per X frames w/o clamping
 s16 InputManager::clamp(s16 value){
 	if (value > 1){
 		return 1;
