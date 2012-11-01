@@ -78,8 +78,6 @@ int main(void) {
 
 	/* Hide title */
 	bool bg3_hidden = false;
-	
-	Vector3<u16>* derp = new Vector3<u16>(1, 2, 3);
 
 	mmInitDefaultMem((mm_addr)soundbank_bin);
 
