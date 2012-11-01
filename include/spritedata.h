@@ -1,7 +1,13 @@
 #ifndef SPRITEDATA_H_
 #define SPRITEDATA_H_
 
+#include <nds.h>
+
 class SpriteData {
+	private:
+		static bool oamAllocationTable[SPRITE_COUNT];
+		void assignOamIndex(void);
+
 	public:
 		u16* spriteGfxMem;
 		u8* spriteTilesMem;

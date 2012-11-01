@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 void Sprite::draw(void) {
-	iprintf("%d\n", hidden);
+	iprintf("   \x1b[32;1m%d\x1b[39m\n", currentFrame);
 	oamSet(
 		&oamSub,
 		spriteData->oamIndex, // oam index
@@ -18,24 +18,43 @@ void Sprite::draw(void) {
 		-1, // affine transformation context
 		false, //double size when rotating
 		false, //hidden
-		false, //wflip
-		false, //hflip
+		vflip, //vflip
+		hflip, //hflip
 		false //mosaic?
 	);
 }
 
 Sprite::Sprite(SpriteData* inSpriteData) {
 	spriteData = inSpriteData;
-	dmaCopy(spriteData->spriteTilesMem, spriteData->spriteGfxMem, 32*32);
 	currentFrame = 0;
+	vflip = false;
+	hflip = false;
+
+	copyToGfxBuffer();
+}
+
+void Sprite::boundFrameNumber(void) {
+	if (currentFrame >= spriteData->maxNumFrames) {
+		currentFrame = 0;
+	}
+	if (currentFrame < 0) {
+		currentFrame = spriteData->maxNumFrames - 1;
+	}
+}
+
+void Sprite::copyToGfxBuffer(void) {
+	u8* offset = spriteData->spriteTilesMem + (currentFrame+1*spriteData->maxNumFrames) * 32*32;
+	dmaCopy(offset, spriteData->spriteGfxMem, 32*32);
 }
 
 void Sprite::nextFrame(void) {
 	currentFrame++;
-	if (currentFrame >= spriteData->maxNumFrames) {
-		currentFrame = 0;
-	}
+	boundFrameNumber();
+	copyToGfxBuffer();
+}
 
-	u8* offset = spriteData->spriteTilesMem + (currentFrame+1*spriteData->maxNumFrames) * 32*32;
-	dmaCopy(offset, spriteData->spriteGfxMem, 32*32);
+void Sprite::prevFrame(void) {
+	currentFrame--;
+	boundFrameNumber();
+	copyToGfxBuffer();
 }
