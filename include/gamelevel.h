@@ -4,6 +4,7 @@
 
 #include <nds.h>
 #include "map_type.h"
+#include "maps.h"
 
 // NOTE: if you add a new type here, make sure you add to the corresponding mappings in gamelevel.cpp
 typedef enum _EnemyType
@@ -66,7 +67,7 @@ public:
 class LevelLoader
 {
 public:
-	void load(GameLevel* level);
+	MapEngine load(GameLevel* level);
 };
 
 extern LevelLoader levelLoader;

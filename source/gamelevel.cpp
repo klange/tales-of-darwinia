@@ -89,7 +89,7 @@ GameLevel::GameLevel(map_t* map, u16 playerX, u16 playerY, EnemySpecification** 
 	this->music = music;
 }
 
-void LevelLoader::load(GameLevel* level)
+MapEngine LevelLoader::load(GameLevel* level)
 {
 	/* Load data from map_data.h into the map engine */
 	MapEngine mapEngine = MapEngine(
@@ -99,9 +99,11 @@ void LevelLoader::load(GameLevel* level)
 	);
 
 	/* Load the relevant data into the VRAM */
-	mapEngine.dumpPaletteToVRAM(&BG_PALETTE_SUB[0]);
-	mapEngine.dumpTilesToVRAM((u8*)BG_TILE_RAM_SUB(1));
-	mapEngine.dumpMapToVRAM((u16*)BG_MAP_RAM_SUB(0));
+	mapEngine.initVRAM(
+		&BG_PALETTE_SUB[0],
+		(u8*)BG_TILE_RAM_SUB(1),
+		(u16*)BG_MAP_RAM_SUB(0)
+	);
 
 	/* Make the darwin sprite */
 	SpriteData* gfx = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)darwinTiles, 3);
@@ -127,4 +129,6 @@ void LevelLoader::load(GameLevel* level)
 	}
 
 	audioManager.playMusic(level->music);
+
+	return mapEngine;
 }

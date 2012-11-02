@@ -23,6 +23,10 @@
 #define MAP_HEIGHT 64
 #define MAP_SIZE (MAP_WIDTH * MAP_HEIGHT)
 
+// World boundaries
+#define MAP_MAX_X (TILE_WIDTH * MAP_WIDTH)
+#define MAP_MAX_Y (TILE_HEIGHT * MAP_HEIGHT)
+
 /* Palette typedef */
 typedef u16 palette_t[PALETTE_ENTRIES];
 
