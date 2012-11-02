@@ -2,12 +2,12 @@
 #define TEXT_CHAR_H_
 
 #include "spritedata.h"
-#include "sprite.h"
+#include "livingentity.h"
 
-class TextChar : public Sprite
+class TextChar : public LivingEntity
 {
 public:
-    TextChar(SpriteData* gfx) : Sprite(gfx) {}
+ TextChar(SpriteData* gfx) : LivingEntity(gfx) {}
 	virtual void Update();
 };
 

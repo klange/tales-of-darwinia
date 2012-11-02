@@ -2,9 +2,6 @@
 #define TEXT_H_
 
 #include <nds.h>
-#include "entity.h"
-#include "renderable.h"
-#include "transformable.h"
 #include "textchar.h"
 
 #define MAX_TEXT_SPRITES 64
@@ -12,7 +9,7 @@
 /**
  * Represents a text object
  */
-class TextRenderable : public Entity, public Renderable, public Transformable { // Once the renderable API is better defined, we'll want to call through it
+class TextRenderable { // Once the renderable API is better defined, we'll want to call through it
 
 	private:
 		void draw(void);

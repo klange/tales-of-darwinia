@@ -21,6 +21,7 @@
 
 #include "darwin.h"
 #include "man.h"
+#include "inconsolata.h"
 #include "logo.h"
 #include "sprite.h"
 #include "entitymanager.h"
@@ -44,6 +45,29 @@ void Vblank(void) {
 	
 }
 
+//SpriteData gTextSpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)inconsolataTiles, 27);
+	 
+void blitText(const char* text, int len, int x, int y, int width, int height) {
+  for (int i = 0; i < len; ++i) {
+          SpriteData* spriteData = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)inconsolataTiles, 27);
+    	  Sprite* charSprite = new Sprite(spriteData);
+	  charSprite->Init();
+	  charSprite->size = Vector3<s16>(1,1,0);
+	  charSprite->setPosition(Vector3<s16>(x+(i*20),y,1));
+	  int frame = 0;
+	  if (text[i] >= 0x30 && text[i] <= 0x39) {
+	    frame = text[i] - 0x30;
+	  }
+	  else if (text[i] >= 0x61 && text[i] <= 0x7A) {
+	    frame = text[i] - 0x61 + 27;
+	  }
+	  else if (text[i] >= 0x41 && text[i] <= 0x5A) {
+	    frame = text[i] - 0x41 + 54;
+	  }
+	  charSprite->setFrame(frame); //frame);
+  }
+}
+
 void init(void) {
 	/* Force the main engine to top screen */
 	lcdMainOnTop();
@@ -64,7 +88,7 @@ void init(void) {
 	/* Initialize the event dispatcher */
 	gEventDispatcher.Init();
 
-	/* Set the default backgorund color */
+	/* Set the default background color */
 	setBackdropColor(0xF);
 
 	//oamInit(&oamMain, SpriteMapping_1D_128, false);
@@ -107,7 +131,7 @@ int main(void) {
 
 	/* Make a man enemy sprite */
 	SpriteData* gfx2 = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)manTiles, 3);
-	dmaCopy(manPal, SPRITE_PALETTE_SUB, 512);
+	dmaCopy(inconsolataPal, SPRITE_PALETTE_SUB, 512);
 
 	PlayerEntity* playerEntity = new PlayerEntity(gfx);
 	playerEntity->Init();
@@ -122,7 +146,7 @@ int main(void) {
 	audioManager.initialize();
 	audioManager.playMusic(MOD_TECHNO_MOZART);
 
-	TextRenderable("This is test text. <>!", 22, 64, 90, 0, 0);
+	blitText("BARK0123456789", 10, 1, 1, 0, 0);
 
 	touchPosition touchXY;
 

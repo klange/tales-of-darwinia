@@ -1,8 +1,12 @@
 #include <nds.h>
 #include <stdio.h>
+#include "entitymanager.h"
 #include "text.h"
 #include "man.h"
 #include "inconsolata.h"
+#include "enemyentity.h"
+
+extern EntityManager gEntityManager;
 
 /**
  * Performs the actual text rendering operation
@@ -24,9 +28,10 @@ TextRenderable::TextRenderable(const char* text, //! The text to be rendered
 	mSpriteData = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)manTiles, 3);
 	for (int i = 0; i < len; ++i) {
 	  mSprites[i] = new TextChar(mSpriteData);
+	  mSprites[i]->Init();
 	  mSprites[i]->size = Vector3<s16>(16,16,0);
 	  mSprites[i]->setPosition(Vector3<s16>(x+1,y,1));
-	  //mSprites[i]->setFrame(4);
+	  mSprites[i]->setFrame(4);
 	}
 }
 
