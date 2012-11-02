@@ -5,14 +5,15 @@
 #include "math.h"
 #include <stdio.h>
 
+LivingEntity::LivingEntity(SpriteData* gfx, LivingStats* stats) : Sprite(gfx)
+{
+	mStats = stats;
+}
 
 // this might actually have common methods in it someday
 void LivingEntity::Init(){
 	Entity::Init();
 	
-	// Make this more robust, read from a map or something later
-	mStats = new LivingStats(8, 1, 0, 8, 8);
-
 	type = LIVINGENTITY;
 	updateCount = 0;
 }

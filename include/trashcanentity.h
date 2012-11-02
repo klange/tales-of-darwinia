@@ -7,7 +7,7 @@
 class TrashCanEntity : public EnemyEntity
 {
 public:
-	TrashCanEntity(SpriteData* gfx) : EnemyEntity(gfx){}
+	TrashCanEntity(SpriteData* gfx, LivingStats* stats) : EnemyEntity(gfx, stats){}
 
 	virtual void Update();
 	
