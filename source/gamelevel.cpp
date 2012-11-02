@@ -5,6 +5,7 @@
 // sprite resources
 #include "darwin.h"
 #include "man.h"
+#include "trashcan.h"
 
 #include "sprite.h"
 #include "spritedata.h"
@@ -27,11 +28,16 @@ LivingStats DEFAULT_PLAYER_STATS(8, 8, 8, 8, 8);
 // NOTE: must parallel EnemyType order
 u8* SPRITE_TILES_BY_ENEMY_TYPE[] = {
 	NULL, // ENEMY_UNKNOWN
-	(u8*) manTiles, // TODO: replace with trashCanTiles
+	(u8*) trashcanTiles,
 	(u8*) manTiles,
 	NULL,
 };
 
+u8 SPRITE_FRAMES_BY_ENEMY_TYPE[] = {
+	0, // ENEMY_UNKNOWN
+	0,
+	3,
+};
 // TODO: map from item type to sprite buffer
 u8* SPRITE_TILES_BY_ITEM_TYPE[] = {
 	NULL,
@@ -120,7 +126,12 @@ MapEngine LevelLoader::load(GameLevel* level)
 	while (*enemies)
 	{
 		EnemySpecification* enemySpec = *enemies;
-		SpriteData* enemySprite = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, SPRITE_TILES_BY_ENEMY_TYPE[enemySpec->type], 3);
+		SpriteData* enemySprite = new SpriteData(
+			SpriteSize_32x32,
+			SpriteColorFormat_256Color,
+			SPRITE_TILES_BY_ENEMY_TYPE[enemySpec->type],
+			SPRITE_FRAMES_BY_ENEMY_TYPE[enemySpec->type]
+		);
 		enemySprite->paletteIndex=1;
 		EnemyEntity* enemyEntity;
 		if (enemySpec->type == ENEMY_TRASH_CAN){
