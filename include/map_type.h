@@ -18,6 +18,7 @@
 // TODO: should not need these
 #define TILE_ENTRIES 96
 #define PALETTE_ENTRIES 16
+#define NOWALK_ENTRIES 46
 
 #define MAP_WIDTH 64
 #define MAP_HEIGHT 64
@@ -40,5 +41,8 @@ typedef tile_t * tile_list_t[TILE_ENTRIES];
 
 /* Maps typedef */
 typedef u16 map_t[MAP_SIZE];
+
+/* Nowalk typedef */
+typedef u8 nowalk_t[NOWALK_ENTRIES];
 
 #endif
