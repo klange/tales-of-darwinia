@@ -15,7 +15,9 @@
 class ItemEntity : public Sprite
 {
 public:
-	ItemEntity(SpriteData* inSpriteData) : Sprite(inSpriteData) {}
+	ItemEntity(SpriteData* inSpriteData, LivingStats* stats);
+
+	virtual void Update(void);
 
 	LivingStats* Consume();
 

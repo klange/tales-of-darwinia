@@ -12,24 +12,12 @@ void EnemyEntity::Update()
 		return;
 
 	speed = 2;
-	Vector3<s16> touchPos;
-	if(gInputManager.getCurrentTouchPosition(touchPos))
+
+	if (IsTouchedByNearbyPlayer())
 	{
-		//printf("touchPos = %d,%d\n", touchPos.x(), touchPos.y());
-		BoundingBox<s16> bb;
-		getBoundingBox(bb);
-		//printf("topLeft = %d,%d\n", bb.mTopLeft.x(), bb.mTopLeft.y());
-		//printf("bottomRight = %d,%d\n", bb.mBottomRight.x(), bb.mBottomRight.y());
-		if(bb.PointInside(touchPos))
-		{
-			Vector3<s16> toPlayer = gpPlayerEntity->position - this->position;
-			if(toPlayer.magnitude() < 32)
-			{
-				audioManager.playSound(SFX_OUCH);
-				LivingEntity::Damage(gpPlayerEntity->mStats->attack);
-				printf("Ouch %d!\n", mStats->health);
-			}
-		}
+		audioManager.playSound(SFX_OUCH);
+		LivingEntity::Damage(gpPlayerEntity->mStats->attack);
+		printf("Ouch %d!\n", mStats->health);
 	}
 
 	this->setTargetPosition(gpPlayerEntity->position);

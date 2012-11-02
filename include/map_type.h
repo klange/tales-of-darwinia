@@ -19,8 +19,8 @@
 #define TILE_ENTRIES 96
 #define PALETTE_ENTRIES 16
 
-#define MAP_WIDTH 32
-#define MAP_HEIGHT 32
+#define MAP_WIDTH 64
+#define MAP_HEIGHT 64
 #define MAP_SIZE (MAP_WIDTH * MAP_HEIGHT)
 
 // World boundaries
