@@ -1,4 +1,6 @@
+#include "entitymanager.h"
 #include "livingentity.h"
+#include "boundingbox.h"
 #include "vector3.h"
 #include "math.h"
 #include <stdio.h>
@@ -11,6 +13,7 @@ void LivingEntity::Init(){
 	// Make this more robust, read from a map or something later
 	mStats = new LivingStats(8, 1, 0, 8, 8);
 
+	type = LIVINGENTITY;
 	updateCount = 0;
 }
 
@@ -27,11 +30,12 @@ void LivingEntity::Update(void) {
 	directionVector = targetPosition - position;
 	float32 magnitude = (float32)directionVector.magnitude();
 
-	if (magnitude < 1.5) {
+	BoundingBox<s16> bb;
+	getBoundingBox(bb);
+	if (magnitude < 1.5)  {
 		movementState = STOPPED;
 		return;
 	}
-
 	float32 diffx = ((float32)abs(directionVector.x()) / magnitude) * speed;
 	float32 diffy = ((float32)abs(directionVector.y()) / magnitude) * speed;
 
@@ -62,9 +66,13 @@ void LivingEntity::Update(void) {
 	} else {
 		y = floor(newy);
 	}
-
+	Vector3<s16> oldPos = position;	
 	setPosition(Vector3<s16>(x, y, 1));
-
+	if(!gEntityManager.IsMoveLegal(this)){
+		movementState = STOPPED;
+		setPosition(oldPos);
+		return;
+	}
 	s16 xComp = abs(directionVector.x());
 	s16 yComp = abs(directionVector.y());
 	vflip = false;
@@ -94,4 +102,8 @@ void LivingEntity::setTargetPosition(Vector3<s16> tar) {
 
 Vector3<s16> LivingEntity::getTargetPosition(void) {
 	return targetPosition;
+}
+
+EntityType LivingEntity::getType(){
+	return LIVINGENTITY;
 }

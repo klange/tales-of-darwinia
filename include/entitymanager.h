@@ -3,6 +3,9 @@
 
 #include <nds.h>
 #include <stdint.h>
+#include <vector3.h>
+#include "transformable.h"
+#include "boundingbox.h"
 
 // Forward declations
 class Entity;
@@ -23,6 +26,7 @@ public:
 	 * Invoke nextFrame on all applicable entities
 	 */
 	void NextFrame();
+	bool IsMoveLegal(Entity* entity);
 
 private:
 	// private data

@@ -99,7 +99,7 @@ bool Sprite::IsTouchedByNearbyPlayer()
 		if (bb.PointInside(touchPos))
 		{
 			Vector3<s16> toPlayer = gpPlayerEntity->position - this->position;
-			if (toPlayer.magnitude() < 32)
+			if (toPlayer.magnitude() < 45)
 			{
 				return true;
 			}
