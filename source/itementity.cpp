@@ -2,16 +2,26 @@
 #include "audiomanager.h"
 #include "playerentity.h"
 
-#define SFX_CONSUME_ITEM SFX_R2D2
+#define SFX_CONSUME_ITEM SFX_CHOMP
 
-ItemEntity::ItemEntity(SpriteData* inSpriteData, LivingStats* stats) : Sprite(inSpriteData)
+
+char* NAMES_BY_ITEM_TYPE[] = {
+	NULL, // ITEM_UNKNOWN
+	"Peanut butter",
+	"Chocolate",
+	"Drumstick",
+	NULL,
+};
+
+
+ItemEntity::ItemEntity(SpriteData* inSpriteData, LivingStats* stats, ItemType type) : Sprite(inSpriteData)
 {
+	this->type = type;
 	this->mStats = stats;
 }
 
 LivingStats* ItemEntity::Consume()
 {
-	audioManager.playSound(SFX_CONSUME_ITEM);
 	shouldBeRemoved = true;
 	hidden = true;
 	return this->mStats;
@@ -25,7 +35,7 @@ void ItemEntity::Update()
 	if (IsTouchedByNearbyPlayer())
 	{
 		// TODO: play munch sound
-		mStats->Print("Munch");
+		mStats->Print(NAMES_BY_ITEM_TYPE[type]);
 		gpPlayerEntity->Collect(this);
 	}
 

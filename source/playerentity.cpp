@@ -35,6 +35,9 @@ PlayerEntity::~PlayerEntity()
 
 void PlayerEntity::Update()
 {
+	if (shouldBeRemoved)
+		return;
+
 	if (keysHeld() & KEY_TOUCH) {
 		touchPosition curTouchPosition;
 		touchRead(&curTouchPosition);
@@ -59,28 +62,31 @@ void PlayerEntity::Update()
 
 	LivingEntity::Update();
 
-	// HUGE HACK
-	static int mapX = 0;
-	static int mapY = 0;
+	static int mapX = gpMapEngine->getScrollX();
+	static int mapY = gpMapEngine->getScrollY();
 
 	const int slop = 32;
 	const int width = 256;
 	const int height = 190;
 
+	const int scrollSpeed = 2;
+	int relX = 0;
+	int relY = 0;
+
 	if (position.x() - mapX < slop) {
-		if (mapX > 0) mapX--;
+		if (mapX > 0) relX = -scrollSpeed;
 	}
 	if (mapX + width - position.x() < slop) {
-		if (mapX < ((MAP_WIDTH-(256/8))*8)) mapX++;
+		if (mapX < ((MAP_WIDTH-(256/8))*8)) relX = scrollSpeed;
 	}
 	if (position.y() - mapY < slop) {
-		if (mapY > 0) mapY--;
+		if (mapY > 0) relY = -scrollSpeed;
 	}
 	if (mapY + height - position.y() < slop) {
-		if (mapY < ((MAP_HEIGHT-(192/8))*8)) mapY++;
+		if (mapY < ((MAP_HEIGHT-(192/8))*8)) relY = scrollSpeed;
 	}
 
-	gpMapEngine->scrollMapAbsolute(gMapTileIndex, mapX, mapY);
+	gpMapEngine->scrollMapRelative(gMapTileIndex, relX, relY);
 }
 
 void PlayerEntity::Collect(ItemEntity* item)
@@ -99,4 +105,21 @@ void PlayerEntity::Collect(ItemEntity* item)
 	}
 
 	mStats->Print("DARWIN");
+
+	if (mStats->health <= 0)
+	{
+		audioManager.playSound(SFX_GAME_OVER);
+		audioManager.pauseMusic();
+		OnDeath();
+	}
+	else
+	{
+		audioManager.playSound(SFX_CHOMP);
+	}
+}
+
+void PlayerEntity::OnDeath()
+{
+	shouldBeRemoved = true;
+	printf("\n\nGAME OVER :-(\n\n");
 }

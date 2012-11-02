@@ -53,10 +53,14 @@ class MapEngine {
 			u16* a_map_memory
 		);
 
+		int getScrollX() { return scroll_x; }
+		int getScrollY() { return scroll_y; }
+
 		int getTileX(int screen_pixel_x);
 		int getTileY(int screen_pixel_y);
 
-		void scrollMapAbsolute(int bg, int pixel_x, int pixel_y);
+		void scrollMapAbsolute(int bg, int abs_x, int abs_y);
+		void scrollMapRelative(int bg, int rel_x, int rel_y);
 };
 
 #endif

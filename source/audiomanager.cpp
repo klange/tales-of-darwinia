@@ -22,8 +22,9 @@ void AudioManager::initialize()
 	mmInitDefaultMem((mm_addr)soundbank_bin);
 
 	mmLoadEffect(SFX_DOG_BARK);
-//	mmLoadEffect(SFX_R2D2);
+	mmLoadEffect(SFX_CHOMP);
 	mmLoadEffect(SFX_OUCH);
+	mmLoadEffect(SFX_GAME_OVER);
 	mmLoad(MOD_TECHNO_MOZART);
 }
 
@@ -35,9 +36,11 @@ void AudioManager::playSound(int soundRef)
 void AudioManager::playMusic(int musicRef)
 {
 	mmStart(musicRef, MM_PLAY_LOOP);
+	mmSetModuleVolume(1024);
 }
 
 void AudioManager::pauseMusic()
 {
-	mmPause();
+	// pause or stop kills all sound :-(
+	mmSetModuleVolume(0);
 }
