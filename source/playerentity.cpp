@@ -9,10 +9,6 @@
 
 PlayerEntity* gpPlayerEntity = NULL;
 
-extern int gMapTileIndex;
-extern MapEngine* gpMapEngine;
-
-
 void PlayerEntity::Init(){
 	LivingEntity::Init();
 
@@ -38,10 +34,13 @@ void PlayerEntity::Update()
 	if (shouldBeRemoved)
 		return;
 
+	int mapX = gpMapEngine->getScrollX();
+	int mapY = gpMapEngine->getScrollY();
+
 	if (keysHeld() & KEY_TOUCH) {
 		touchPosition curTouchPosition;
 		touchRead(&curTouchPosition);
-		setTargetPosition(Vector3<s16>(curTouchPosition.px, curTouchPosition.py, 1));
+		setTargetPosition(Vector3<s16>(mapX + curTouchPosition.px, mapY + curTouchPosition.py, 1));
 		movementState = MOVING;
 	}
 
@@ -62,9 +61,6 @@ void PlayerEntity::Update()
 
 	LivingEntity::Update();
 
-	static int mapX = gpMapEngine->getScrollX();
-	static int mapY = gpMapEngine->getScrollY();
-
 	const int slop = 32;
 	const int width = 256;
 	const int height = 190;
@@ -73,17 +69,18 @@ void PlayerEntity::Update()
 	int relX = 0;
 	int relY = 0;
 
-	if (position.x() - mapX < slop) {
-		if (mapX > 0) relX = -scrollSpeed;
+	if (position.x() - mapX < slop)
+	{
+		relX = -scrollSpeed;
 	}
 	if (mapX + width - position.x() < slop) {
-		if (mapX < ((MAP_WIDTH-(256/8))*8)) relX = scrollSpeed;
+		relX = scrollSpeed;
 	}
 	if (position.y() - mapY < slop) {
-		if (mapY > 0) relY = -scrollSpeed;
+		relY = -scrollSpeed;
 	}
 	if (mapY + height - position.y() < slop) {
-		if (mapY < ((MAP_HEIGHT-(192/8))*8)) relY = scrollSpeed;
+		relY = scrollSpeed;
 	}
 
 	gpMapEngine->scrollMapRelative(gMapTileIndex, relX, relY);

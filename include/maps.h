@@ -4,6 +4,13 @@
 #include <nds.h>
 #include "map_type.h"
 
+// forward declarations
+class MapEngine;
+
+// Yep! This is ugly.
+extern int gMapTileIndex;
+extern MapEngine* gpMapEngine;
+
 /**
  * A class that deals with the loading and unloading of viewable map
  * area to the hardware

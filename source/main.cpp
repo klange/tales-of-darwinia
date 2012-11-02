@@ -142,6 +142,7 @@ int main(void) {
           gSpriteData[i] = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)inconsolataTiles, 255);
     	  gTextChars[i] = new TextChar(gSpriteData[i]);
 	  gTextChars[i]->isAnimated = false;
+	  gTextChars[i]->isScrollable = false;
 	  gTextChars[i]->Init();
 	  gTextChars[i]->size = Vector3<s16>(1,1,0);
 	  gTextChars[i]->setPosition(Vector3<s16>(40+(i*12),20,1));
