@@ -25,7 +25,14 @@ void Transformable::setRotation(s16 rotValue) {
 
 void Transformable::getBoundingBox(BoundingBox<s16>& bbOut)
 {
-	bbOut.mTopLeft = position + anchor;
-	bbOut.mBottomRight = position + size + anchor;
+	getBoundingBox(bbOut, 2);
 }
+
+void Transformable::getBoundingBox(BoundingBox<s16>& bbOut, u16 scalingFactor)
+{
+	bbOut.mTopLeft = position + anchor;
+	bbOut.mBottomRight = position + size/scalingFactor + anchor;
+}
+
+
 

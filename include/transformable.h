@@ -28,6 +28,7 @@ class Transformable {
 		void setRotation(s16);
 		void setScale(s16);
 
+		void getBoundingBox(BoundingBox<s16>& bbOut, u16 scalingFactor);
 		void getBoundingBox(BoundingBox<s16>& bbOut);
 };
 #endif
