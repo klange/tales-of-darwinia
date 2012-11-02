@@ -35,6 +35,7 @@ Sprite::Sprite(SpriteData* inSpriteData) {
 	vflip = false;
 	hflip = false;
 	anchor = Vector3<s16>(-16, -16, 0);
+	isAnimated = true;
 
 	copyToGfxBuffer();
 }
@@ -58,15 +59,19 @@ void Sprite::copyToGfxBuffer(void) {
 }
 
 void Sprite::nextFrame(void) {
+  if (isAnimated) {
 	currentFrame++;
 	boundFrameNumber();
 	copyToGfxBuffer();
+  }
 }
 
 void Sprite::prevFrame(void) {
+  if (isAnimated) {
 	currentFrame--;
 	boundFrameNumber();
 	copyToGfxBuffer();
+  }
 }
 
 void Sprite::setFrame(int8 givenFrame) {
