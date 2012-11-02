@@ -60,7 +60,6 @@ void Sprite::prevFrame(void) {
 }
 
 void Sprite::Render(void) {
-	printf("what\n");
 	draw();
 }
 
