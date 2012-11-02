@@ -123,7 +123,14 @@ void PlayerEntity::Collect(ItemEntity* item)
 	}
 	else
 	{
-		audioManager.playSound(SFX_CHOMP);
+		if (statsDelta->health < 0)
+		{
+			audioManager.playSound(SFX_CHOKE);
+		}
+		else
+		{
+			audioManager.playSound(SFX_CHOMP);
+		}
 	}
 }
 
