@@ -2,6 +2,7 @@
 #define TRASHCAN_ENTITY_H_
 
 #include "enemyentity.h"
+#include "spritedata.h"
 
 class TrashCanEntity : public EnemyEntity
 {

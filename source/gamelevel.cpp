@@ -15,6 +15,7 @@
 
 #include "playerentity.h"
 #include "enemyentity.h"
+#include "trashcanentity.h"
 
 #include "audiomanager.h"
 
@@ -119,7 +120,12 @@ MapEngine LevelLoader::load(GameLevel* level)
 	{
 		EnemySpecification* enemySpec = *enemies;
 		SpriteData* enemySprite = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, SPRITE_TILES_BY_ENEMY_TYPE[enemySpec->type], 3);
-		EnemyEntity* enemyEntity = new EnemyEntity(enemySprite);
+		EnemyEntity* enemyEntity;
+		if (enemySpec->type == ENEMY_TRASH_CAN){
+			enemyEntity = new TrashCanEntity(enemySprite);
+		} else {
+			enemyEntity = new EnemyEntity(enemySprite);
+		}		
 		enemyEntity->Init();
 		enemyEntity->size = Vector3<s16>(32,32,0);
 		enemyEntity->setPosition(Vector3<s16>(enemySpec->position->pixelX(), enemySpec->position->pixelY(), 0));
