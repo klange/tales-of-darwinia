@@ -4,16 +4,15 @@
 
 #define SFX_PLAYER_MOVE SFX_DOG_BARK
 
+#define speed 3
 void PlayerEntity::Update()
 {
 	LivingEntity::Update();
 
-	Vector3<s16> destPosition;
-	if (gInputManager.moveToPosition(getPosition(), 2.0, destPosition))
-	{
-		setPosition(destPosition);
-
-		audioManager.playSound(SFX_PLAYER_MOVE);
+	if (keysHeld() & KEY_TOUCH) {
+		touchPosition curTouchPosition;
+		touchRead(&curTouchPosition);
+		setTargetPosition(Vector3<s16>(curTouchPosition.px, curTouchPosition.py, 1));
 	}
 
 	if (directionVector.x() < 0) {

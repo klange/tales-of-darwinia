@@ -10,13 +10,14 @@
  * and can be rotated or scaled.
  */
 class Transformable {
+	protected:
+		Vector3<s16> directionVector;
+		Vector3<s16> rotationAnchor;
 
-	// TODO: Convert to use pointers/references
+	// TODO: make these thing
 	public:
 		Vector3<s16> position;
 		Vector3<s16> size;
-		Vector3<s16> directionVector;
-		Vector3<s16> rotationAnchor;
 		u16 rotation;
 
 		void translate(Vector3<s16>);

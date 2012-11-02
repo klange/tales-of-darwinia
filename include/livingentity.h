@@ -11,10 +11,11 @@ public:
 	LivingEntity(SpriteData *gfx) : Sprite(gfx) {}
 
 	virtual void Update(void);
+	void setTargetPosition(Vector3<s16>);
 
 protected:
 	LivingStats mStats;
-	Vector3<s16> targetPos;
+	Vector3<s16> targetPosition;
 };
 
 #endif // LIVING_ENTITY_H_
