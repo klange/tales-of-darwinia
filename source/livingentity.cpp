@@ -4,6 +4,15 @@
 #include <stdio.h>
 
 
+// this might actually have common methods in it someday
+
+void LivingEntity::Damage(u16 damage){
+	mStats->health -= damage;
+	if (mStats->health <= 0){
+		OnDeath();
+	}
+}
+
 void LivingEntity::Update(void) {
 	directionVector = targetPosition - position;
 	u32 magnitude = directionVector.magnitude();
