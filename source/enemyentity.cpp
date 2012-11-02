@@ -25,4 +25,6 @@ void EnemyEntity::Update()
 			}
 		}
 	}
+
+	this->setTargetPosition(gpPlayerEntity->position);
 }
