@@ -16,6 +16,7 @@ class LivingEntity : public Sprite
 {
 public:
 	LivingEntity(SpriteData *gfx, LivingStats* stats);
+	~LivingEntity();
 	virtual void Init();
 	virtual void Damage(u16 damage);
 	virtual void OnDeath() {};

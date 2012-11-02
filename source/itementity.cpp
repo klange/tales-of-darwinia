@@ -17,7 +17,12 @@ char* NAMES_BY_ITEM_TYPE[] = {
 ItemEntity::ItemEntity(SpriteData* inSpriteData, LivingStats* stats, ItemType type) : Sprite(inSpriteData)
 {
 	this->type = type;
-	this->mStats = stats;
+	this->mStats = stats->clone();
+}
+
+ItemEntity::~ItemEntity()
+{
+	delete mStats;
 }
 
 LivingStats* ItemEntity::Consume()

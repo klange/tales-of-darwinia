@@ -4,6 +4,7 @@
 #include "transformable.h"
 #include "boundingbox.h"
 #include <vector3.h>
+#include <stdio.h>
 
 // Singleton
 EntityManager gEntityManager;
@@ -69,6 +70,9 @@ void EntityManager::Destroy()
 	for(LinkedList* node = mEntities; node != NULL; node = node->next)
 	{
 		// Delete data too?
+		Entity* entity = (Entity*) node->data;
+		printf("deleting %d (%d)\n", entity, entity->getType());
+		delete entity;
 		delete node;
 	}
 }
