@@ -5,6 +5,7 @@
 #include "entity.h"
 #include "renderable.h"
 #include "transformable.h"
+#include "spritedata.h"
 
 /**
  * A class that represents a renderable sprite on the screen.
@@ -13,14 +14,19 @@
  */
 class Sprite: public Renderable, public Entity, public Transformable {
 	private:
-		void draw(void);
-		int mIndex; // which sprite am I?
-		static int sNextIndex; // the next sprite index to be allocated
+		SpriteData* spriteData;
+		int8 currentFrame;
+		void boundFrameNumber(void);
+		void copyToGfxBuffer(void);
 	public:
-		u16* gfx_data;
-		Sprite(u16* gfx = NULL);
+		bool vflip;
+		bool hflip;
 
-		virtual void Render();
+		Sprite(SpriteData*);
+		void nextFrame(void);
+		void prevFrame(void);
+		void draw(void);
+		virtual void Render(void);
 };
 
 #endif
