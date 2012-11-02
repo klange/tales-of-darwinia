@@ -30,6 +30,10 @@ void EntityManager::Update()
 
 bool EntityManager::IsMoveLegal(Entity* input)
 {
+	// Make player walk through everything
+	if( input->getType() == PLAYERENTITY)
+		return true;
+
 	Sprite* entity = static_cast<Sprite*>(input);
 	BoundingBox<s16> entitybb;
 	entity->getBoundingBox(entitybb);

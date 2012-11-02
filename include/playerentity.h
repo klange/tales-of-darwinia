@@ -18,6 +18,7 @@ public:
 
 	void BlitStatus();
 
+	virtual EntityType getType();
 	virtual void OnDeath();
 };
 
