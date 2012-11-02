@@ -55,7 +55,7 @@ void init(void) {
 	lcdMainOnTop();
 
 	/* Set the mode for 2 text layers and two extended background layers */
-	videoSetMode(MODE_5_2D | DISPLAY_BG1_ACTIVE | DISPLAY_BG3_ACTIVE);
+	videoSetMode(MODE_5_2D | DISPLAY_BG2_ACTIVE);
 	vramSetBankA(VRAM_A_MAIN_BG);
 	vramSetBankB(VRAM_B_MAIN_BG);
 
@@ -83,19 +83,19 @@ int main(void) {
 	);
 
 	/* Tile engine is going to claim BG0 */
-	int tile = bgInitSub(0, BgType_Text8bpp, BgSize_T_512x512, 0, 2);
-//	REG_BG0CNT = BG_64x64 | BG_COLOR_256 | BG_MAP_BASE(0) | BG_TILE_BASE(2);
+	int tile = bgInitSub(0, BgType_Text8bpp, BgSize_T_512x512, 0, 1);
+//	REG_BG0CNT = BG_64x64 | BG_COLOR_256 | BG_MAP_BASE(0) | BG_TILE_BASE(1);
 
 	/* Load the relevant data into the VRAM */
-	mapEngine.dumpPaletteToVRAM(&BG_PALETTE_SUB[1]);
-	mapEngine.dumpTilesToVRAM((u8*)BG_TILE_RAM_SUB(2));
+	mapEngine.dumpPaletteToVRAM(&BG_PALETTE_SUB[0]);
+	mapEngine.dumpTilesToVRAM((u8*)BG_TILE_RAM_SUB(1));
 	mapEngine.dumpMapToVRAM((u16*)BG_MAP_RAM_SUB(0));
 
 	/* Vertical offset for scrolling the map in pixels */
 	REG_BG0VOFS = 64;
 
 	/* Decompress and show the logo */
-	int logo = bgInit(3, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
+	int logo = bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
 	decompress(logoBitmap, BG_GFX, LZ77Vram);
 
 	/* Set up the console */
@@ -111,7 +111,7 @@ int main(void) {
 		gfx[i] = 1 | (1 << 8);
 	}
 
-	u16* gfx2 = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_256Color);	
+	u16* gfx2 = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_256Color);
 	for (int i = 0; i < 16 * 16 / 2; i++) {
 		gfx2[i] = 1 | (1 << 8);
 	}
