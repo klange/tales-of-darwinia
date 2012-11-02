@@ -8,8 +8,8 @@
 void LivingEntity::Init(){
 	Entity::Init();
 	
-	mStats->health = 4;
-	mStats->attack = 1;
+	// Make this more robust, read from a map or something later
+	mStats = new LivingStats(8, 1, 0, 8, 8);
 }
 
 void LivingEntity::Damage(u16 damage){

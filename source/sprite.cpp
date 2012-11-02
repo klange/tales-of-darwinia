@@ -5,7 +5,6 @@
 
 
 void Sprite::Render(void) {
-	printf("%d \n", spriteData->paletteIndex);
 	oamSet(
 		&oamSub,
 		spriteData->oamIndex, // oam index

@@ -3,9 +3,10 @@
 #include "audiomanager.h"
 
 EnemySpecification* ENEMIES_ONE[] = {
-	//new EnemySpecification(10, 6, ENEMY_EMPLOYEE, NULL),
-	//new EnemySpecification(6, 8, ENEMY_EMPLOYEE, NULL),
-	new EnemySpecification(15, 15, ENEMY_TRASH_CAN, NULL),
+	new EnemySpecification(3, 3, ENEMY_TRASH_CAN, NULL),
+	new EnemySpecification(6, 8, ENEMY_TRASH_CAN, NULL),
+	new EnemySpecification(10, 6, ENEMY_EMPLOYEE, NULL),
+	new EnemySpecification(5, 5, ENEMY_EMPLOYEE, NULL),
 	NULL
 };
 
