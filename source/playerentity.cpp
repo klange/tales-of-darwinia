@@ -2,11 +2,16 @@
 #include "playerentity.h"
 #include "audiomanager.h"
 #include "inputmanager.h"
+#include "maps.h"
 #include "math.h"
 
 #define SFX_PLAYER_MOVE SFX_DOG_BARK
 
 PlayerEntity* gpPlayerEntity = NULL;
+
+extern int gMapTileIndex;
+extern MapEngine* gpMapEngine;
+
 
 void PlayerEntity::Init(){
 	LivingEntity::Init();
@@ -53,6 +58,29 @@ void PlayerEntity::Update()
 	}
 
 	LivingEntity::Update();
+
+	// HUGE HACK
+	static int mapX = 0;
+	static int mapY = 0;
+
+	const int slop = 32;
+	const int width = 256;
+	const int height = 190;
+
+	if (position.x() - mapX < slop) {
+		if (mapX > 0) mapX--;
+	}
+	if (mapX + width - position.x() < slop) {
+		if (mapX < ((MAP_WIDTH-(256/8))*8)) mapX++;
+	}
+	if (position.y() - mapY < slop) {
+		if (mapY > 0) mapY--;
+	}
+	if (mapY + height - position.y() < slop) {
+		if (mapY < ((MAP_HEIGHT-(192/8))*8)) mapY++;
+	}
+
+	gpMapEngine->scrollMapAbsolute(gMapTileIndex, mapX, mapY);
 }
 
 void PlayerEntity::Collect(ItemEntity* item)

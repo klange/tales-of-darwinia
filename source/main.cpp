@@ -119,12 +119,16 @@ void init(void) {
 	irqSet(IRQ_VBLANK, Vblank);
 }
 
+// This is ugly :-(
+int gMapTileIndex = 0;
+MapEngine* gpMapEngine = NULL;
+
 int main(void) {
 	/* Put any generic engine/game init code in the init () */
 	init();
 
 	/* Tile engine is going to claim BG0 */
-	int tile = bgInitSub(0, BgType_Text8bpp, BgSize_T_512x512, 0, 1);
+	gMapTileIndex = bgInitSub(0, BgType_Text8bpp, BgSize_T_512x512, 0, 1);
 	REG_BG0CNT_SUB = BG_64x64 | BG_COLOR_256 | BG_MAP_BASE(0) | BG_TILE_BASE(1);
 
 	/* Decompress and show the logo */
@@ -142,35 +146,13 @@ int main(void) {
 	audioManager.initialize();
 
 	MapEngine mapEngine = levelLoader.load(GAME_LEVELS[0]);
+	gpMapEngine = &mapEngine;
 
 	//blitText("BARK0123456789", 10, 1, 1, 0, 0);
-
-	touchPosition touchXY;
-
-	int x = 0;
-	int y = 0;
 
 	int lolcounter = 0;
 	while(1) {
 		scanKeys();
-		if (keysHeld() & KEY_TOUCH) {
-			touchRead(&touchXY);
-		}
-
-		if (keysHeld() & KEY_LEFT) {
-			if (x > 0) x--;
-		}
-		if (keysHeld() & KEY_RIGHT) {
-			if (x < ((MAP_WIDTH-(256/8))*8)) x++;
-		}
-		if (keysHeld() & KEY_UP) {
-			if (y > 0) y--;
-		}
-		if (keysHeld() & KEY_DOWN) {
-			if (y < ((MAP_HEIGHT-(192/8))*8)) y++;
-		}
-
-		mapEngine.scrollMapAbsolute(tile, x, y);
 
 		gInputManager.Update();
 		gEntityManager.Update();
