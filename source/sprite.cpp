@@ -3,15 +3,25 @@
 #include "spritedata.h"
 #include "inputmanager.h"
 #include "playerentity.h"
+#include "maps.h"
 #include <stdio.h>
 
 
 void Sprite::Render(void) {
+
+	s16 drawX = position.x() + anchor.x();
+	s16 drawY = position.y() + anchor.y();
+	if(isScrollable)
+	{
+		drawX -= gpMapEngine->getScrollX();
+		drawY -= gpMapEngine->getScrollY();
+	}
+
 	oamSet(
 		&oamSub,
 		spriteData->oamIndex, // oam index
-		position.x() + anchor.x(),
-		position.y() + anchor.y(),
+		drawX,
+		drawY,
 		spriteData->priority, // priority
 		spriteData->paletteIndex, // palette index
 		spriteData->spriteSize,
@@ -35,6 +45,8 @@ Sprite::Sprite(SpriteData* inSpriteData) {
 	vflip = false;
 	hflip = false;
 	anchor = Vector3<s16>(-16, -16, 0);
+	isAnimated = true;
+	isScrollable = true;
 
 	copyToGfxBuffer();
 }
@@ -58,15 +70,19 @@ void Sprite::copyToGfxBuffer(void) {
 }
 
 void Sprite::nextFrame(void) {
+  if (isAnimated) {
 	currentFrame++;
 	boundFrameNumber();
 	copyToGfxBuffer();
+  }
 }
 
 void Sprite::prevFrame(void) {
+  if (isAnimated) {
 	currentFrame--;
 	boundFrameNumber();
 	copyToGfxBuffer();
+  }
 }
 
 void Sprite::setFrame(int8 givenFrame) {
