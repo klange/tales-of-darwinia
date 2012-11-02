@@ -5,13 +5,14 @@
 
 
 void Sprite::Render(void) {
+	printf("%d \n", spriteData->paletteIndex);
 	oamSet(
 		&oamSub,
 		spriteData->oamIndex, // oam index
 		position.x() + anchor.x(),
 		position.y() + anchor.y(),
 		spriteData->priority, // priority
-		spriteData->paletteIndex,
+		spriteData->paletteIndex, // palette index
 		spriteData->spriteSize,
 		spriteData->spriteColorFormat,
 		spriteData->spriteGfxMem, // grahpics data
@@ -33,6 +34,10 @@ Sprite::Sprite(SpriteData* inSpriteData) {
 	anchor = Vector3<s16>(-16, -16, 0);
 
 	copyToGfxBuffer();
+}
+
+Sprite::~Sprite(void) {
+	delete spriteData;
 }
 
 void Sprite::boundFrameNumber(void) {

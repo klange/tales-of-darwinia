@@ -107,7 +107,8 @@ MapEngine LevelLoader::load(GameLevel* level)
 
 	/* Make the darwin sprite */
 	SpriteData* gfx = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)darwinTiles, 3);
-	dmaCopy(darwinPal, SPRITE_PALETTE_SUB, 512);
+	dmaCopy(darwinPal, &SPRITE_PALETTE_SUB[0], 512);
+	gfx->paletteIndex = 0;
 
 	PlayerEntity* playerEntity = new PlayerEntity(gfx);
 	playerEntity->Init();
@@ -119,12 +120,14 @@ MapEngine LevelLoader::load(GameLevel* level)
 	{
 		EnemySpecification* enemySpec = *enemies;
 		SpriteData* enemySprite = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, SPRITE_TILES_BY_ENEMY_TYPE[enemySpec->type], 3);
+		enemySprite->paletteIndex=1;
 		EnemyEntity* enemyEntity = new EnemyEntity(enemySprite);
 		enemyEntity->Init();
 		enemyEntity->size = Vector3<s16>(32,32,0);
 		enemyEntity->setPosition(Vector3<s16>(enemySpec->position->pixelX(), enemySpec->position->pixelY(), 0));
 		enemies++;
 	}
+	dmaCopy(manPal, &SPRITE_PALETTE_SUB[8], 512);
 
 	audioManager.playMusic(level->music);
 

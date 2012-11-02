@@ -23,6 +23,7 @@ class Sprite: public Entity, public Transformable {
 		bool hflip;
 
 		Sprite(SpriteData*);
+		~Sprite(void);
 		void nextFrame(void);
 		void prevFrame(void);
 		void setFrame(int8 givenFrame);

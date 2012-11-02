@@ -25,6 +25,8 @@ void SpriteData::assignOamIndex(void) {
 }
 
 SpriteData::~SpriteData() {
+	oamClearSprite(&oamSub, oamIndex);
 	oamFreeGfx(&oamSub, spriteGfxMem);
+	oamUpdate(&oamSub);
 	oamAllocationTable[oamIndex] = false;
 }
