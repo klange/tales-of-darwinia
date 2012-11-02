@@ -14,7 +14,13 @@ void EntityManager::Update()
 	for(u32 i=0; i<mNumEntities; i++)
 	{
 		Entity* current = (Entity*) DynamicArrayGet(&mEntities, i);
-		current->Update();
+		if(current->shouldBeRemoved){
+			Remove(current);
+			current->Render();
+		}
+		else {
+			current->Update();
+		}
 	}
 }
 
@@ -57,6 +63,7 @@ void EntityManager::Remove(Entity* entity)
 			void* last = DynamicArrayGet(&mEntities, mNumEntities - 1);
 			DynamicArraySet(&mEntities, i, last); // note that this is fast, but does not maintain order of entities
 			mNumEntities--;
+			delete current;
 			break;
 		}
 	}
