@@ -33,6 +33,7 @@ class Sprite: public Entity, public Transformable {
 		void Render(void);
 
 		virtual void Update(void);
+		bool IsTouchedByNearbyPlayer();
 
 	protected:
 		u32 updateCount;

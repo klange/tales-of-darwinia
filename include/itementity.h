@@ -21,10 +21,6 @@ public:
 
 	LivingStats* Consume();
 
-	// TODO: move this to a GameEntity that both LivingEntity and ItemEntity inherit from.
-	// it would be Sprite, Transformable too.
-	bool IsTouchedByNearbyPlayer();
-
 private:
 	LivingStats* mStats;
 };

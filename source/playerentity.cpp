@@ -69,4 +69,6 @@ void PlayerEntity::Collect(ItemEntity* item)
 	{
 		this->mStats->health = this->mStats->maxHealth;
 	}
+
+	mStats->Print("DARWIN");
 }
