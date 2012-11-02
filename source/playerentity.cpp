@@ -14,6 +14,7 @@ void blitText(const char* text, int len);
 void PlayerEntity::Init(){
 	LivingEntity::Init();
 
+	type = PLAYERENTITY;
 	// TODO: Make this more robust
 	mStats->attack = 1;
 }
@@ -147,4 +148,8 @@ void PlayerEntity::OnDeath()
 {
 	shouldBeRemoved = true;
 	printf("\n\nGAME OVER :-(\n\n");
+}
+
+EntityType PlayerEntity::getType(){
+	return PLAYERENTITY;
 }
