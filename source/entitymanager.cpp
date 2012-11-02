@@ -31,27 +31,28 @@ void EntityManager::Update()
 
 bool EntityManager::IsMoveLegal(Entity* input)
 {
-	// Make player walk through everything
-	if( input->getType() == PLAYERENTITY)
-		return true;
-
 	Sprite* entity = static_cast<Sprite*>(input);
 	BoundingBox<s16> entitybb;
 	entity->getBoundingBox(entitybb);
-	for(LinkedList* node = mEntities; node != NULL; node = node->next)
+
+	// Make player walk through everything
+	if( input->getType() != PLAYERENTITY)
 	{
-		Entity* entity_to_check = (Entity*) node->data;
+		for(LinkedList* node = mEntities; node != NULL; node = node->next)
+		{
+			Entity* entity_to_check = (Entity*) node->data;
 
-		// Ugly casting but it's needed...
-		if(entity_to_check->getType() != LIVINGENTITY || input == entity_to_check || entity_to_check->hidden)
-			continue;
+			// Ugly casting but it's needed...
+			if(entity_to_check->getType() != LIVINGENTITY || input == entity_to_check || entity_to_check->hidden)
+				continue;
 
-		Sprite* current = static_cast<Sprite*>(entity_to_check);
+			Sprite* current = static_cast<Sprite*>(entity_to_check);
 
-		BoundingBox<s16> bb;
-		current->getBoundingBox(bb);
-		if(entitybb.Intersects(bb))
-			return false;
+			BoundingBox<s16> bb;
+			current->getBoundingBox(bb);
+			if(entitybb.Intersects(bb))
+				return false;
+		}
 	}
 
 	/* Check the map walk/nowalk flag */
