@@ -128,7 +128,6 @@ int main(void) {
 			touchRead(&touchXY);
 		}
 
-		playerEntity->setPosition(Vector3<s16>(touchXY.px, touchXY.py, 0));
 
 		gEntityManager.Update();
 		gEntityManager.Render();
