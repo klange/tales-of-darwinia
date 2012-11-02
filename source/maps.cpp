@@ -70,7 +70,25 @@ bool MapEngine::collisionAbsolute(int abs_x, int abs_y) {
 	// Calculate the offset needed to refer to the right tile
 	int tile_x = abs_x / TILE_WIDTH;
 	int tile_y = abs_y / TILE_HEIGHT;
-	int offset = tile_x + (tile_y * MAP_WIDTH);
+
+	/*
+	 * Map data is stored as (32x32) (0,0), then (32x32) (1,0), then (0,1)
+	 * and so on, so its not exactly a linear x/y array of map so the
+	 * extended 32x32 maps wont work but this will work for the (0,0) map..
+	 */
+	int map_y_offset = 0;
+	if (tile_x > 32) { // TODO: hardcoding, this is bad
+		map_y_offset += 32;
+		tile_x = 64 - tile_x;
+	}
+	if (tile_y > 32) { // TODO: hardcoding, this is bad
+		map_y_offset += 32;
+		tile_y = 64 - tile_y;
+	}
+
+	// Generate the initial offset to point to the correct (32x32) map then
+	// puck the data out of that map
+	int offset = tile_x + (tile_y * MAP_WIDTH) + (map_y_offset * MAP_WIDTH);
 
 	if (collision_memory[offset] == NOWALK) {
 		return true;
