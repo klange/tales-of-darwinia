@@ -34,7 +34,7 @@ public:
 class EnemySpecification
 {
 public:
-	EnemySpecification(TilePosition* position, EnemyType type);
+	EnemySpecification(u16 x, u16 y, EnemyType type);
 	TilePosition* position;
 	EnemyType type;
 };
@@ -50,12 +50,12 @@ public:
 class GameLevel
 {
 public:
-	GameLevel(u16* map, TilePosition* playerPosition, EnemySpecification** enemies, ItemSpecification** items, int music);
+	GameLevel(u16* map, u16 playerX, u16 playerY, EnemySpecification* enemies, ItemSpecification* items, int music);
 private:
 	u16* map;
 	TilePosition* playerPosition;
-	EnemySpecification** enemies;
-	ItemSpecification** items;
+	EnemySpecification* enemies;
+	ItemSpecification* items;
 	int music;
 };
 

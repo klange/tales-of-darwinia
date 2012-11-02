@@ -12,9 +12,9 @@ TilePosition::TilePosition(u16 x, u16 y)
 	this->y = y;
 }
 
-EnemySpecification::EnemySpecification(TilePosition* position, EnemyType type)
+EnemySpecification::EnemySpecification(u16 x, u16 y, EnemyType type)
 {
-	this->position = position;
+	this->position = new TilePosition(x, y);
 	this->type = type;
 }
 
@@ -24,10 +24,10 @@ ItemSpecification::ItemSpecification(TilePosition* position, ItemType type)
 	this->type = type;
 }
 
-GameLevel::GameLevel(u16* map, TilePosition* playerPosition, EnemySpecification** enemies, ItemSpecification** items, int music)
+GameLevel::GameLevel(u16* map, u16 playerX, u16 playerY, EnemySpecification* enemies, ItemSpecification* items, int music)
 {
 	this->map = map;
-	this->playerPosition = playerPosition;
+	this->playerPosition = new TilePosition(playerX, playerY);
 	this->enemies = enemies;
 	this->items = items;
 	this->music = music;
