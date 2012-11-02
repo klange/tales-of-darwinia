@@ -9,6 +9,8 @@ class LivingEntity : public Sprite
 {
 public:
 	LivingEntity(SpriteData *gfx) : Sprite(gfx) {}
+	virtual void Damage(u16 damage);
+	virtual void OnDeath() {};
 
 protected:
 	LivingStats mStats;
