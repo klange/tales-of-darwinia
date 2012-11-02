@@ -5,6 +5,9 @@
 
 
 void Sprite::Render(void) {
+	if(hidden)
+		printf("LOL IM HERE");
+
 	oamSet(
 		&oamSub,
 		spriteData->oamIndex, // oam index

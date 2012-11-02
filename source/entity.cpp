@@ -5,6 +5,7 @@ void Entity::Init()
 {
 	gEntityManager.Add(this);
 	shouldBeRemoved = false;
+	hidden = false;
 }
 void Entity::Destroy()
 {
