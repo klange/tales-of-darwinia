@@ -9,3 +9,4 @@ void Entity::Destroy()
 {
 	gEntityManager.Remove(this);
 }
+
