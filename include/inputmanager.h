@@ -8,6 +8,7 @@
  * InputManager class that manages inputs and delegates to appropriate entities.
  */
 
+
 class InputManager{
 	private:
 		s16 round(float32 input);
