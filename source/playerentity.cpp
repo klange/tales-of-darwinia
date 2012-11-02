@@ -11,6 +11,8 @@ PlayerEntity* gpPlayerEntity = NULL;
 PlayerEntity::PlayerEntity(SpriteData* gfx) : LivingEntity(gfx)
 {
 	gpPlayerEntity = this;
+	maxSpeed = 3;
+	acceleration = 0.2;
 }
 
 PlayerEntity::~PlayerEntity()
@@ -21,36 +23,26 @@ PlayerEntity::~PlayerEntity()
 
 void PlayerEntity::Update()
 {
-	speed = 3.0;
 	if (keysHeld() & KEY_TOUCH) {
 		touchPosition curTouchPosition;
 		touchRead(&curTouchPosition);
 		setTargetPosition(Vector3<s16>(curTouchPosition.px, curTouchPosition.py, 1));
+		movementState = MOVING;
 	}
-	s16 magnitude = directionVector.magnitude();
-	s16 xComp = abs(directionVector.x()/magnitude);
-	s16 yComp = abs(directionVector.y()/magnitude);
 
-	if (xComp > yComp) {
-		if (directionVector.x() < 0) {
-			spriteOffset = 1;
-			vflip = true;
-			hflip = false;
-		} else if (directionVector.x() >= 0) {
-			spriteOffset = 1;
-			vflip = false;
-			hflip = false;	
-		}
-	} else {
-		if (directionVector.y() < 0) {
-			spriteOffset = 0;
-			vflip = false;
-			hflip = false;
-		} else if (directionVector.y() >= 0) {
-			spriteOffset = 2;
-			vflip = false;
-			hflip = false;
-		}
+	if (movementState == MOVING) {
+		speed += acceleration;
+	}
+
+	if (movementState == STOPPED) {
+		speed = 0;
+	}
+	if (speed < 0) {
+		speed = 0;
+	}
+
+	if (speed > maxSpeed) {
+		speed = maxSpeed;
 	}
 
 	LivingEntity::Update();

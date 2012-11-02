@@ -128,25 +128,8 @@ int main(void) {
 //	REG_BG0CNT = BG_64x64 | BG_COLOR_256 | BG_MAP_BASE(0) | BG_TILE_BASE(1);
 
 	/* Decompress and show the logo */
-	bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
-	decompress(logoBitmap, BG_GFX, LZ77Vram);
-
-	/* Make the darwin sprite */
-	SpriteData* gfx = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)darwinTiles, 3);
-
-	/* Make a man enemy sprite */
-	SpriteData* gfx2 = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)manTiles, 3);
-	dmaCopy(inconsolataPal, SPRITE_PALETTE_SUB, 512);
-
-	PlayerEntity* playerEntity = new PlayerEntity(gfx);
-	playerEntity->Init();
-	playerEntity->size = Vector3<s16>(16,16,0);
-	playerEntity->setPosition(Vector3<s16>(64,90,1));
-
-	EnemyEntity* enemyEntity = new EnemyEntity(gfx2);
-	enemyEntity->Init();
-	enemyEntity->size = Vector3<s16>(16,16,0);
-	enemyEntity->setPosition(Vector3<s16>(192,90,0));
+	//bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
+	//decompress(logoBitmap, BG_GFX, LZ77Vram);
 
 	if(!USE_TOP_SCREEN_FOR_CONSOLE)
 	{
@@ -158,7 +141,7 @@ int main(void) {
 
 	MapEngine mapEngine = levelLoader.load(GAME_LEVELS[0]);
 
-	blitText("BARK0123456789", 10, 1, 1, 0, 0);
+	//blitText("BARK0123456789", 10, 1, 1, 0, 0);
 
 	touchPosition touchXY;
 
@@ -184,6 +167,7 @@ int main(void) {
 		if (keysHeld() & KEY_DOWN) {
 			if (y < ((64-(192/8))*8)) y++;
 		}
+
 		mapEngine.scrollMapAbsolute(tile, x, y);
 
 		gInputManager.Update();
@@ -194,7 +178,6 @@ int main(void) {
 		if (lolcounter >= 10) {
 			gEntityManager.NextFrame();
 			lolcounter = 0;
-
 		}
 
 		oamUpdate(&oamSub);

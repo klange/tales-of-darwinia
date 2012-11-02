@@ -7,10 +7,9 @@
 class EnemyEntity : public LivingEntity
 {
 public:
-    EnemyEntity(SpriteData* gfx) : LivingEntity(gfx) {}
+   EnemyEntity(SpriteData* gfx) : LivingEntity(gfx) {}
 	virtual void Update();
 	virtual void OnDeath();
-	virtual void Render();
 };
 
 #endif // ENEMY_ENTITY_H_

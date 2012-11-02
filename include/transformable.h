@@ -13,6 +13,7 @@ class Transformable {
 	protected:
 		Vector3<s16> directionVector;
 		Vector3<s16> anchor;
+		u8 frameCounter;
 
 	// TODO: make these thing
 	public:
