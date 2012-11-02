@@ -11,7 +11,7 @@ public:
 	LivingEntity(SpriteData *gfx) : Sprite(gfx) {}
 
 protected:
-	LivingStats mStats;
+	LivingStats* mStats;
 };
 
 #endif // LIVING_ENTITY_H_
