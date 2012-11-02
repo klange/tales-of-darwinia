@@ -13,6 +13,7 @@ EnemySpecification* ENEMIES_ONE[] = {
 ItemSpecification* ITEMS_ONE[] = {
 	new ItemSpecification(10, 10, ITEM_PEANUT_BUTTER),
 	new ItemSpecification(1, 1, ITEM_CHOCOLATE),
+	new ItemSpecification(12, 3, ITEM_CHOCOLATE),
 	NULL,
 };
 

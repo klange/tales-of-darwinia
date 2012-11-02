@@ -10,6 +10,11 @@ LivingStats::LivingStats(s16 health, s16 attack, s16 speed, s16 maxHealth, s16 p
 	this->points = points;
 }
 
+LivingStats* LivingStats::clone()
+{
+	return new LivingStats(health, attack, speed, maxHealth, points);
+}
+
 void LivingStats::Print(const char* prefix)
 {
 	printf("%s ", prefix);

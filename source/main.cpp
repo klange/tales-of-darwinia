@@ -42,6 +42,14 @@
 #include "gamelevel.h"
 #include "gamelevel_data.h"
 
+
+
+// HEY PEEPS - set this to 1 for PRINTF DEBUGGING GOODNESS!
+#define USE_TOP_SCREEN_FOR_CONSOLE 1
+
+#define RESET_ON_GAME_OVER 1
+
+
 void Vblank(void) {
 
 }
@@ -55,8 +63,7 @@ void blitText(const char* text, int len) {
     gTextChars[i]->setFrame(text[i]);
   }
 }
-// HEY PEEPS - set this to 1 for PRINTF DEBUGGING GOODNESS!
-#define USE_TOP_SCREEN_FOR_CONSOLE 1
+
 PrintConsole* gpTopScreen = NULL;
 
 void init(void) {
@@ -111,9 +118,13 @@ void init(void) {
 int gMapTileIndex = 0;
 MapEngine* gpMapEngine = NULL;
 
+bool gReset = false;
+
 int main(void) {
 	/* Put any generic engine/game init code in the init () */
+	printf("calling init\n");
 	init();
+	printf("done init\n");
 
 	/* Tile engine is going to claim BG0 */
 	gMapTileIndex = bgInitSub(0, BgType_Text8bpp, BgSize_T_512x512, 0, 1);
@@ -146,10 +157,10 @@ int main(void) {
 	  gTextChars[i]->setFrame(0x9);
 	}
 
-	MapEngine mapEngine = levelLoader.load(GAME_LEVELS[0]);
-	gpMapEngine = &mapEngine;
+	gpMapEngine = levelLoader.load(GAME_LEVELS[0]);
 
 	int lolcounter = 0;
+	int resetCounter = 0;
 	while(1) {
 		scanKeys();
 
@@ -167,7 +178,24 @@ int main(void) {
 		bgUpdate();
 
 		swiWaitForVBlank();
+#ifdef RESET_ON_GAME_OVER
+		if (gReset)
+		{
+			resetCounter++;
+		}
+		if (resetCounter > 300)
+		{
+			break;
+		}
+#endif
 	}
+
+	printf("resetting\n");
+
+	gReset = false;
+	gEntityManager.Destroy();
+	delete gpMapEngine;
+	main();
 
 	return 0;
 }

@@ -8,6 +8,7 @@ class LivingStats
 public:
 	LivingStats(s16 health, s16 attack, s16 speed, s16 maxHealth, s16 points);
 	void Print(const char *prefix);
+	LivingStats* clone();
 
 	s16 health;
 	s16 attack;

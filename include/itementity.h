@@ -31,6 +31,7 @@ class ItemEntity : public Sprite
 {
 public:
 	ItemEntity(SpriteData* inSpriteData, LivingStats* stats, ItemType type);
+	~ItemEntity();
 
 	virtual void Update(void);
 

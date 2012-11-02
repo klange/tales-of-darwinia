@@ -7,7 +7,12 @@
 
 LivingEntity::LivingEntity(SpriteData* gfx, LivingStats* stats) : Sprite(gfx)
 {
-	mStats = stats;
+	mStats = stats->clone();
+}
+
+LivingEntity::~LivingEntity()
+{
+	delete this->mStats;
 }
 
 // this might actually have common methods in it someday
