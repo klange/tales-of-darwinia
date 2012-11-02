@@ -26,6 +26,8 @@ class Sprite: public Renderable, public Entity, public Transformable {
 		Sprite(SpriteData*);
 		void nextFrame(void);
 		void prevFrame(void);
+		void setFrame(int8 givenFrame);
+		int8 getFrame(void);
 		void draw(void);
 		void draw(bool shouldDraw);
 		virtual void Render(void);
