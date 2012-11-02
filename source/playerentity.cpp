@@ -62,12 +62,12 @@ void PlayerEntity::Collect(ItemEntity* item)
 	// for now items are consumables that just change our stats
 
 	LivingStats* statsDelta = item->Consume();
-	this->mStats.attack += statsDelta->attack;
-	this->mStats.maxHealth += statsDelta->maxHealth;
-	this->mStats.health += statsDelta->health;
-	this->mStats.speed += statsDelta->speed;
-	if (this->mStats.health > this->mStats.maxHealth)
+	this->mStats->attack += statsDelta->attack;
+	this->mStats->maxHealth += statsDelta->maxHealth;
+	this->mStats->health += statsDelta->health;
+	this->mStats->speed += statsDelta->speed;
+	if (this->mStats->health > this->mStats->maxHealth)
 	{
-		this->mStats.health = this->mStats.maxHealth;
+		this->mStats->health = this->mStats->maxHealth;
 	}
 }

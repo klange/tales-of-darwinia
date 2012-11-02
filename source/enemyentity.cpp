@@ -24,11 +24,13 @@ void EnemyEntity::Update()
 			Vector3<s16> toPlayer = gpPlayerEntity->position - this->position;
 			if(toPlayer.magnitude() < 32)
 			{
-				LivingEntity::Damage(gpPlayerEntity->mStats.attack);
-				printf("Ouch %d!", mStats.health);
+				LivingEntity::Damage(gpPlayerEntity->mStats->attack);
+				printf("Ouch %d!", mStats->health);
 			}
 		}
 	}
+
+	this->setTargetPosition(gpPlayerEntity->position);
 }
 
 void EnemyEntity::OnDeath(){

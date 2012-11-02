@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "gamelevel.h"
 
-// image resources
+// sprite resources
 #include "darwin.h"
 #include "man.h"
 
@@ -20,9 +20,35 @@
 
 LevelLoader levelLoader;
 
-// TODO: map from enemy type to sprite buffer
+LivingStats DEFAULT_PLAYER_STATS(8, 8, 8, 8, 8);
+
+// map from enemy type to sprite buffer
+// NOTE: must parallel EnemyType order
+u8* SPRITE_TILES_BY_ENEMY_TYPE[] = {
+	NULL, // ENEMY_UNKNOWN
+	(u8*) manTiles, // TODO: replace with trashCanTiles
+	(u8*) manTiles,
+	NULL,
+};
 
 // TODO: map from item type to sprite buffer
+u8* SPRITE_TILES_BY_ITEM_TYPE[] = {
+	NULL,
+};
+
+// map from EnemyType to stats
+// NOTE: must parallel EnemyType order
+LivingStats* STATS_BY_ENEMY_TYPE[] = {
+	NULL, // ENEMY_UNKNOWN
+	new LivingStats(8, 0, 0, 8, 8), // ENEMY_TRASH_CAN
+	new LivingStats(8, 8, 8, 8, 16), // ENEMY_EMPLOYEE
+	NULL
+};
+
+// TODO: map from ItemType to stats
+LivingStats* STATS_BY_ITEM_TYPE[] = {
+
+};
 
 
 TilePosition::TilePosition(u16 x, u16 y)
@@ -81,8 +107,6 @@ void LevelLoader::load(GameLevel* level)
 	SpriteData* gfx = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)darwinTiles, 3);
 	dmaCopy(darwinPal, SPRITE_PALETTE_SUB, 512);
 
-	/* Make a man enemy sprite */
-	SpriteData* gfx2 = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)manTiles, 3);
 //	dmaCopy(manPal, SPRITE_PALETTE_SUB, 512);
 
 	PlayerEntity* playerEntity = new PlayerEntity(gfx);
@@ -94,7 +118,8 @@ void LevelLoader::load(GameLevel* level)
 	while (*enemies)
 	{
 		EnemySpecification* enemySpec = *enemies;
-		EnemyEntity* enemyEntity = new EnemyEntity(gfx2);
+		SpriteData* enemySprite = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, SPRITE_TILES_BY_ENEMY_TYPE[enemySpec->type], 3);
+		EnemyEntity* enemyEntity = new EnemyEntity(enemySprite);
 		enemyEntity->Init();
 		enemyEntity->size = Vector3<s16>(16,16,0);
 		enemyEntity->setPosition(Vector3<s16>(enemySpec->position->pixelX(), enemySpec->position->pixelY(), 0));
