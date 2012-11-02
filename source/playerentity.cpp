@@ -2,6 +2,7 @@
 #include "playerentity.h"
 #include "audiomanager.h"
 #include "inputmanager.h"
+#include "maps.h"
 #include "math.h"
 
 #define SFX_PLAYER_MOVE SFX_DOG_BARK
@@ -33,10 +34,13 @@ void PlayerEntity::Update()
 	if (shouldBeRemoved)
 		return;
 
+	int mapX = gpMapEngine->getScrollX();
+	int mapY = gpMapEngine->getScrollY();
+
 	if (keysHeld() & KEY_TOUCH) {
 		touchPosition curTouchPosition;
 		touchRead(&curTouchPosition);
-		setTargetPosition(Vector3<s16>(curTouchPosition.px, curTouchPosition.py, 1));
+		setTargetPosition(Vector3<s16>(mapX + curTouchPosition.px, mapY + curTouchPosition.py, 1));
 		movementState = MOVING;
 	}
 
@@ -56,6 +60,30 @@ void PlayerEntity::Update()
 	}
 
 	LivingEntity::Update();
+
+	const int slop = 32;
+	const int width = 256;
+	const int height = 190;
+
+	const int scrollSpeed = 2;
+	int relX = 0;
+	int relY = 0;
+
+	if (position.x() - mapX < slop)
+	{
+		relX = -scrollSpeed;
+	}
+	if (mapX + width - position.x() < slop) {
+		relX = scrollSpeed;
+	}
+	if (position.y() - mapY < slop) {
+		relY = -scrollSpeed;
+	}
+	if (mapY + height - position.y() < slop) {
+		relY = scrollSpeed;
+	}
+
+	gpMapEngine->scrollMapRelative(gMapTileIndex, relX, relY);
 }
 
 void PlayerEntity::Collect(ItemEntity* item)

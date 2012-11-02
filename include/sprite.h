@@ -24,6 +24,7 @@ class Sprite: public Entity, public Transformable {
 		bool hflip;
 		s16 transformContext;
 		bool isAnimated;
+		bool isScrollable;
 
 		Sprite(SpriteData*);
 		~Sprite(void);

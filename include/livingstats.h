@@ -7,7 +7,7 @@ class LivingStats
 {
 public:
 	LivingStats(s16 health, s16 attack, s16 speed, s16 maxHealth, s16 points);
-	void Print(char *prefix);
+	void Print(const char *prefix);
 
 	s16 health;
 	s16 attack;

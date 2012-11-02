@@ -10,7 +10,7 @@ LivingStats::LivingStats(s16 health, s16 attack, s16 speed, s16 maxHealth, s16 p
 	this->points = points;
 }
 
-void LivingStats::Print(char* prefix)
+void LivingStats::Print(const char* prefix)
 {
 	printf("%s ", prefix);
 	if (health)

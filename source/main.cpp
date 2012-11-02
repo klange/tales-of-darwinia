@@ -107,12 +107,16 @@ void init(void) {
 	irqSet(IRQ_VBLANK, Vblank);
 }
 
+// This is ugly :-(
+int gMapTileIndex = 0;
+MapEngine* gpMapEngine = NULL;
+
 int main(void) {
 	/* Put any generic engine/game init code in the init () */
 	init();
 
 	/* Tile engine is going to claim BG0 */
-	int tile = bgInitSub(0, BgType_Text8bpp, BgSize_T_512x512, 0, 1);
+	gMapTileIndex = bgInitSub(0, BgType_Text8bpp, BgSize_T_512x512, 0, 1);
 	REG_BG0CNT_SUB = BG_64x64 | BG_COLOR_256 | BG_MAP_BASE(0) | BG_TILE_BASE(1);
 
 	/* Decompress and show the logo */
@@ -130,6 +134,7 @@ int main(void) {
 	audioManager.initialize();
 
 	MapEngine mapEngine = levelLoader.load(GAME_LEVELS[0]);
+	gpMapEngine = &mapEngine;
 
 	// Set up the text display
 
@@ -137,6 +142,7 @@ int main(void) {
           gSpriteData[i] = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)inconsolataTiles, 255);
     	  gTextChars[i] = new TextChar(gSpriteData[i]);
 	  gTextChars[i]->isAnimated = false;
+	  gTextChars[i]->isScrollable = false;
 	  gTextChars[i]->Init();
 	  gTextChars[i]->size = Vector3<s16>(1,1,0);
 	  gTextChars[i]->setPosition(Vector3<s16>(40+(i*12),20,1));
@@ -145,30 +151,9 @@ int main(void) {
 
 	blitText("BARK0123456789", 14);
 
-	touchPosition touchXY;
-
 	int lolcounter = 0;
 	while(1) {
 		scanKeys();
-		if (keysHeld() & KEY_TOUCH) {
-			touchRead(&touchXY);
-		}
-
-		int rel_x = 0;
-		int rel_y = 0;
-		if (keysHeld() & KEY_LEFT) {
-			rel_x = -1;
-		}
-		if (keysHeld() & KEY_RIGHT) {
-			rel_x = 1;
-		}
-		if (keysHeld() & KEY_UP) {
-			rel_y = -1;
-		}
-		if (keysHeld() & KEY_DOWN) {
-			rel_y = 1;
-		}
-		mapEngine.scrollMapRelative(tile, rel_x, rel_y);
 
 		gInputManager.Update();
 		gEntityManager.Update();
