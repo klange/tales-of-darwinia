@@ -25,6 +25,21 @@ class MapEngine {
 		/* Map offset */
 		int map_x, map_y;
 
+		/* Pointer to the memory area to update in VRAM when we have
+		 * new data to update with
+		 */
+		u16* palette_memory;
+		u8* tile_memory;
+		u16* map_memory;
+
+		/* All of the data operation to load new data into VRAM */
+		void dumpPaletteToVRAM(u16* palette_memory);
+		void dumpTilesToVRAM(u8* tile_memory);
+		void dumpMapToVRAM(u16* map_memory);
+
+		/* Load a new map tile from the list of maps */
+		void loadNewMapTile();
+
 	public:
 		MapEngine(
 			const palette_t* a_palette,
@@ -32,9 +47,11 @@ class MapEngine {
 			const map_t* a_map
 		);
 
-		void dumpPaletteToVRAM(u16* palette_memory);
-		void dumpTilesToVRAM(u8* tile_memory);
-		void dumpMapToVRAM(u16* map_memory);
+		void initVRAM(
+			u16* a_palette_memory,
+			u8* a_tile_memory,
+			u16* a_map_memory
+		);
 
 		int getTileX(int screen_pixel_x);
 		int getTileY(int screen_pixel_y);

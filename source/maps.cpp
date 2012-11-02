@@ -23,6 +23,19 @@ MapEngine::MapEngine(
 	map_x = map_y = 0;
 }
 
+void MapEngine::initVRAM(
+		u16* a_palette_memory,
+		u8* a_tile_memory,
+		u16* a_map_memory) {
+	palette_memory = a_palette_memory;
+	tile_memory = a_tile_memory;
+	map_memory = a_map_memory;
+
+	dumpPaletteToVRAM(palette_memory);
+	dumpTilesToVRAM(tile_memory);
+	dumpMapToVRAM(map_memory);
+}
+
 void MapEngine::dumpPaletteToVRAM(u16* palette_memory) {
 	// Load the palette
 	// dmaCopy copies in halfword (16bits), a palette entry is 16bit

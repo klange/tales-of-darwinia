@@ -91,9 +91,11 @@ int main(void) {
 //	REG_BG0CNT = BG_64x64 | BG_COLOR_256 | BG_MAP_BASE(0) | BG_TILE_BASE(1);
 
 	/* Load the relevant data into the VRAM */
-	mapEngine.dumpPaletteToVRAM(&BG_PALETTE_SUB[0]);
-	mapEngine.dumpTilesToVRAM((u8*)BG_TILE_RAM_SUB(1));
-	mapEngine.dumpMapToVRAM((u16*)BG_MAP_RAM_SUB(0));
+	mapEngine.initVRAM(
+		&BG_PALETTE_SUB[0],
+		(u8*)BG_TILE_RAM_SUB(1),
+		(u16*)BG_MAP_RAM_SUB(0)
+	);
 
 	/* Decompress and show the logo */
 	bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
