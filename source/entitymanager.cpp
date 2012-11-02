@@ -6,14 +6,14 @@ EntityManager gEntityManager;
 
 void EntityManager::Init()
 {
-	DynamicArrayInit(&mEntities, 16); // initial size
+	mEntities = NULL;
 }
 
 void EntityManager::Update()
 {
-	for(u32 i=0; i<mNumEntities; i++)
+	for(LinkedList* node = mEntities; node != NULL; node = node->next)
 	{
-		Entity* current = (Entity*) DynamicArrayGet(&mEntities, i);
+		Entity* current = (Entity*) node->data;
 		if(current->shouldBeRemoved){
 			//Remove(current);
 		}
@@ -25,23 +25,27 @@ void EntityManager::Update()
 
 void EntityManager::Render()
 {
-	for(u32 i=0; i<mNumEntities; i++)
+	for(LinkedList* node = mEntities; node != NULL; node = node->next)
 	{
-		Entity* current = (Entity*) DynamicArrayGet(&mEntities, i);
+		Entity* current = (Entity*) node->data;
 		current->Render();
 	}
 }
 
 void EntityManager::Destroy()
 {
-	DynamicArrayDelete(&mEntities);
+	for(LinkedList* node = mEntities; node != NULL; node = node->next)
+	{
+		// Delete data too?
+		delete node;
+	}
 }
 
 void EntityManager::NextFrame()
 {
-	for(u32 i=0; i<mNumEntities; i++)
+	for(LinkedList* node = mEntities; node != NULL; node = node->next)
 	{
-		Entity* current = (Entity*) DynamicArrayGet(&mEntities, i);
+		Entity* current = (Entity*) node->data;
 		current->nextFrame();
 	}
 
@@ -49,21 +53,20 @@ void EntityManager::NextFrame()
 
 void EntityManager::Add(Entity* entity)
 {
-	DynamicArraySet(&mEntities, mNumEntities++, entity);
+	mEntities = linkedlistAdd(&mEntities, entity); 
 }
 
 void EntityManager::Remove(Entity* entity)
 {
-	for(u32 i=0; i<mNumEntities; i++)
+	for(LinkedList* node = mEntities; node != NULL; node = node->next)
 	{
-		Entity* current = (Entity*) DynamicArrayGet(&mEntities, i);
+		Entity* current = (Entity*) node->data;
 		if(current == entity)
 		{
-			void* last = DynamicArrayGet(&mEntities, mNumEntities - 1);
-			DynamicArraySet(&mEntities, i, last); // note that this is fast, but does not maintain order of entities
 			mNumEntities--;
 			delete current;
-			break;
+			linkedlistRemove(node);
+			return;
 		}
 	}
 }

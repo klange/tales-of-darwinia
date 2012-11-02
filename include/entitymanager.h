@@ -27,7 +27,7 @@ public:
 private:
 	// private data
 	u32 mNumEntities;
-	DynamicArray mEntities;
+	LinkedList* mEntities;
 
 	friend class Entity;
 	// methods for Entity to add itself to the manager
