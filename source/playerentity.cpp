@@ -5,10 +5,10 @@
 
 void PlayerEntity::Update(InputManager* inputManager)
 {
-	touchPosition* touchXY = inputManager->moveToPosition(getPosition());
+	touchPosition* touchXY = inputManager->moveToPosition(getPosition(), 2.0);
 
 	/* Touchscreen position */
-	Vector3<u16> touchPosition;
+	Vector3<s16> touchPosition;
 
 	// This section below is for touch screen sprite
 	if (touchXY != NULL){

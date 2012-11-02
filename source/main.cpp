@@ -122,11 +122,11 @@ int main(void) {
 
 	PlayerEntity* playerEntity = new PlayerEntity(gfx);
 	playerEntity->Init();
-	playerEntity->setPosition(Vector3<u16>(64,90,1));
+	playerEntity->setPosition(Vector3<s16>(64,90,1));
 
 	EnemyEntity* enemyEntity = new EnemyEntity(gfx2);
 	enemyEntity->Init();
-	enemyEntity->setPosition(Vector3<u16>(192,90,0));
+	enemyEntity->setPosition(Vector3<s16>(192,90,0));
 
 	audioManager.initialize();
 	audioManager.playMusic(MOD_TECHNO_MOZART);

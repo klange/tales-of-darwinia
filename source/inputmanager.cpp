@@ -12,8 +12,7 @@ touchPosition* InputManager::getCurrentTouchPosition(){
 	return NULL;
 }
 
-//TODO: Let speed be controlled by a variable, right now it's clamped
-touchPosition* InputManager::moveToPosition(Vector3<u16>* currentPosition){
+touchPosition* InputManager::moveToPosition(Vector3<s16>* currentPosition, float32 speed){
 	s16 from_x = currentPosition->x();
 	s16 from_y = currentPosition->y();
 
@@ -25,8 +24,13 @@ touchPosition* InputManager::moveToPosition(Vector3<u16>* currentPosition){
 		s16 to_x = heldPosition.px;
 		s16 to_y = heldPosition.py;
 
-		s16 diff_x = clamp(to_x - from_x);
-		s16 diff_y = clamp(to_y - from_y);
+		s16 diff_x = (to_x - from_x);
+		s16 diff_y = (to_y - from_y);
+
+		u32 magnitude = sqrt32(diff_x*diff_x + diff_y*diff_y);
+
+		diff_x = round(diff_x * speed / magnitude);
+		diff_y = round(diff_y * speed / magnitude);
 
 		moveToPosition->px = (u16)(from_x + diff_x);
 		moveToPosition->py = (u16)(from_y + diff_y);
@@ -37,15 +41,14 @@ touchPosition* InputManager::moveToPosition(Vector3<u16>* currentPosition){
 }
 
 // This is really shitty...figure out a way to move once per X frames w/o clamping
-s16 InputManager::clamp(s16 value){
-	if (value > 1){
-		return 1;
+s16 InputManager::round(float32 input){
+	s16 value = 0;
+	if(input >= 0){
+		value = (int)(input + .5);
 	}
-
-	if (value < -1){
-		return -1;
+	else {
+		value = (int)(input - .5);
 	}
-
 	return value;
 }
 
