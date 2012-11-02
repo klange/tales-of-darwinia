@@ -3,7 +3,10 @@
 #include "event.h"
 #include <stdio.h>
 
-EventDispatcher::EventDispatcher(void) {
+// Singleton
+EventDispatcher gEventDispatcher;
+
+void EventDispatcher::Init(void) {
 	events = (Event**)malloc(MAX_NUM_EVENTS * sizeof(Event*));
 }
 
@@ -75,4 +78,3 @@ void EventDispatcher::dispatchEvents(void) {
 		}
 	}
 }
-
