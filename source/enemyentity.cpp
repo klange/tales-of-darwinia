@@ -1,6 +1,7 @@
 #include "enemyentity.h"
 #include "inputmanager.h"
 #include "playerentity.h"
+#include "audiomanager.h"
 
 #include <stdio.h>
 
@@ -22,6 +23,7 @@ void EnemyEntity::Update()
 			if(toPlayer.magnitude() < 32)
 			{
 				printf("Ouch!");
+				audioManager.playSound(SFX_OUCH);
 			}
 		}
 	}

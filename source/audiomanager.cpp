@@ -22,7 +22,8 @@ void AudioManager::initialize()
 	mmInitDefaultMem((mm_addr)soundbank_bin);
 
 	mmLoadEffect(SFX_DOG_BARK);
-	mmLoadEffect(SFX_R2D2);
+//	mmLoadEffect(SFX_R2D2);
+	mmLoadEffect(SFX_OUCH);
 	mmLoad(MOD_TECHNO_MOZART);
 }
 
