@@ -131,11 +131,13 @@ int main(void) {
 	//bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
 	//decompress(logoBitmap, BG_GFX, LZ77Vram);
 
+	/*
 	if(!USE_TOP_SCREEN_FOR_CONSOLE)
 	{
 		bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
 		decompress(logoBitmap, BG_GFX, LZ77Vram);
 	}
+	*/
 
 	audioManager.initialize();
 
