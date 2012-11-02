@@ -3,6 +3,7 @@
 #include "sprite.h"
 #include "transformable.h"
 #include "boundingbox.h"
+#include "maps.h"
 #include <vector3.h>
 
 // Singleton
@@ -35,7 +36,7 @@ bool EntityManager::IsMoveLegal(Entity* input)
 	for(LinkedList* node = mEntities; node != NULL; node = node->next)
 	{
 		Entity* entity_to_check = (Entity*) node->data;
-		
+
 		// Ugly casting but it's needed...
 		if(entity_to_check->getType() != LIVINGENTITY || input == entity_to_check || entity_to_check->hidden)
 			continue;
@@ -48,7 +49,8 @@ bool EntityManager::IsMoveLegal(Entity* input)
 			return false;
 	}
 
-	return true;
+	/* Check the map walk/nowalk flag */
+	return (gpMapEngine->collisionAbsolute(entity->position.x(), entity->position.y()));
 }
 
 void EntityManager::Render()
