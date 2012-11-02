@@ -75,4 +75,3 @@ void EventDispatcher::dispatchEvents(void) {
 		}
 	}
 }
-
