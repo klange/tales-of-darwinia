@@ -3,6 +3,7 @@
 
 typedef enum _EntityType{
 	LIVINGENTITY,
+	PLAYERENTITY,
 	OTHER,
 } EntityType;
 
