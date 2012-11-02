@@ -123,9 +123,12 @@ int main(void) {
 
 	int lolcounter = 0;
 	while(1) {
-		touchRead(&touchXY);
+		scanKeys();
+		if (keysHeld() & KEY_TOUCH) {
+			touchRead(&touchXY);
+		}
 
-		playerEntity->setPosition(Vector3<u16>(touchXY.px, touchXY.py, 0));
+		playerEntity->setPosition(Vector3<s16>(touchXY.px, touchXY.py, 0));
 
 		gEntityManager.Update();
 		gEntityManager.Render();
