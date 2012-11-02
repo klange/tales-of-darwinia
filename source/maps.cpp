@@ -9,10 +9,12 @@
 MapEngine::MapEngine(
 		const palette_t* a_palette,
 		const tile_list_t* a_tiles,
-		const map_t* a_map
+		const map_t* a_map,
+		const nowalk_t* a_nowalk
 	) : palette(a_palette),
 		tiles(a_tiles),
-		map(a_map) {
+		map(a_map),
+		nowalk_idx(a_nowalk) {
 	/* Init the tile and scroll position,
 	 * Top-Left corner is 0,0 for screen and tiles
 	 *
@@ -21,6 +23,40 @@ MapEngine::MapEngine(
 	 */
 	scroll_x = scroll_y = 0;
 	map_x = map_y = 0;
+
+	/* Init the collision map array */
+	collision_memory = (u8*) malloc (sizeof(u8) * MAP_SIZE);
+	generateCollisionMap();
+}
+
+MapEngine::~MapEngine() {
+	/* Deallocate the array for collision */
+	free(collision_memory);
+	collision_memory = NULL;
+}
+
+void MapEngine::generateCollisionMap() {
+	for (int i = 0; i < MAP_SIZE; i++) {
+		u16 map_tile_id = (*map)[i];
+
+		// Check the nowalk list
+		bool walk = true;
+		for (int j = 0; j < NOWALK_ENTRIES; j++) {
+			u16 nowalk_tile_id = (*nowalk_idx)[j];
+
+			if ((map_tile_id & IDX_MASK) == (nowalk_tile_id & IDX_MASK)) {
+				walk = false;
+				break;
+			}
+		}
+
+		// Set the flag
+		if (walk) {
+			collision_memory[i] = WALK;
+		} else {
+			collision_memory[i] = NOWALK;
+		}
+	}
 }
 
 void MapEngine::initVRAM(
@@ -129,8 +165,3 @@ void MapEngine::scrollMapRelative(int bg, int rel_x, int rel_y) {
 	scroll_x += move_x;
 	scroll_y += move_y;
 }
-
-/*
-	//tell the DS where we are putting everything and set 256 color mode and that we are using a 64 by 64 tile map.
-	REG_BG0CNT = BG_64x64 | BG_COLOR_256 | BG_MAP_BASE(0) | BG_TILE_BASE(1);
-}*/
