@@ -9,12 +9,13 @@
 template <typename T>
 class Vector3 {
 	public:
-		T* data;
+		T data[3];
 
 		Vector3(void);
 		Vector3(T, T, T);
+
+		// copy constructor
 		Vector3(const Vector3<T> &);
-		~Vector3(void);
 
 		T x(void) const;
 		T y(void) const;
@@ -23,15 +24,17 @@ class Vector3 {
 		void setY(T);
 		void setW(T);
 
-		virtual void normalize(void);
+		void normalize(void);
 
-		virtual Vector3<T>& operator=(const Vector3<T> &);	
+		// assignment operator
+		Vector3<T>& operator=(const Vector3<T> &);
 
-		virtual Vector3<T> &operator+=(const Vector3<T> &);
-		virtual const Vector3<T> operator+(const Vector3<T> &) const;
 
-		virtual Vector3<T> &operator-=(const Vector3<T> &);
-		virtual const Vector3<T> operator-(const Vector3<T> &) const;
+		Vector3<T> &operator+=(const Vector3<T> &);
+		const Vector3<T> operator+(const Vector3<T> &) const;
+
+		Vector3<T> &operator-=(const Vector3<T> &);
+		const Vector3<T> operator-(const Vector3<T> &) const;
 
 		/* todo: dot product */
 		/* todo: scalar product */
@@ -39,26 +42,32 @@ class Vector3 {
 
 template <typename T>
 Vector3<T>::Vector3(void) {
-	data = new T[3];
+	data[0] = 0;
+	data[1] = 0;
+	data[2] = 0;
 }
 
 template <typename T>
 Vector3<T>::Vector3(T x, T y, T w) {
-	data = new T[3];
 	data[0] = x;
 	data[1] = y;
 	data[2] = w;
 }
 
 template <typename T>
-Vector3<T>::Vector3(const Vector3<T>& other) {
-	data = new T[3];
-	memcpy(data, other.data, 3 * sizeof(T));
+Vector3<T>::Vector3(const Vector3<T>& other)
+{
+	data[0] = other.data[0];
+	data[1] = other.data[1];
+	data[2] = other.data[2];
 }
 
 template <typename T>
-Vector3<T>::~Vector3(void) {
-	delete data;
+Vector3<T>& Vector3<T>::operator=(const Vector3<T>& other) {
+	data[0] = other.data[0];
+	data[1] = other.data[1];
+	data[2] = other.data[2];
+	return *this;
 }
 
 template <typename T>
@@ -99,42 +108,29 @@ void Vector3<T>::normalize(void) {
 }
 
 template <typename T>
-Vector3<T>& Vector3<T>::operator=(const Vector3<T>& other) {
-	if (this == &other) {
-		return *this;
-	}
-	memcpy(data, other.data, 3 * sizeof(T));
-	return *this;
-}
-
-template <typename T>
 Vector3<T> &Vector3<T>::operator+=(const Vector3<T> &other) {
-	for (int lcv = 0; lcv < 3; lcv++) {
-		data[lcv] = data[lcv] + other.data[lcv];
-	}
+	data[0] += other.data[0];
+	data[1] += other.data[1];
+	data[2] += other.data[2];
 	return *this;
 }
 
 template <typename T>
 const Vector3<T> Vector3<T>::operator+(const Vector3<T> &other) const {
-	Vector3<T> result = *this;
-	result += other;
-	return result;
+	return Vector3<T>(data[0] + other.data[0], data[1] + other.data[1], data[2] + other.data[2]);
 }
 
 template <typename T>
 Vector3<T> &Vector3<T>::operator-=(const Vector3<T> &other) {
-	for (int lcv = 0; lcv < 3; lcv++) {
-		data[lcv] = data[lcv] - other.data[lcv];
-	}
+	data[0] -= other.data[0];
+	data[1] -= other.data[1];
+	data[2] -= other.data[2];
 	return *this;
 }
 
 template <typename T>
 const Vector3<T> Vector3<T>::operator-(const Vector3<T> &other) const {
-	Vector3<T> result = *this;
-	result -= other;
-	return result;
+	return Vector3<T>(data[0] - other.data[0], data[1] - other.data[1], data[2] - other.data[2]);
 }
 
 #endif

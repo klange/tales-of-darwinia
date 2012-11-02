@@ -21,8 +21,12 @@
 
 #include "logo.h"
 #include "sprite.h"
+#include "entitymanager.h"
 #include "event.h"
 #include "eventdispatcher.h"
+#include "inputmanager.h"
+#include "playerentity.h"
+#include "enemyentity.h"
 
 #include "dispatch.h"
 
@@ -30,10 +34,7 @@
 #include "maps.h"
 #include "map_data.h"
 
-// Sound!
-#include <maxmod9.h>
-#include "soundbank.h"
-#include "soundbank_bin.h"
+#include "audiomanager.h"
 
 volatile int frame = 0;
 
@@ -72,9 +73,6 @@ void init(void) {
 }
 
 int main(void) {
-	/* Touchscreen position */
-	touchPosition touchXY;
-
 	/* Put any generic engine/game init code in the init () */
 	init();
 
@@ -112,21 +110,31 @@ int main(void) {
 	oamInit(&oamSub, SpriteMapping_1D_32, false);
 
 	u16* gfx = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_256Color);	
-
 	for (int i = 0; i < 16 * 16 / 2; i++) {
 		gfx[i] = 1 | (1 << 8);
 	}
 
+	u16* gfx2 = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_256Color);	
+	for (int i = 0; i < 16 * 16 / 2; i++) {
+		gfx2[i] = 1 | (1 << 8);
+	}
+
 	SPRITE_PALETTE_SUB[1] = RGB15(31, 0, 0);
 
-	Sprite boxSprite = Sprite(gfx);
-	Vector3<u16> touchPosition;
+	gEntityManager.Init();
+
+	PlayerEntity* playerEntity = new PlayerEntity(gfx);
+	playerEntity->Init();
+	playerEntity->setPosition(Vector3<u16>(64,90,1));
+
+	EnemyEntity* enemyEntity = new EnemyEntity(gfx2);
+	enemyEntity->Init();
+	enemyEntity->setPosition(Vector3<u16>(192,90,0));
 
 	/* Hide title */
 //	bool bg3_hidden = false;
-	mmInitDefaultMem((mm_addr)soundbank_bin);
-	mmLoad(MOD_TECHNO_MOZART);
-	mmStart(MOD_TECHNO_MOZART, MM_PLAY_LOOP);
+	audioManager.initialize();
+	audioManager.playMusic(MOD_TECHNO_MOZART);
 
 	Event* derpyEvent;
 	derpyEvent = (Event*)malloc(sizeof(Event));
@@ -136,7 +144,7 @@ int main(void) {
 
 	Event* drawEvent;
 	drawEvent = (Event*)malloc(sizeof(Event));
-	//drawEvent->eventCallback = boxSprite.doRender;
+	//drawEvent->eventCallback = playerEntity->doRender;
 	drawEvent->type = BUTTON_HOLD;
 	drawEvent->enabled = true;
 
@@ -154,14 +162,10 @@ int main(void) {
 //			bgHide(bg1);
 //			bgShow(bg3);
 //		}
-		// This section below is for touch screen sprite
-		if (keysHeld() & KEY_TOUCH) {
-			touchRead(&touchXY);
-		}
-		touchPosition.setX(touchXY.px);
-		touchPosition.setY(touchXY.py);
-		boxSprite.setPosition(touchPosition);
-		boxSprite.doRender(NULL);
+
+		gEntityManager.Update();
+		gEntityManager.Render();
+
 		bgUpdate();
 	}
 

@@ -19,6 +19,11 @@ void Transformable::setPosition(Vector3<u16> newPosition) {
 	position = newPosition;
 }
 
+//TODO: Make stuff use pointers instead later
+Vector3<u16>* Transformable::getPosition() {
+	return &position;
+}
+
 void Transformable::setRotation(u16 rotValue) {
 	rotation = rotValue;
 }
