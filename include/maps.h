@@ -82,6 +82,9 @@ class MapEngine {
 
 		void scrollMapAbsolute(int bg, int abs_x, int abs_y);
 		void scrollMapRelative(int bg, int rel_x, int rel_y);
+
+		bool collisionAbsolute(int abs_x, int abs_y);
+		bool collisionRelative(int rel_x, int rel_y);
 };
 
 #endif

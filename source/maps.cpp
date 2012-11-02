@@ -44,7 +44,7 @@ void MapEngine::generateCollisionMap() {
 		for (int j = 0; j < NOWALK_ENTRIES; j++) {
 			u16 nowalk_tile_id = (*nowalk_idx)[j];
 
-			if ((map_tile_id & IDX_MASK) == (nowalk_tile_id & IDX_MASK)) {
+			if ((map_tile_id & IDX_MASK) == nowalk_tile_id) {
 				walk = false;
 				break;
 			}
@@ -57,6 +57,30 @@ void MapEngine::generateCollisionMap() {
 			collision_memory[i] = NOWALK;
 		}
 	}
+}
+
+bool MapEngine::collisionAbsolute(int abs_x, int abs_y) {
+	// Sanity check, if outside bounds, consider it a collision
+	if (abs_x < 0) { return true; }
+	if (abs_x > MAP_SCREEN_WIDTH) { return true; }
+	if (abs_y < 0) { return true; }
+	if (abs_y > MAP_SCREEN_HEIGHT) { return true; }
+
+	// Got home free, now time to consult the collision_memory array
+	// Calculate the offset needed to refer to the right tile
+	int tile_x = abs_x / TILE_WIDTH;
+	int tile_y = abs_y / TILE_HEIGHT;
+	int offset = tile_x + (tile_y * MAP_WIDTH);
+
+	if (collision_memory[offset] == NOWALK) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool MapEngine::collisionRelative(int rel_x, int rel_y) {
+	return collisionAbsolute(scroll_x + rel_x, scroll_y + rel_y);
 }
 
 void MapEngine::initVRAM(
