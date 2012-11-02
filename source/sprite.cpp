@@ -5,6 +5,10 @@
 
 
 void Sprite::draw(void) {
+	draw(true);
+}
+
+void Sprite::draw(bool shouldDraw) {
 	oamSet(
 		&oamSub,
 		spriteData->oamIndex, // oam index
@@ -17,7 +21,7 @@ void Sprite::draw(void) {
 		spriteData->spriteGfxMem, // grahpics data
 		-1, // affine transformation context
 		false, //double size when rotating
-		false, //hidden
+		!shouldDraw, //hidden
 		vflip, //vflip
 		hflip, //hflip
 		false //mosaic?
@@ -59,6 +63,16 @@ void Sprite::prevFrame(void) {
 	currentFrame--;
 	boundFrameNumber();
 	copyToGfxBuffer();
+}
+
+void Sprite::setFrame(int8 givenFrame) {
+	currentFrame = givenFrame;
+	boundFrameNumber();
+	copyToGfxBuffer();
+}
+
+int8 Sprite::getFrame(void) {
+  	return currentFrame;
 }
 
 void Sprite::Render(void) {
