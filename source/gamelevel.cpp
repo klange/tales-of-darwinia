@@ -115,7 +115,8 @@ MapEngine LevelLoader::load(GameLevel* level)
 	MapEngine mapEngine = MapEngine(
 		&tile_palette,
 		&tile_set,
-		level->map
+		level->map,
+		&nowalk
 	);
 
 	/* Load the relevant data into the VRAM */
