@@ -38,11 +38,5 @@ void EnemyEntity::Update()
 
 void EnemyEntity::OnDeath(){
 	shouldBeRemoved = true;
-}
-
-void EnemyEntity::Render(){
-	if(shouldBeRemoved)
-		Sprite::draw(false);
-
-	LivingEntity::Render();
+	hidden = true;
 }

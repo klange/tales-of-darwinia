@@ -13,7 +13,7 @@ void LivingEntity::Init(){
 }
 
 void LivingEntity::Damage(u16 damage){
-	if (damage > mStats->health){
+	if (damage >= mStats->health){
 		mStats->health = 0;
 		OnDeath();
 	} else {

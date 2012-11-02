@@ -7,6 +7,8 @@
  */
 class Entity {
 	public:
+		bool hidden;
+
 		bool shouldBeRemoved;
 		virtual ~Entity(void) {};
 		
@@ -14,8 +16,8 @@ class Entity {
 		virtual void Destroy();
 
 		virtual void Update() {};
-		virtual void Render() {};
 
+		virtual void Render() {};
 		virtual void nextFrame() {};
 };
 

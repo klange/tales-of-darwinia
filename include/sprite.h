@@ -12,7 +12,7 @@
  * The sprite can move around, and can be rendered
  * TODO: Make this an animated sprite
  */
-class Sprite: public Renderable, public Entity, public Transformable {
+class Sprite: public Entity, public Transformable {
 	private:
 		SpriteData* spriteData;
 		int8 currentFrame;
@@ -28,9 +28,7 @@ class Sprite: public Renderable, public Entity, public Transformable {
 		void prevFrame(void);
 		void setFrame(int8 givenFrame);
 		int8 getFrame(void);
-		void draw(void);
-		void draw(bool shouldDraw);
-		virtual void Render(void);
+		void Render(void);
 };
 
 #endif

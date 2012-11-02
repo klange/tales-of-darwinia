@@ -15,8 +15,7 @@ void EntityManager::Update()
 	{
 		Entity* current = (Entity*) DynamicArrayGet(&mEntities, i);
 		if(current->shouldBeRemoved){
-			Remove(current);
-			current->Render();
+			//Remove(current);
 		}
 		else {
 			current->Update();

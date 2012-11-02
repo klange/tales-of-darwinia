@@ -4,11 +4,7 @@
 #include <stdio.h>
 
 
-void Sprite::draw(void) {
-	draw(true);
-}
-
-void Sprite::draw(bool shouldDraw) {
+void Sprite::Render(void) {
 	oamSet(
 		&oamSub,
 		spriteData->oamIndex, // oam index
@@ -21,7 +17,7 @@ void Sprite::draw(bool shouldDraw) {
 		spriteData->spriteGfxMem, // grahpics data
 		-1, // affine transformation context
 		false, //double size when rotating
-		!shouldDraw, //hidden
+		hidden, //hidden
 		vflip, //vflip
 		hflip, //hflip
 		false //mosaic?
@@ -73,9 +69,5 @@ void Sprite::setFrame(int8 givenFrame) {
 
 int8 Sprite::getFrame(void) {
   	return currentFrame;
-}
-
-void Sprite::Render(void) {
-	draw();
 }
 
