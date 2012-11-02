@@ -9,13 +9,16 @@ class PlayerEntity : public LivingEntity
 {
 public:
 	virtual ~PlayerEntity();
-	PlayerEntity(SpriteData* gfx);
+	PlayerEntity(SpriteData* gfx, LivingStats* stats);
 
 	virtual void Init();
 	virtual void Update();
 
 	void Collect(ItemEntity* item);
 
+	void BlitStatus();
+
+	virtual EntityType getType();
 	virtual void OnDeath();
 };
 

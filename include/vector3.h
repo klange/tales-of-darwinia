@@ -36,6 +36,7 @@ class Vector3 {
 		Vector3<T> &operator-=(const Vector3<T> &);
 		const Vector3<T> operator-(const Vector3<T> &) const;
 		const Vector3<T> operator/(const T &other) const;
+		const Vector3<T> operator*(const T &other) const;
 		/* todo: dot product */
 		/* todo: scalar product */
 };
@@ -141,5 +142,10 @@ const Vector3<T> Vector3<T>::operator-(const Vector3<T> &other) const {
 template <typename T>
 const Vector3<T> Vector3<T>::operator/(const T &other) const {
 	return Vector3<T>(data[0]/other, data[1]/other, data[2]/other);
+}
+
+template <typename T>
+const Vector3<T> Vector3<T>::operator*(const T &other) const {
+	return Vector3<T>(data[0]*other, data[1]*other, data[2]*other);
 }
 #endif

@@ -26,6 +26,8 @@ void EnemyEntity::Update()
 }
 
 void EnemyEntity::OnDeath(){
+	gpPlayerEntity->mStats->points += mStats->points;
+	gpPlayerEntity->BlitStatus();
 	shouldBeRemoved = true;
 	hidden = true;
 }

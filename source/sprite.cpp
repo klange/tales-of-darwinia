@@ -127,7 +127,7 @@ bool Sprite::IsTouchedByNearbyPlayer()
 		touchPos += Vector3<s16>((s16)gpMapEngine->getScrollX(), (s16)gpMapEngine->getScrollY(), 0);
 
 		BoundingBox<s16> bb;
-		getBoundingBox(bb);
+		getBoundingBox(bb, 1);
 		if (bb.PointInside(touchPos))
 		{
 			Vector3<s16> toPlayer = gpPlayerEntity->position - this->position;

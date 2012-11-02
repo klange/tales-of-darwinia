@@ -12,6 +12,7 @@ extern tile_t yellowTile;
 extern tile_t aquaTile;
 extern tile_t purpleTile;
 extern tile_list_t tile_set;
+extern nowalk_t nowalk;
 extern map_t map;
 
 #endif
