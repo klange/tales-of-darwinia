@@ -7,7 +7,7 @@
 class PlayerEntity : public LivingEntity
 {
 public:
-	PlayerEntity(u16* gfx) : LivingEntity(gfx) {}
+	PlayerEntity(SpriteData* gfx) : LivingEntity(gfx) {}
 	virtual void Update(InputManager* inputManager);
 };
 
