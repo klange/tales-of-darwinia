@@ -15,7 +15,7 @@
 class ItemEntity : public Sprite
 {
 public:
-	ItemEntity(u16* gfx) : Sprite(gfx) {}
+	ItemEntity(SpriteData* inSpriteData) : Sprite(inSpriteData) {}
 
 	LivingStats* Consume();
 
