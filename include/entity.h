@@ -6,6 +6,7 @@
  */
 class Entity {
 	public:
+		bool shouldBeRemoved;
 		virtual ~Entity(void) {};
 		
 		virtual void Init();

@@ -6,6 +6,9 @@
 
 void EnemyEntity::Update()
 {
+	if(shouldBeRemoved)
+		return;
+
 	Vector3<s16> touchPos;
 	if(gInputManager.getCurrentTouchPosition(touchPos))
 	{
@@ -19,8 +22,20 @@ void EnemyEntity::Update()
 			Vector3<s16> toPlayer = gpPlayerEntity->position - this->position;
 			if(toPlayer.magnitude() < 32)
 			{
-				printf("Ouch!");
+				LivingEntity::Damage(gpPlayerEntity->mStats.attack);
+				printf("Ouch %d!", mStats.health);
 			}
 		}
 	}
+}
+
+void EnemyEntity::OnDeath(){
+	shouldBeRemoved = true;
+}
+
+void EnemyEntity::Render(){
+	if(shouldBeRemoved)
+		Sprite::draw(false);
+
+	LivingEntity::Render();
 }

@@ -44,7 +44,7 @@ void Vblank(void) {
 }
 
 // HEY PEEPS - set this to 1 for PRINTF DEBUGGING GOODNESS!
-#define USE_TOP_SCREEN_FOR_CONSOLE 0
+#define USE_TOP_SCREEN_FOR_CONSOLE 1
 PrintConsole* gpTopScreen = NULL;
 
 void init(void) {
