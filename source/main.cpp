@@ -145,6 +145,7 @@ int main(void) {
 		}
 		mapEngine.scrollMapAbsolute(tile, x, y);
 
+		gInputManager.Update();
 		gEntityManager.Update();
 		gEntityManager.Render();
 
