@@ -23,6 +23,7 @@ class Sprite: public Entity, public Transformable {
 		bool vflip;
 		bool hflip;
 		s16 transformContext;
+		bool isAnimated;
 
 		Sprite(SpriteData*);
 		~Sprite(void);

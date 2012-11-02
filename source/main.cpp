@@ -31,6 +31,7 @@
 #include "playerentity.h"
 #include "enemyentity.h"
 #include "text.h"
+#include "textchar.h"
 
 /* Maps */
 #include "maps.h"
@@ -45,26 +46,14 @@ void Vblank(void) {
 
 }
 
-//SpriteData gTextSpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)inconsolataTiles, 27);
+SpriteData* gSpriteData[16];
+TextChar* gTextChars[16];
 
-void blitText(const char* text, int len, int x, int y, int width, int height) {
+void blitText(const char* text, int len) {
+  if (len > 16) len = 16;
   for (int i = 0; i < len; ++i) {
-          SpriteData* spriteData = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)inconsolataTiles, 27);
-    	  Sprite* charSprite = new Sprite(spriteData);
-	  charSprite->Init();
-	  charSprite->size = Vector3<s16>(1,1,0);
-	  charSprite->setPosition(Vector3<s16>(x+(i*20),y,1));
-	  int frame = 0;
-	  if (text[i] >= 0x30 && text[i] <= 0x39) {
-	    frame = text[i] - 0x30;
-	  }
-	  else if (text[i] >= 0x61 && text[i] <= 0x7A) {
-	    frame = text[i] - 0x61 + 27;
-	  }
-	  else if (text[i] >= 0x41 && text[i] <= 0x5A) {
-	    frame = text[i] - 0x41 + 54;
-	  }
-	  charSprite->setFrame(frame); //frame);
+    iprintf(text);
+    gTextChars[i]->setFrame(text[i]);
   }
 }
 // HEY PEEPS - set this to 1 for PRINTF DEBUGGING GOODNESS!
@@ -143,7 +132,19 @@ int main(void) {
 
 	MapEngine mapEngine = levelLoader.load(GAME_LEVELS[0]);
 
-	//blitText("BARK0123456789", 10, 1, 1, 0, 0);
+	// Set up the text display
+
+	for (int i = 0; i < 16; ++i) {
+          gSpriteData[i] = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)inconsolataTiles, 16);
+    	  gTextChars[i] = new TextChar(gSpriteData[i]);
+	  gTextChars[i]->isAnimated = false;
+	  gTextChars[i]->Init();
+	  gTextChars[i]->size = Vector3<s16>(1,1,0);
+	  gTextChars[i]->setPosition(Vector3<s16>(i*20,1,1));
+	  gTextChars[i]->setFrame(0x9);
+	}
+
+	blitText("BARK0123456789", 10);
 
 	touchPosition touchXY;
 
