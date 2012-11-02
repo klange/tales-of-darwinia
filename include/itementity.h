@@ -5,6 +5,21 @@
 #include "livingstats.h"
 
 
+// NOTE: if you add a new type here, make sure you add to the corresponding mappings in gamelevel.cpp
+typedef enum _ItemType
+{
+	ITEM_UNKNOWN,
+	ITEM_PEANUT_BUTTER,
+	ITEM_CHOCOLATE,
+	ITEM_DRUMSTICK,
+	ITEM_KIBBLE,
+	ITEM_BIT,
+	ITEM_BONE,
+	ITEM_CAT,
+} ItemType;
+
+
+
 /**
  * An item that can be picked up.
  *
@@ -15,13 +30,14 @@
 class ItemEntity : public Sprite
 {
 public:
-	ItemEntity(SpriteData* inSpriteData, LivingStats* stats);
+	ItemEntity(SpriteData* inSpriteData, LivingStats* stats, ItemType type);
 
 	virtual void Update(void);
 
 	LivingStats* Consume();
 
 private:
+	ItemType type;
 	LivingStats* mStats;
 };
 

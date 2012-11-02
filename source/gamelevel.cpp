@@ -170,7 +170,7 @@ MapEngine LevelLoader::load(GameLevel* level)
 			0 // all items are single-frame
 		);
 		sprite->paletteIndex=0;
-		ItemEntity* entity = new ItemEntity(sprite, STATS_BY_ITEM_TYPE[spec->type]);
+		ItemEntity* entity = new ItemEntity(sprite, STATS_BY_ITEM_TYPE[spec->type], spec->type);
 		entity->Init();
 		entity->size = Vector3<s16>(32,32,0);
 		entity->setPosition(Vector3<s16>(spec->position->pixelX(), spec->position->pixelY(), 0));

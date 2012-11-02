@@ -15,6 +15,8 @@ public:
 	virtual void Update();
 
 	void Collect(ItemEntity* item);
+
+	virtual void OnDeath();
 };
 
 extern PlayerEntity* gpPlayerEntity;
