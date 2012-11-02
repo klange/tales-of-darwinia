@@ -7,6 +7,7 @@
 
 void EnemyEntity::Update()
 {
+
 	if(shouldBeRemoved)
 		return;
 

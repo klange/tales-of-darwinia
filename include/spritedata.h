@@ -11,6 +11,7 @@ class SpriteData {
 	public:
 		u16* spriteGfxMem;
 		u8* spriteTilesMem;
+		s16 transformContext;
 
 		u8 maxNumFrames;
 

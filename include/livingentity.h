@@ -23,7 +23,6 @@ public:
 	virtual void Update(void);
 	void setTargetPosition(Vector3<s16>);
 	Vector3<s16> getTargetPosition(void);
-
 	LivingStats* mStats;
 
 protected:

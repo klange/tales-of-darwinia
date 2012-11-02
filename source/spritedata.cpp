@@ -7,6 +7,7 @@ SpriteData::SpriteData(SpriteSize size, SpriteColorFormat format, u8* spriteTile
 	spriteSize = size;
 	spriteColorFormat = format;
 	priority = 0;
+	transformContext = -1;
 	spriteGfxMem = oamAllocateGfx(&oamSub, spriteSize, spriteColorFormat);
 	spriteTilesMem = (u8*)spriteTiles;
 	maxNumFrames = numFrames;

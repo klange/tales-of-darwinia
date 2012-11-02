@@ -17,10 +17,12 @@ class Sprite: public Entity, public Transformable {
 		int8 currentFrame;
 		void boundFrameNumber(void);
 		void copyToGfxBuffer(void);
+
 	public:
 		u8 spriteOffset;
 		bool vflip;
 		bool hflip;
+		s16 transformContext;
 
 		Sprite(SpriteData*);
 		~Sprite(void);
@@ -29,6 +31,11 @@ class Sprite: public Entity, public Transformable {
 		void setFrame(int8 givenFrame);
 		int8 getFrame(void);
 		void Render(void);
+
+		virtual void Update(void);
+
+	protected:
+		u32 updateCount;
 };
 
 #endif

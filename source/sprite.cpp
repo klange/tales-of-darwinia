@@ -15,7 +15,7 @@ void Sprite::Render(void) {
 		spriteData->spriteSize,
 		spriteData->spriteColorFormat,
 		spriteData->spriteGfxMem, // grahpics data
-		-1, // affine transformation context
+		transformContext, // affine transformation context
 		false, //double size when rotating
 		hidden, //hidden
 		vflip, //vflip
@@ -27,7 +27,9 @@ void Sprite::Render(void) {
 Sprite::Sprite(SpriteData* inSpriteData) {
 	spriteData = inSpriteData;
 	currentFrame = 0;
+	updateCount = 0;
 	spriteOffset = 0;
+	transformContext = -1;
 	vflip = false;
 	hflip = false;
 	anchor = Vector3<s16>(-16, -16, 0);
@@ -69,6 +71,10 @@ void Sprite::setFrame(int8 givenFrame) {
 	currentFrame = givenFrame;
 	boundFrameNumber();
 	copyToGfxBuffer();
+}
+
+void Sprite::Update(void) {
+	updateCount++;
 }
 
 int8 Sprite::getFrame(void) {

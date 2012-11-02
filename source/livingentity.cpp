@@ -10,6 +10,8 @@ void LivingEntity::Init(){
 	
 	// Make this more robust, read from a map or something later
 	mStats = new LivingStats(8, 1, 0, 8, 8);
+
+	updateCount = 0;
 }
 
 void LivingEntity::Damage(u16 damage){
@@ -82,6 +84,8 @@ void LivingEntity::Update(void) {
 			spriteOffset = 2;
 		}
 	}
+
+	Sprite::Update();
 }
 
 void LivingEntity::setTargetPosition(Vector3<s16> tar) {
