@@ -19,25 +19,17 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "darwin.h"
-#include "man.h"
 #include "logo.h"
 #include "sprite.h"
 #include "entitymanager.h"
 #include "event.h"
 #include "eventdispatcher.h"
 #include "inputmanager.h"
-#include "playerentity.h"
-#include "enemyentity.h"
-
-/* Maps */
-#include "maps.h"
-#include "map_data.h"
 
 #include "audiomanager.h"
 
-#include "sprite.h"
-#include "spritedata.h"
+#include "gamelevel.h"
+#include "gamelevel_data.h"
 
 void Vblank(void) {
 	
@@ -98,21 +90,9 @@ int main(void) {
 	/* Put any generic engine/game init code in the init () */
 	init();
 
-	/* Load data from map_data.h into the map engine */
-	MapEngine mapEngine = MapEngine(
-		&tile_palette,
-		&tile_set,
-		&map
-	);
-
 	/* Tile engine is going to claim BG0 */
 	bgInitSub(0, BgType_Text8bpp, BgSize_T_512x512, 0, 1);
 //	REG_BG0CNT = BG_64x64 | BG_COLOR_256 | BG_MAP_BASE(0) | BG_TILE_BASE(1);
-
-	/* Load the relevant data into the VRAM */
-	mapEngine.dumpPaletteToVRAM(&BG_PALETTE_SUB[0]);
-	mapEngine.dumpTilesToVRAM((u8*)BG_TILE_RAM_SUB(1));
-	mapEngine.dumpMapToVRAM((u16*)BG_MAP_RAM_SUB(0));
 
 	/* Vertical offset for scrolling the map in pixels */
 	REG_BG0VOFS = 64;
@@ -144,7 +124,8 @@ int main(void) {
 	enemyEntity->setTargetPosition(Vector3<s16>(0,0,0));
 
 	audioManager.initialize();
-	audioManager.playMusic(MOD_TECHNO_MOZART);
+
+	levelLoader.load(GAME_LEVELS[0]);
 
 	touchPosition touchXY;
 
@@ -161,8 +142,7 @@ int main(void) {
 
 		lolcounter++;
 		if (lolcounter >= 10) {
-			playerEntity->prevFrame();
-			enemyEntity->nextFrame();
+			gEntityManager.NextFrame();
 			lolcounter = 0;
 
 		}
