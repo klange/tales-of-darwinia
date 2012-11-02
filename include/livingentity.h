@@ -15,7 +15,7 @@ enum {
 class LivingEntity : public Sprite
 {
 public:
-	LivingEntity(SpriteData *gfx) : Sprite(gfx) {}
+	LivingEntity(SpriteData *gfx, LivingStats* stats);
 	virtual void Init();
 	virtual void Damage(u16 damage);
 	virtual void OnDeath() {};

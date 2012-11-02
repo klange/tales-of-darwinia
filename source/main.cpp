@@ -133,9 +133,6 @@ int main(void) {
 
 	audioManager.initialize();
 
-	MapEngine mapEngine = levelLoader.load(GAME_LEVELS[0]);
-	gpMapEngine = &mapEngine;
-
 	// Set up the text display
 
 	for (int i = 0; i < 16; ++i) {
@@ -149,7 +146,8 @@ int main(void) {
 	  gTextChars[i]->setFrame(0x9);
 	}
 
-	blitText("BARK0123456789", 14);
+	MapEngine mapEngine = levelLoader.load(GAME_LEVELS[0]);
+	gpMapEngine = &mapEngine;
 
 	int lolcounter = 0;
 	while(1) {
