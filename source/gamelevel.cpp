@@ -7,6 +7,7 @@
 #include "man.h"
 #include "trashcan.h"
 #include "peanut_butter.h"
+#include "chocolate.h"
 
 #include "sprite.h"
 #include "spritedata.h"
@@ -44,7 +45,7 @@ u8 SPRITE_FRAMES_BY_ENEMY_TYPE[] = {
 u8* SPRITE_TILES_BY_ITEM_TYPE[] = {
 	NULL, // ITEM_UNKNOWN
 	(u8*) peanut_butterTiles,
-	(u8*) peanut_butterTiles,
+	(u8*) chocolateTiles,
 	(u8*) peanut_butterTiles,
 	NULL,
 };

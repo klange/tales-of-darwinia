@@ -25,6 +25,7 @@ void AudioManager::initialize()
 	mmLoadEffect(SFX_CHOMP);
 	mmLoadEffect(SFX_OUCH);
 	mmLoadEffect(SFX_GAME_OVER);
+	mmLoadEffect(SFX_CHOKE);
 	mmLoad(MOD_TECHNO_MOZART);
 }
 
