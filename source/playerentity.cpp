@@ -30,6 +30,9 @@ PlayerEntity::~PlayerEntity()
 
 void PlayerEntity::Update()
 {
+	if (shouldBeRemoved)
+		return;
+
 	if (keysHeld() & KEY_TOUCH) {
 		touchPosition curTouchPosition;
 		touchRead(&curTouchPosition);
@@ -71,4 +74,21 @@ void PlayerEntity::Collect(ItemEntity* item)
 	}
 
 	mStats->Print("DARWIN");
+
+	if (mStats->health <= 0)
+	{
+		audioManager.playSound(SFX_GAME_OVER);
+		audioManager.pauseMusic();
+		OnDeath();
+	}
+	else
+	{
+		audioManager.playSound(SFX_CHOMP);
+	}
+}
+
+void PlayerEntity::OnDeath()
+{
+	shouldBeRemoved = true;
+	printf("\n\nGAME OVER :-(\n\n");
 }

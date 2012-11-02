@@ -23,9 +23,13 @@
 #define MAP_HEIGHT 64
 #define MAP_SIZE (MAP_WIDTH * MAP_HEIGHT)
 
+// Screen dim
+#define SCREEN_HEIGHT 192
+#define SCREEN_WIDTH 256
+
 // World boundaries
-#define MAP_MAX_X (TILE_WIDTH * MAP_WIDTH)
-#define MAP_MAX_Y (TILE_HEIGHT * MAP_HEIGHT)
+#define MAP_SCREEN_HEIGHT ((MAP_HEIGHT - (SCREEN_HEIGHT / TILE_HEIGHT)) * TILE_HEIGHT)
+#define MAP_SCREEN_WIDTH ((MAP_WIDTH - (SCREEN_WIDTH / TILE_WIDTH)) * TILE_WIDTH)
 
 /* Palette typedef */
 typedef u16 palette_t[PALETTE_ENTRIES];

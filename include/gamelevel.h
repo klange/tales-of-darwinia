@@ -5,6 +5,7 @@
 #include <nds.h>
 #include "map_type.h"
 #include "maps.h"
+#include "itementity.h"
 
 // NOTE: if you add a new type here, make sure you add to the corresponding mappings in gamelevel.cpp
 typedef enum _EnemyType
@@ -13,19 +14,6 @@ typedef enum _EnemyType
 	ENEMY_TRASH_CAN,
 	ENEMY_EMPLOYEE,
 } EnemyType;
-
-// NOTE: if you add a new type here, make sure you add to the corresponding mappings in gamelevel.cpp
-typedef enum _ItemType
-{
-	ITEM_UNKNOWN,
-	ITEM_PEANUT_BUTTER,
-	ITEM_CHOCOLATE,
-	ITEM_DRUMSTICK,
-	ITEM_KIBBLE,
-	ITEM_BIT,
-	ITEM_BONE,
-	ITEM_CAT,
-} ItemType;
 
 class TilePosition
 {
