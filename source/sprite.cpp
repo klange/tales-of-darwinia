@@ -8,8 +8,8 @@ void Sprite::draw(void) {
 	oamSet(
 		&oamSub,
 		spriteData->oamIndex, // oam index
-		position.x(),
-		position.y(),
+		position.x() + anchor.x(),
+		position.y() + anchor.y(),
 		spriteData->priority, // priority
 		spriteData->paletteIndex,
 		spriteData->spriteSize,
@@ -30,6 +30,7 @@ Sprite::Sprite(SpriteData* inSpriteData) {
 	spriteOffset = 0;
 	vflip = false;
 	hflip = false;
+	anchor = Vector3<s16>(-16, -16, 0);
 
 	copyToGfxBuffer();
 }

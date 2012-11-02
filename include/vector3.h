@@ -25,7 +25,7 @@ class Vector3 {
 		void setW(T);
 
 		void normalize(void);
-		u32 magnitude(void);
+		T magnitude(void);
 
 		// assignment operator
 		Vector3<T>& operator=(const Vector3<T> &);
@@ -108,8 +108,8 @@ void Vector3<T>::normalize(void) {
 }
 
 template <typename T>
-u32 Vector3<T>::magnitude(void) {
-	return sqrt32(x() * x() + y() * y());
+T Vector3<T>::magnitude(void) {
+	return (T)sqrt32(x() * x() + y() * y());
 }
 
 template <typename T>
