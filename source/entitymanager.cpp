@@ -5,7 +5,6 @@
 // Singleton
 EntityManager gEntityManager;
 
-
 void EntityManager::Init()
 {
 	DynamicArrayInit(&mEntities, 16); // initial size
