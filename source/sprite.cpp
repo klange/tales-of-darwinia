@@ -1,30 +1,65 @@
 #include <nds.h>
 #include "sprite.h"
+#include "spritedata.h"
+#include <stdio.h>
+
 
 void Sprite::draw(void) {
 	oamSet(
 		&oamSub,
-		0, // oam index
+		spriteData->oamIndex, // oam index
 		position.x(),
 		position.y(),
-		0, //z-index
-		0, // palette index
-		SpriteSize_16x16,
-		SpriteColorFormat_256Color,
-		gfx_data[currentFrame], // grahpics data
-		-1, //rotation
+		spriteData->priority, // priority
+		spriteData->paletteIndex,
+		spriteData->spriteSize,
+		spriteData->spriteColorFormat,
+		spriteData->spriteGfxMem, // grahpics data
+		-1, // affine transformation context
 		false, //double size when rotating
-		hidden,
-		false, //wflip
-		false, //hflip
+		false, //hidden
+		vflip, //vflip
+		hflip, //hflip
 		false //mosaic?
 	);
 }
 
-Sprite::Sprite(void) {
-	gfx_data = NULL;
+Sprite::Sprite(SpriteData* inSpriteData) {
+	spriteData = inSpriteData;
+	currentFrame = 0;
+	vflip = false;
+	hflip = false;
+
+	copyToGfxBuffer();
 }
 
-Sprite::Sprite(u16** in_gfx_data) {
-	gfx_data = in_gfx_data;
+void Sprite::boundFrameNumber(void) {
+	if (currentFrame >= spriteData->maxNumFrames) {
+		currentFrame = 0;
+	}
+	if (currentFrame < 0) {
+		currentFrame = spriteData->maxNumFrames - 1;
+	}
 }
+
+void Sprite::copyToGfxBuffer(void) {
+	u8* offset = spriteData->spriteTilesMem + (currentFrame+1*spriteData->maxNumFrames) * 32*32;
+	dmaCopy(offset, spriteData->spriteGfxMem, 32*32);
+}
+
+void Sprite::nextFrame(void) {
+	currentFrame++;
+	boundFrameNumber();
+	copyToGfxBuffer();
+}
+
+void Sprite::prevFrame(void) {
+	currentFrame--;
+	boundFrameNumber();
+	copyToGfxBuffer();
+}
+
+void Sprite::Render(void) {
+	draw();
+}
+

@@ -3,7 +3,10 @@
 #include "event.h"
 #include <stdio.h>
 
-EventDispatcher::EventDispatcher(void) {
+// Singleton
+EventDispatcher gEventDispatcher;
+
+void EventDispatcher::Init(void) {
 	events = (Event**)malloc(MAX_NUM_EVENTS * sizeof(Event*));
 }
 
@@ -32,7 +35,7 @@ int8 EventDispatcher::addEvent(Event *event) {
 	return endPointer;
 }
 
-int8 EventDispatcher::dispatchEvents(void) {
+void EventDispatcher::dispatchEvents(void) {
 	Event* currentEvent;
 	uint32 downKeys = keysDown();
 	uint32 heldKeys = keysHeld();
