@@ -22,6 +22,7 @@
 #include "sprite.h"
 #include "event.h"
 #include "eventdispatcher.h"
+#include "text.h"
 
 #include "dispatch.h"
 
@@ -58,7 +59,7 @@ int main(void) {
 	vramSetBankB(VRAM_B_MAIN_BG);
 
 	/* Set the mode for sprite display */
-	videoSetModeSub(MODE_5_2D | DISPLAY_SPR_ACTIVE);
+	videoSetModeSub(MODE_5_2D | DISPLAY_BG3_ACTIVE | DISPLAY_SPR_ACTIVE);
 	vramSetBankC(VRAM_C_SUB_BG);
 	vramSetBankD(VRAM_D_SUB_SPRITE);
 
@@ -111,6 +112,7 @@ int main(void) {
 	//drawEvent->eventCallback = boxSprite.doRender;
 	drawEvent->type = BUTTON_HOLD;
 	drawEvent->enabled = true;
+	TextRenderable("This is a test message",1,1,12,12);
 
 	while(1) {
 		swiWaitForVBlank();
