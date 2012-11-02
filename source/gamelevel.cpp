@@ -134,6 +134,7 @@ MapEngine LevelLoader::load(GameLevel* level)
 	playerEntity->Init();
 	playerEntity->size = Vector3<s16>(32,32,0);
 	playerEntity->setPosition(Vector3<s16>(level->playerPosition->pixelX(), level->playerPosition->pixelY(), 1));
+	playerEntity->setTargetPosition(Vector3<s16>(level->playerPosition->pixelX(), level->playerPosition->pixelY(), 1));
 
 	EnemySpecification** enemies = level->enemies;
 	while (*enemies)
