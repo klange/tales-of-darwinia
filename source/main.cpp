@@ -65,7 +65,6 @@ void init(void) {
 	oamInit(&oamMain, SpriteMapping_1D_128, false);
 	oamInit(&oamSub, SpriteMapping_1D_128, false);
 
-<<<<<<< HEAD
 	/* Set the vertical blank event */
 	irqSet(IRQ_VBLANK, Vblank);
 }

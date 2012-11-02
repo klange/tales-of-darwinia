@@ -5,10 +5,6 @@
 
 
 void Sprite::draw(void) {
-<<<<<<< HEAD
-=======
-	iprintf("   \x1b[32;1m%d\x1b[39m\n", currentFrame);
->>>>>>> 7c4585946c4982177825c420d66b79210e5c4af3
 	oamSet(
 		&oamSub,
 		spriteData->oamIndex, // oam index
