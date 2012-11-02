@@ -29,7 +29,6 @@ class Vector3 {
 		// assignment operator
 		Vector3<T>& operator=(const Vector3<T> &);
 
-
 		Vector3<T> &operator+=(const Vector3<T> &);
 		const Vector3<T> operator+(const Vector3<T> &) const;
 

@@ -5,6 +5,8 @@
 
 void PlayerEntity::Update(InputManager* inputManager)
 {
+	LivingEntity::Update();
+
 	touchPosition* touchXY = inputManager->moveToPosition(getPosition(), 2.0);
 
 	/* Touchscreen position */
@@ -17,6 +19,14 @@ void PlayerEntity::Update(InputManager* inputManager)
 		setPosition(touchPosition);
 
 		audioManager.playSound(SFX_PLAYER_MOVE);
+	}
+
+	if (directionVector.x() < 0) {
+		spriteOffset = 1;
+		vflip = true;
+	} else if (directionVector.x() >= 0) {
+		spriteOffset = 1;
+		vflip = false;
 	}
 
 	delete touchXY;

@@ -136,7 +136,7 @@ int main(void) {
 
 		lolcounter++;
 		if (lolcounter >= 10) {
-			playerEntity->nextFrame();
+			playerEntity->prevFrame();
 			enemyEntity->nextFrame();
 			lolcounter = 0;
 		}

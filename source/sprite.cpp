@@ -27,6 +27,7 @@ void Sprite::draw(void) {
 Sprite::Sprite(SpriteData* inSpriteData) {
 	spriteData = inSpriteData;
 	currentFrame = 0;
+	spriteOffset = 0;
 	vflip = false;
 	hflip = false;
 
@@ -43,7 +44,7 @@ void Sprite::boundFrameNumber(void) {
 }
 
 void Sprite::copyToGfxBuffer(void) {
-	u8* offset = spriteData->spriteTilesMem + (currentFrame+1*spriteData->maxNumFrames) * 32*32;
+	u8* offset = spriteData->spriteTilesMem + (currentFrame+spriteOffset*spriteData->maxNumFrames) * 32*32;
 	dmaCopy(offset, spriteData->spriteGfxMem, 32*32);
 }
 

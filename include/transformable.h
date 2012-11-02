@@ -24,6 +24,7 @@ class Transformable {
 		void translateRotationAnchor(Vector3<s16>);
 		void setPosition(Vector3<s16>);
 		Vector3<s16>* getPosition();
+		Vector3<s16>* getDirection();
 		void setRotation(s16);
 		void setScale(s16);
 

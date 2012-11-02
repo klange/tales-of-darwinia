@@ -23,6 +23,9 @@ void Transformable::setPosition(Vector3<s16> newPosition) {
 Vector3<s16>* Transformable::getPosition() {
 	return &position;
 }
+Vector3<s16>* Transformable::getDirection() {
+	return &directionVector;
+}
 
 void Transformable::setRotation(s16 rotValue) {
 	rotation = rotValue;
@@ -33,3 +36,4 @@ void Transformable::getBoundingBox(BoundingBox<s16>& bbOut)
 	bbOut.mTopLeft = position;
 	bbOut.mBottomRight = position + size;
 }
+
