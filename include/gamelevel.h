@@ -28,6 +28,8 @@ class TilePosition
 {
 public:
 	TilePosition(u16 x, u16 y);
+	u16 pixelX();
+	u16 pixelY();
 	u16 x;
 	u16 y;
 };
@@ -52,11 +54,11 @@ public:
 class GameLevel
 {
 public:
-	GameLevel(map_t* map, u16 playerX, u16 playerY, EnemySpecification* enemies, ItemSpecification* items, int music);
+	GameLevel(map_t* map, u16 playerX, u16 playerY, EnemySpecification** enemies, ItemSpecification** items, int music);
 	map_t* map;
 	TilePosition* playerPosition;
-	EnemySpecification* enemies;
-	ItemSpecification* items;
+	EnemySpecification** enemies;
+	ItemSpecification** items;
 	int music;
 };
 

@@ -1,5 +1,5 @@
 #include <nds.h>
-
+#include <stdio.h>
 #include "gamelevel.h"
 
 // image resources
@@ -31,6 +31,16 @@ TilePosition::TilePosition(u16 x, u16 y)
 	this->y = y;
 }
 
+u16 TilePosition::pixelX()
+{
+	return this->x * 16;
+}
+
+u16 TilePosition::pixelY()
+{
+	return this->y * 16;
+}
+
 EnemySpecification::EnemySpecification(u16 x, u16 y, EnemyType type, ItemSpecification* rewards)
 {
 	this->position = new TilePosition(x, y);
@@ -44,7 +54,7 @@ ItemSpecification::ItemSpecification(TilePosition* position, ItemType type)
 	this->type = type;
 }
 
-GameLevel::GameLevel(map_t* map, u16 playerX, u16 playerY, EnemySpecification* enemies, ItemSpecification* items, int music)
+GameLevel::GameLevel(map_t* map, u16 playerX, u16 playerY, EnemySpecification** enemies, ItemSpecification** items, int music)
 {
 	this->map = map;
 	this->playerPosition = new TilePosition(playerX, playerY);
@@ -69,20 +79,27 @@ void LevelLoader::load(GameLevel* level)
 
 	/* Make the darwin sprite */
 	SpriteData* gfx = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)darwinTiles, 3);
+	dmaCopy(darwinPal, SPRITE_PALETTE_SUB, 512);
 
 	/* Make a man enemy sprite */
 	SpriteData* gfx2 = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)manTiles, 3);
-	dmaCopy(manPal, SPRITE_PALETTE_SUB, 512);
+//	dmaCopy(manPal, SPRITE_PALETTE_SUB, 512);
 
 	PlayerEntity* playerEntity = new PlayerEntity(gfx);
 	playerEntity->Init();
 	playerEntity->size = Vector3<s16>(16,16,0);
-	playerEntity->setPosition(Vector3<s16>(64,90,1));
+	playerEntity->setPosition(Vector3<s16>(level->playerPosition->pixelX(), level->playerPosition->pixelY(), 1));
 
-	EnemyEntity* enemyEntity = new EnemyEntity(gfx2);
-	enemyEntity->Init();
-	playerEntity->size = Vector3<s16>(16,16,0);
-	enemyEntity->setPosition(Vector3<s16>(192,90,0));
+	EnemySpecification** enemies = level->enemies;
+	while (*enemies)
+	{
+		EnemySpecification* enemySpec = *enemies;
+		EnemyEntity* enemyEntity = new EnemyEntity(gfx2);
+		enemyEntity->Init();
+		enemyEntity->size = Vector3<s16>(16,16,0);
+		enemyEntity->setPosition(Vector3<s16>(enemySpec->position->pixelX(), enemySpec->position->pixelY(), 0));
+		enemies++;
+	}
 
 	audioManager.playMusic(level->music);
 }

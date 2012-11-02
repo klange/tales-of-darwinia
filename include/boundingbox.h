@@ -9,6 +9,7 @@
 template <typename T>
 class BoundingBox {
 public:
+	BoundingBox() {}
 	BoundingBox(T left, T top, T right, T bottom);
 	BoundingBox(const Vector3<T>& topLeft, const Vector3<T>& bottomRight);
 
