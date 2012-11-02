@@ -11,6 +11,8 @@ PlayerEntity* gpPlayerEntity = NULL;
 PlayerEntity::PlayerEntity(SpriteData* gfx) : LivingEntity(gfx)
 {
 	gpPlayerEntity = this;
+	maxSpeed = 3;
+	acceleration = 0.2;
 }
 
 PlayerEntity::~PlayerEntity()
@@ -21,12 +23,28 @@ PlayerEntity::~PlayerEntity()
 
 void PlayerEntity::Update()
 {
-	speed = 3.0;
 	if (keysHeld() & KEY_TOUCH) {
 		touchPosition curTouchPosition;
 		touchRead(&curTouchPosition);
 		setTargetPosition(Vector3<s16>(curTouchPosition.px, curTouchPosition.py, 1));
+		movementState = MOVING;
 	}
+
+	if (movementState == MOVING) {
+		speed += acceleration;
+	}
+
+	if (movementState == STOPPED) {
+		speed = 0;
+	}
+	if (speed < 0) {
+		speed = 0;
+	}
+
+	if (speed > maxSpeed) {
+		speed = maxSpeed;
+	}
+
 	LivingEntity::Update();
 }
 

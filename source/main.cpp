@@ -141,7 +141,7 @@ int main(void) {
 
 	MapEngine mapEngine = levelLoader.load(GAME_LEVELS[0]);
 
-	blitText("BARK0123456789", 10, 1, 1, 0, 0);
+	//blitText("BARK0123456789", 10, 1, 1, 0, 0);
 
 	touchPosition touchXY;
 

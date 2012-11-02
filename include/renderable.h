@@ -8,10 +8,9 @@
  */
 class Renderable {
 	private:
-		virtual void draw(void) = 0;
+		virtual void Render(void) = 0;
 
 	public:
 		bool hidden;
-		void doRender(void*);
 };
 #endif

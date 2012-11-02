@@ -10,7 +10,7 @@ void EnemyEntity::Update()
 	if(shouldBeRemoved)
 		return;
 
-	speed = 2.0;
+	speed = 2;
 	Vector3<s16> touchPos;
 	if(gInputManager.getCurrentTouchPosition(touchPos))
 	{
@@ -38,11 +38,5 @@ void EnemyEntity::Update()
 
 void EnemyEntity::OnDeath(){
 	shouldBeRemoved = true;
-}
-
-void EnemyEntity::Render(){
-	if(shouldBeRemoved)
-		Sprite::draw(false);
-
-	LivingEntity::Render();
+	hidden = true;
 }
