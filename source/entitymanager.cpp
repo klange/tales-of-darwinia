@@ -55,8 +55,10 @@ bool EntityManager::IsMoveLegal(Entity* input)
 		}
 	}
 
+	return true;
+
 	/* Check the map walk/nowalk flag */
-	return (gpMapEngine->collisionAbsolute(entity->position.x(), entity->position.y()));
+	//return (gpMapEngine->collisionAbsolute(entity->position.x() + 16, entity->position.y() + 16));
 }
 
 void EntityManager::Render()
