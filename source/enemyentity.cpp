@@ -6,6 +6,8 @@
 
 void EnemyEntity::Update()
 {
+	speed = 1.0;
+	LivingEntity::Update();
 	Vector3<s16> touchPos;
 	if(gInputManager.getCurrentTouchPosition(touchPos))
 	{
