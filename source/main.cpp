@@ -147,9 +147,6 @@ int main(void) {
 
 	touchPosition touchXY;
 
-	int x = 0;
-	int y = 0;
-
 	int lolcounter = 0;
 	while(1) {
 		scanKeys();
@@ -157,20 +154,21 @@ int main(void) {
 			touchRead(&touchXY);
 		}
 
+		int rel_x = 0;
+		int rel_y = 0;
 		if (keysHeld() & KEY_LEFT) {
-			if (x > 0) x--;
+			rel_x = -1;
 		}
 		if (keysHeld() & KEY_RIGHT) {
-			if (x < ((MAP_WIDTH-(256/8))*8)) x++;
+			rel_x = 1;
 		}
 		if (keysHeld() & KEY_UP) {
-			if (y > 0) y--;
+			rel_y = -1;
 		}
 		if (keysHeld() & KEY_DOWN) {
-			if (y < ((MAP_HEIGHT-(192/8))*8)) y++;
+			rel_y = 1;
 		}
-
-		mapEngine.scrollMapAbsolute(tile, x, y);
+		mapEngine.scrollMapRelative(tile, rel_x, rel_y);
 
 		gInputManager.Update();
 		gEntityManager.Update();
