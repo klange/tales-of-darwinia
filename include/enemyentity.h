@@ -2,11 +2,12 @@
 #define ENEMY_ENTITY_H_
 
 #include "livingentity.h"
+#include "spritedata.h"
 
 class EnemyEntity : public LivingEntity
 {
 public:
-    EnemyEntity(u16* gfx) : LivingEntity(gfx) {}
+    EnemyEntity(SpriteData* gfx) : LivingEntity(gfx) {}
 	virtual void Update();
 };
 

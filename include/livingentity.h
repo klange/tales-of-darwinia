@@ -2,12 +2,13 @@
 #define LIVING_ENTITY_H_
 
 #include "sprite.h"
+#include "spritedata.h"
 #include "livingstats.h"
 
 class LivingEntity : public Sprite
 {
 public:
-	LivingEntity(u16 *gfx) : Sprite(gfx) {}
+	LivingEntity(SpriteData *gfx) : Sprite(gfx) {}
 
 protected:
 	LivingStats mStats;
