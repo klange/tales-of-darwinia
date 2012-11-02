@@ -19,11 +19,11 @@ class MapEngine {
 		/* The actual map data itself */
 		const map_t* map;
 
-		/* Current "player" location in tiles unit */
-		int x, y;
-
 		/* Current "display" scroll offset in pixels */
 		int scroll_x, scroll_y;
+
+		/* Map offset */
+		int map_x, map_y;
 
 	public:
 		MapEngine(
@@ -32,12 +32,14 @@ class MapEngine {
 			const map_t* a_map
 		);
 
-		int dumpPaletteToVRAM(u16* palette_memory);
-		int dumpTilesToVRAM(u8* tile_memory);
-		int dumpMapToVRAM(u16* map_memory);
+		void dumpPaletteToVRAM(u16* palette_memory);
+		void dumpTilesToVRAM(u8* tile_memory);
+		void dumpMapToVRAM(u16* map_memory);
 
 		int getTileX(int screen_pixel_x);
 		int getTileY(int screen_pixel_y);
+
+		void scrollMapAbsolute(int bg, int pixel_x, int pixel_y);
 };
 
 #endif

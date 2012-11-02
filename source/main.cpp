@@ -40,7 +40,7 @@
 #include "spritedata.h"
 
 void Vblank(void) {
-	
+
 }
 
 void init(void) {
@@ -51,7 +51,7 @@ void init(void) {
 	videoSetMode(MODE_5_2D | DISPLAY_BG2_ACTIVE);
 	vramSetBankA(VRAM_A_MAIN_BG);
 	vramSetBankB(VRAM_B_MAIN_BG);
-		
+
 	/* Set the mode for sprite display */
 	videoSetModeSub(MODE_5_2D | DISPLAY_BG0_ACTIVE | DISPLAY_SPR_ACTIVE);
 	vramSetBankC(VRAM_C_SUB_BG);
@@ -64,7 +64,8 @@ void init(void) {
 	gEventDispatcher.Init();
 
 	/* Set the default backgorund color */
-	setBackdropColor(0xF);
+	setBackdropColor(0x0);
+	setBackdropColorSub(0x0);
 
 	//oamInit(&oamMain, SpriteMapping_1D_128, false);
 	/* Initiate the sprite engine */
@@ -86,16 +87,13 @@ int main(void) {
 	);
 
 	/* Tile engine is going to claim BG0 */
-	bgInitSub(0, BgType_Text8bpp, BgSize_T_512x512, 0, 1);
+	int tile = bgInitSub(0, BgType_Text8bpp, BgSize_T_512x512, 0, 1);
 //	REG_BG0CNT = BG_64x64 | BG_COLOR_256 | BG_MAP_BASE(0) | BG_TILE_BASE(1);
 
 	/* Load the relevant data into the VRAM */
 	mapEngine.dumpPaletteToVRAM(&BG_PALETTE_SUB[0]);
 	mapEngine.dumpTilesToVRAM((u8*)BG_TILE_RAM_SUB(1));
 	mapEngine.dumpMapToVRAM((u16*)BG_MAP_RAM_SUB(0));
-
-	/* Vertical offset for scrolling the map in pixels */
-	REG_BG0VOFS = 64;
 
 	/* Decompress and show the logo */
 	bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
@@ -123,6 +121,9 @@ int main(void) {
 
 	touchPosition touchXY;
 
+	int x = 0;
+	int y = 0;
+
 	int lolcounter = 0;
 	while(1) {
 		scanKeys();
@@ -130,6 +131,19 @@ int main(void) {
 			touchRead(&touchXY);
 		}
 
+		if (keysHeld() & KEY_LEFT) {
+			if (x > 0) x--;
+		}
+		if (keysHeld() & KEY_RIGHT) {
+			if (x < ((64*8)/2)) x++;
+		}
+		if (keysHeld() & KEY_UP) {
+			if (y > 0) y--;
+		}
+		if (keysHeld() & KEY_DOWN) {
+			if (y < ((64-(192/8))*8)) y++;
+		}
+		mapEngine.scrollMapAbsolute(tile, x, y);
 
 		gEntityManager.Update();
 		gEntityManager.Render();
