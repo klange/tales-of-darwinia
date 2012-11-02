@@ -11,6 +11,7 @@ public:
 	virtual ~PlayerEntity();
 	PlayerEntity(SpriteData* gfx);
 
+	virtual void Init();
 	virtual void Update();
 
 	void Collect(ItemEntity* item);

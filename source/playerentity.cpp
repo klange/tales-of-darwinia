@@ -8,6 +8,13 @@
 
 PlayerEntity* gpPlayerEntity = NULL;
 
+void PlayerEntity::Init(){
+	LivingEntity::Init();
+
+	// TODO: Make this more robust
+	mStats->attack = 1;
+}
+
 PlayerEntity::PlayerEntity(SpriteData* gfx) : LivingEntity(gfx)
 {
 	gpPlayerEntity = this;
