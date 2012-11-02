@@ -56,7 +56,7 @@ public:
 class LevelLoader
 {
 public:
-	MapEngine load(GameLevel* level);
+	MapEngine* load(GameLevel* level);
 };
 
 extern LevelLoader levelLoader;

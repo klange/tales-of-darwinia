@@ -14,6 +14,7 @@ void blitText(const char* text, int len);
 void PlayerEntity::Init(){
 	LivingEntity::Init();
 
+	type = PLAYERENTITY;
 	// TODO: Make this more robust
 	mStats->attack = 1;
 }
@@ -132,19 +133,25 @@ void PlayerEntity::BlitStatus()
 	char status[17];
 	sprintf(status, "%05d      ", mStats->points);
 	s16 stars = 5 * mStats->health / mStats->maxHealth;
-	printf("stars: %d\n", stars);
 	for (s16 i = 0; i < 5; i++)
 	{
 		s16 ixStatus = 10 + i;
 		status[ixStatus] = i < stars ? '\1' : '\2';
 	}
 	status[16] = 0;
-	printf("%s\n", status);
 	blitText(status, 15);
 }
+
+
+extern bool gReset;
 
 void PlayerEntity::OnDeath()
 {
 	shouldBeRemoved = true;
 	printf("\n\nGAME OVER :-(\n\n");
+	gReset = true;
+}
+
+EntityType PlayerEntity::getType(){
+	return PLAYERENTITY;
 }
