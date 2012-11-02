@@ -104,25 +104,6 @@ int main(void) {
 		decompress(logoBitmap, BG_GFX, LZ77Vram);
 	}
 
-	/* Make the darwin sprite */
-	SpriteData* gfx = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)darwinTiles, 3);
-
-	/* Make a man enemy sprite */
-	SpriteData* gfx2 = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)manTiles, 3);
-	dmaCopy(manPal, SPRITE_PALETTE_SUB, 512);
-
-	PlayerEntity* playerEntity = new PlayerEntity(gfx);
-	playerEntity->Init();
-	playerEntity->size = Vector3<s16>(32,32,0);
-	playerEntity->setPosition(Vector3<s16>(64,90,1));
-	playerEntity->setTargetPosition(Vector3<s16>(0,0,0));
-
-	EnemyEntity* enemyEntity = new EnemyEntity(gfx2);
-	enemyEntity->Init();
-	enemyEntity->size = Vector3<s16>(32,32,0);
-	enemyEntity->setPosition(Vector3<s16>(192,90,0));
-	enemyEntity->setTargetPosition(Vector3<s16>(0,0,0));
-
 	audioManager.initialize();
 
 	levelLoader.load(GAME_LEVELS[0]);
@@ -146,7 +127,6 @@ int main(void) {
 			lolcounter = 0;
 
 		}
-		enemyEntity->setTargetPosition(playerEntity->position);
 
 		oamUpdate(&oamSub);
 		bgUpdate();
