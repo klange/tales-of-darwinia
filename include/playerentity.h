@@ -9,7 +9,8 @@ class PlayerEntity : public LivingEntity
 {
 public:
 	PlayerEntity(SpriteData* gfx) : LivingEntity(gfx) {}
-	virtual void Update(InputManager* inputManager);
+
+	virtual void Update();
 
 	void Collect(ItemEntity* item);
 };
