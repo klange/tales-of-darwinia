@@ -4,6 +4,13 @@
 #include <nds.h>
 #include "map_type.h"
 
+// forward declarations
+class MapEngine;
+
+// Yep! This is ugly.
+extern int gMapTileIndex;
+extern MapEngine* gpMapEngine;
+
 /**
  * A class that deals with the loading and unloading of viewable map
  * area to the hardware
@@ -52,6 +59,9 @@ class MapEngine {
 			u8* a_tile_memory,
 			u16* a_map_memory
 		);
+
+		int getScrollX() { return scroll_x; }
+		int getScrollY() { return scroll_y; }
 
 		int getTileX(int screen_pixel_x);
 		int getTileY(int screen_pixel_y);
