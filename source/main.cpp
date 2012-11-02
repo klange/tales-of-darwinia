@@ -30,8 +30,6 @@
 #include "playerentity.h"
 #include "enemyentity.h"
 
-#include "dispatch.h"
-
 /* Maps */
 #include "maps.h"
 #include "map_data.h"
@@ -59,10 +57,17 @@ void init(void) {
 	vramSetBankC(VRAM_C_SUB_BG);
 	vramSetBankD(VRAM_D_SUB_SPRITE);
 
+	/* Initialize the entity manager */
+	gEntityManager.Init();
+
+	/* Initialize the event dispatcher */
+	gEventDispatcher.Init();
+
 	/* Set the default backgorund color */
 	setBackdropColor(0xF);
 
-	oamInit(&oamMain, SpriteMapping_1D_128, false);
+	//oamInit(&oamMain, SpriteMapping_1D_128, false);
+	/* Initiate the sprite engine */
 	oamInit(&oamSub, SpriteMapping_1D_128, false);
 
 	/* Set the vertical blank event */
@@ -96,17 +101,12 @@ int main(void) {
 	bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
 	decompress(logoBitmap, BG_GFX, LZ77Vram);
 
-	/* Set up the console */
-	PrintConsole topScreen;
-	bgInit(1, BgType_Text4bpp, BgSize_T_256x256, 0, 0);
-	consoleInit(&topScreen, 1, BgType_Text4bpp, BgSize_T_256x256, 31, 0, true, true);
-
+	/* Make the darwin sprite */
 	SpriteData* gfx = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)darwinTiles, 3);
+
+	/* Make a man enemy sprite */
 	SpriteData* gfx2 = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)manTiles, 3);
-
-	dmaCopy(darwinPal, SPRITE_PALETTE_SUB, 512);
-
-	gEntityManager.Init();
+	dmaCopy(manPal, SPRITE_PALETTE_SUB, 512);
 
 	PlayerEntity* playerEntity = new PlayerEntity(gfx);
 	playerEntity->Init();
@@ -121,11 +121,26 @@ int main(void) {
 	audioManager.initialize();
 	audioManager.playMusic(MOD_TECHNO_MOZART);
 
-	//consoleDemoInit();
+	touchPosition touchXY;
 
+	int lolcounter = 0;
 	while(1) {
+		scanKeys();
+		if (keysHeld() & KEY_TOUCH) {
+			touchRead(&touchXY);
+		}
+
+		playerEntity->setPosition(Vector3<s16>(touchXY.px, touchXY.py, 0));
+
 		gEntityManager.Update();
 		gEntityManager.Render();
+
+		lolcounter++;
+		if (lolcounter >= 10) {
+			playerEntity->nextFrame();
+			enemyEntity->nextFrame();
+			lolcounter = 0;
+		}
 
 		oamUpdate(&oamSub);
 		bgUpdate();
