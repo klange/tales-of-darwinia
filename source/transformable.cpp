@@ -27,3 +27,9 @@ Vector3<u16>* Transformable::getPosition() {
 void Transformable::setRotation(u16 rotValue) {
 	rotation = rotValue;
 }
+
+void Transformable::getBoundingBox(BoundingBox<u16>& bbOut)
+{
+	bbOut.mTopLeft = position;
+	bbOut.mBottomRight = position + size;
+}

@@ -113,10 +113,12 @@ int main(void) {
 
 	PlayerEntity* playerEntity = new PlayerEntity(gfx);
 	playerEntity->Init();
+	playerEntity->size = Vector3<u16>(16,16,0);
 	playerEntity->setPosition(Vector3<u16>(64,90,1));
 
 	EnemyEntity* enemyEntity = new EnemyEntity(gfx2);
 	enemyEntity->Init();
+	enemyEntity->size = Vector3<u16>(16,16,0);
 	enemyEntity->setPosition(Vector3<u16>(192,90,0));
 
 	/* Hide title */
