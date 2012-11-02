@@ -130,7 +130,7 @@ int main(void) {
 			touchRead(&touchXY);
 		}
 
-
+		gInputManager.Update();
 		gEntityManager.Update();
 		gEntityManager.Render();
 

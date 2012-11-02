@@ -2,13 +2,12 @@
 #define PLAYER_ENTITY_H_
 
 #include "livingentity.h"
-#include "inputmanager.h"
 
 class PlayerEntity : public LivingEntity
 {
 public:
 	PlayerEntity(SpriteData* gfx) : LivingEntity(gfx) {}
-	virtual void Update(InputManager* inputManager);
+	virtual void Update();
 };
 
 #endif // PLAYER_ENTITY_H_
