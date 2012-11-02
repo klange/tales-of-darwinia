@@ -20,7 +20,13 @@ class InputManager{
 		touchPosition* getCurrentTouchPosition();
 
 		// Gets the position to update to if you want to move
-		touchPosition* moveToPosition(Vector3<s16>* currentPosition, float32 speed);
+		bool moveToPosition(Vector3<s16>* currentPosition, float32 speed, Vector3<s16>& destinationOut);
+
+		// Called once a frame
+		void Update();
 };
+
+// Singleton
+extern InputManager gInputManager;
 
 #endif
