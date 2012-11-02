@@ -107,13 +107,11 @@ MapEngine LevelLoader::load(GameLevel* level)
 
 	/* Make the darwin sprite */
 	SpriteData* gfx = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)darwinTiles, 3);
-	dmaCopy(darwinPal, SPRITE_PALETTE_SUB, 512);
-
-//	dmaCopy(manPal, SPRITE_PALETTE_SUB, 512);
+	dmaCopy(manPal, SPRITE_PALETTE_SUB, 512);
 
 	PlayerEntity* playerEntity = new PlayerEntity(gfx);
 	playerEntity->Init();
-	playerEntity->size = Vector3<s16>(16,16,0);
+	playerEntity->size = Vector3<s16>(32,32,0);
 	playerEntity->setPosition(Vector3<s16>(level->playerPosition->pixelX(), level->playerPosition->pixelY(), 1));
 
 	EnemySpecification** enemies = level->enemies;
@@ -123,7 +121,7 @@ MapEngine LevelLoader::load(GameLevel* level)
 		SpriteData* enemySprite = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, SPRITE_TILES_BY_ENEMY_TYPE[enemySpec->type], 3);
 		EnemyEntity* enemyEntity = new EnemyEntity(enemySprite);
 		enemyEntity->Init();
-		enemyEntity->size = Vector3<s16>(16,16,0);
+		enemyEntity->size = Vector3<s16>(32,32,0);
 		enemyEntity->setPosition(Vector3<s16>(enemySpec->position->pixelX(), enemySpec->position->pixelY(), 0));
 		enemies++;
 	}

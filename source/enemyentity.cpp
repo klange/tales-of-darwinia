@@ -10,8 +10,7 @@ void EnemyEntity::Update()
 	if(shouldBeRemoved)
 		return;
 
-	speed = 1.0;
-	LivingEntity::Update();
+	speed = 2.0;
 	Vector3<s16> touchPos;
 	if(gInputManager.getCurrentTouchPosition(touchPos))
 	{
@@ -33,6 +32,8 @@ void EnemyEntity::Update()
 	}
 
 	this->setTargetPosition(gpPlayerEntity->position);
+
+	LivingEntity::Update();
 }
 
 void EnemyEntity::OnDeath(){

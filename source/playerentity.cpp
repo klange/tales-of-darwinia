@@ -27,32 +27,6 @@ void PlayerEntity::Update()
 		touchRead(&curTouchPosition);
 		setTargetPosition(Vector3<s16>(curTouchPosition.px, curTouchPosition.py, 1));
 	}
-	s16 magnitude = directionVector.magnitude();
-	s16 xComp = abs(directionVector.x()/magnitude);
-	s16 yComp = abs(directionVector.y()/magnitude);
-
-	if (xComp > yComp) {
-		if (directionVector.x() < 0) {
-			spriteOffset = 1;
-			vflip = true;
-			hflip = false;
-		} else if (directionVector.x() >= 0) {
-			spriteOffset = 1;
-			vflip = false;
-			hflip = false;	
-		}
-	} else {
-		if (directionVector.y() < 0) {
-			spriteOffset = 0;
-			vflip = false;
-			hflip = false;
-		} else if (directionVector.y() >= 0) {
-			spriteOffset = 2;
-			vflip = false;
-			hflip = false;
-		}
-	}
-
 	LivingEntity::Update();
 }
 
