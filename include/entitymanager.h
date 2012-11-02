@@ -19,6 +19,11 @@ public:
 	void Update();
 	void Render();
 
+	/**
+	 * Invoke nextFrame on all applicable entities
+	 */
+	void NextFrame();
+
 private:
 	// private data
 	u32 mNumEntities;
@@ -28,6 +33,7 @@ private:
 	// methods for Entity to add itself to the manager
 	void Add(Entity* entity);
 	void Remove(Entity* entity);
+
 };
 
 // Singleton

@@ -13,6 +13,8 @@ class Entity {
 
 		virtual void Update() {};
 		virtual void Render() {};
+
+		virtual void nextFrame() {};
 };
 
 #endif
