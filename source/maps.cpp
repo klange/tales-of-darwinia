@@ -33,7 +33,7 @@ int MapEngine::dumpTilesToVRAM(u8* tile_memory) {
 		tile_t* ptrToTile = (*tiles)[i];
 
 		// dmaCopy copies in halfword (16bits), a tile entry is 8bit
-		dmaCopy(ptrToTile, (tile_memory + (TILE_SIZE * i)), TILE_SIZE/2);
+		dmaCopy(ptrToTile, (tile_memory + (TILE_SIZE * i)), TILE_SIZE);
 	}
 	return 0;
 }

@@ -55,13 +55,12 @@ void init(void) {
 	lcdMainOnTop();
 
 	/* Set the mode for 2 text layers and two extended background layers */
-//	videoSetMode(MODE_5_2D | DISPLAY_BG0_ACTIVE | DISPLAY_BG1_ACTIVE | DISPLAY_BG3_ACTIVE);
-	videoSetMode(MODE_5_2D | DISPLAY_BG0_ACTIVE );
+	videoSetMode(MODE_5_2D | DISPLAY_BG1_ACTIVE | DISPLAY_BG3_ACTIVE);
 	vramSetBankA(VRAM_A_MAIN_BG);
 	vramSetBankB(VRAM_B_MAIN_BG);
 
 	/* Set the mode for sprite display */
-	videoSetModeSub(MODE_5_2D | DISPLAY_SPR_ACTIVE);
+	videoSetModeSub(MODE_5_2D | DISPLAY_BG0_ACTIVE | DISPLAY_SPR_ACTIVE);
 	vramSetBankC(VRAM_C_SUB_BG);
 	vramSetBankD(VRAM_D_SUB_SPRITE);
 
@@ -84,32 +83,30 @@ int main(void) {
 	);
 
 	/* Tile engine is going to claim BG0 */
-	int tile = bgInit(0, BgType_Text8bpp, BgSize_T_512x512, 0, 1);
-//	REG_BG0CNT = BG_64x64 | BG_COLOR_256 | BG_MAP_BASE(0) | BG_TILE_BASE(1);
-
-	/* Access the addresses for tile, palette, maps */
-	u8* tileMemory = (u8*)BG_TILE_RAM(1); // v Any equiv?
-	u16* mapMemory = (u16*)BG_MAP_RAM(0); // bgGetMapPtr
-	u16* paletteMemory = (u16*)BG_PALETTE[0]; // ^ Any equiv?
+	int tile = bgInitSub(0, BgType_Text8bpp, BgSize_T_512x512, 0, 2);
+//	REG_BG0CNT = BG_64x64 | BG_COLOR_256 | BG_MAP_BASE(0) | BG_TILE_BASE(2);
 
 	/* Load the relevant data into the VRAM */
-	mapEngine.dumpPaletteToVRAM(paletteMemory);
-	mapEngine.dumpTilesToVRAM(tileMemory);
-	mapEngine.dumpMapToVRAM(mapMemory);
+	mapEngine.dumpPaletteToVRAM(&BG_PALETTE_SUB[1]);
+	mapEngine.dumpTilesToVRAM((u8*)BG_TILE_RAM_SUB(2));
+	mapEngine.dumpMapToVRAM((u16*)BG_MAP_RAM_SUB(0));
 
+	/* Vertical offset for scrolling the map in pixels */
 	REG_BG0VOFS = 64;
 
 	/* Decompress and show the logo */
-//	int bg3 = bgInitSub(3, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
-//	decompress(logoBitmap, BG_GFX_SUB, LZ77Vram);
+	int logo = bgInit(3, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
+	decompress(logoBitmap, BG_GFX, LZ77Vram);
 
 	/* Set up the console */
 //	PrintConsole topScreen;
 //	int bg1 = bgInit(1, BgType_Text4bpp, BgSize_T_256x256, 0, 0);
 //	consoleInit(&topScreen, 1, BgType_Text4bpp, BgSize_T_256x256, 31, 0, true, true);
+
+	/* Setup the sprites */
 	oamInit(&oamSub, SpriteMapping_1D_32, false);
 
-	u16* gfx = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_256Color);	
+	u16* gfx = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_256Color);
 	for (int i = 0; i < 16 * 16 / 2; i++) {
 		gfx[i] = 1 | (1 << 8);
 	}
@@ -131,8 +128,6 @@ int main(void) {
 	enemyEntity->Init();
 	enemyEntity->setPosition(Vector3<u16>(192,90,0));
 
-	/* Hide title */
-//	bool bg3_hidden = false;
 	audioManager.initialize();
 	audioManager.playMusic(MOD_TECHNO_MOZART);
 
@@ -154,14 +149,6 @@ int main(void) {
 		//globalDispatcher->addEvent(drawEvent);
 
 		SPRITE_PALETTE_SUB[1] = RGB15(0, frame % 32, 0);
-//		if (keysUp() & KEY_START) bg3_hidden = !bg3_hidden;
-//		if (bg3_hidden) {
-//			bgHide(bg3);
-//			bgShow(bg1);
-//		} else {
-//			bgHide(bg1);
-//			bgShow(bg3);
-//		}
 
 		gEntityManager.Update();
 		gEntityManager.Render();
