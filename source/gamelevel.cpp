@@ -24,7 +24,7 @@
 
 LevelLoader levelLoader;
 
-LivingStats DEFAULT_PLAYER_STATS(8, 8, 8, 8, 8);
+LivingStats DEFAULT_PLAYER_STATS(100, 2, 1, 100, 0);
 
 // map from enemy type to sprite buffer
 // NOTE: must parallel EnemyType order
@@ -55,8 +55,8 @@ u8* SPRITE_TILES_BY_ITEM_TYPE[] = {
 // NOTE: must parallel EnemyType order
 LivingStats* STATS_BY_ENEMY_TYPE[] = {
 	NULL, // ENEMY_UNKNOWN
-	new LivingStats(8, 0, 0, 8, 8), // ENEMY_TRASH_CAN
-	new LivingStats(8, 8, 8, 8, 16), // ENEMY_EMPLOYEE
+	new LivingStats(8, 0, 0, 8, 50), // ENEMY_TRASH_CAN
+	new LivingStats(8, 8, 8, 8, 100), // ENEMY_EMPLOYEE
 	NULL,
 };
 
@@ -65,7 +65,7 @@ LivingStats* STATS_BY_ENEMY_TYPE[] = {
 LivingStats* STATS_BY_ITEM_TYPE[] = {
 	NULL, // UNKNOWN
 	new LivingStats(4, 16, 0, 0, 50), // PEANUT_BUTTER
-	new LivingStats(-200, -200, 0, 0, -5000), // CHOCOLATE
+	new LivingStats(-50, -50, 0, 0, -500), // CHOCOLATE
 	new LivingStats(8, 8, 0, 0, 15), // DRUMSTICK
 	NULL,
 };
@@ -131,7 +131,7 @@ MapEngine LevelLoader::load(GameLevel* level)
 	dmaCopy(darwinPal, &SPRITE_PALETTE_SUB[0], 512);
 	gfx->paletteIndex = 0;
 
-	PlayerEntity* playerEntity = new PlayerEntity(gfx);
+	PlayerEntity* playerEntity = new PlayerEntity(gfx, &DEFAULT_PLAYER_STATS);
 	playerEntity->Init();
 	playerEntity->size = Vector3<s16>(32,32,0);
 	playerEntity->setPosition(Vector3<s16>(level->playerPosition->pixelX(), level->playerPosition->pixelY(), 1));
@@ -150,9 +150,9 @@ MapEngine LevelLoader::load(GameLevel* level)
 		sprite->paletteIndex=1;
 		EnemyEntity* entity;
 		if (spec->type == ENEMY_TRASH_CAN){
-			entity = new TrashCanEntity(sprite);
+			entity = new TrashCanEntity(sprite, STATS_BY_ENEMY_TYPE[spec->type]);
 		} else {
-			entity = new EnemyEntity(sprite);
+			entity = new EnemyEntity(sprite, STATS_BY_ENEMY_TYPE[spec->type]);
 		}		
 		entity->Init();
 		entity->size = Vector3<s16>(32,32,0);
@@ -178,6 +178,8 @@ MapEngine LevelLoader::load(GameLevel* level)
 		entity->setPosition(Vector3<s16>(spec->position->pixelX(), spec->position->pixelY(), 0));
 		items++;
 	}
+
+	playerEntity->BlitStatus();
 
 	audioManager.playMusic(level->music);
 
