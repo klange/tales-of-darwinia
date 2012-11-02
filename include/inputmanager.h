@@ -13,13 +13,14 @@ class InputManager{
 		s16 round(float32 input);
 
 	public:
+		// Constructor
+		InputManager();
+
 		// Gets the current position for a tap
 		touchPosition* getCurrentTouchPosition();
 
 		// Gets the position to update to if you want to move
 		touchPosition* moveToPosition(Vector3<s16>* currentPosition, float32 speed);
-		InputManager();
-
 };
 
 #endif
