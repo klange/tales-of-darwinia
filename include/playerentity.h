@@ -16,6 +16,8 @@ public:
 
 	void Collect(ItemEntity* item);
 
+	void BlitStatus();
+
 	virtual void OnDeath();
 };
 
