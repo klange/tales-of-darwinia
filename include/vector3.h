@@ -26,6 +26,8 @@ class Vector3 {
 
 		void normalize(void);
 
+		T magnitude(void);
+
 		// assignment operator
 		Vector3<T>& operator=(const Vector3<T> &);
 
@@ -105,6 +107,12 @@ void Vector3<T>::normalize(void) {
 	data[0] = x()/w();
 	data[1] = y()/w();
 	data[2] = w()/w();
+}
+
+template <typename T>
+T Vector3<T>::magnitude(void)
+{
+	return sqrt32(x() * x() + y() * y());
 }
 
 template <typename T>

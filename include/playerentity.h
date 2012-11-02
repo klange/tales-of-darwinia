@@ -6,8 +6,12 @@
 class PlayerEntity : public LivingEntity
 {
 public:
-	PlayerEntity(SpriteData* gfx) : LivingEntity(gfx) {}
+	virtual ~PlayerEntity();
+	PlayerEntity(SpriteData* gfx);
+
 	virtual void Update();
 };
+
+extern PlayerEntity* gpPlayerEntity;
 
 #endif // PLAYER_ENTITY_H_
