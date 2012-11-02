@@ -31,9 +31,8 @@ class EventDispatcher {
 		 * Gets the next index of this circular buffer
 		 */
 		u8 getNext(u8);
-		
 	public:
-		EventDispatcher(void);
+		void Init();
 
 		/**
 		 * Adds an event to the circular event buffer
@@ -59,5 +58,8 @@ class EventDispatcher {
 		 */
 		bool isFull(void);
 };
+
+// Singleton
+extern EventDispatcher gEventDispatcher;
 
 #endif
