@@ -108,7 +108,7 @@ MapEngine LevelLoader::load(GameLevel* level)
 
 	/* Make the darwin sprite */
 	SpriteData* gfx = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)darwinTiles, 3);
-	dmaCopy(manPal, SPRITE_PALETTE_SUB, 512);
+	dmaCopy(darwinPal, SPRITE_PALETTE_SUB, 512);
 
 	PlayerEntity* playerEntity = new PlayerEntity(gfx);
 	playerEntity->Init();

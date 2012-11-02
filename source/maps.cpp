@@ -65,6 +65,8 @@ int MapEngine::getTileY(int screen_pixel_y) {
 	return 0;
 }
 
+// TODO: support scrollMapRelative so that its easier for folks to
+// move the map around as needed.
 void MapEngine::scrollMapAbsolute(int bg, int pixel_x, int pixel_y) {
 	/*
 	 * Need to experiment with offsets limits, cos apparently it

@@ -8,8 +8,8 @@
 class Entity {
 	public:
 		bool hidden;
-
 		bool shouldBeRemoved;
+		
 		virtual ~Entity(void) {};
 		
 		virtual void Init();

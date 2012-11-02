@@ -1,0 +1,1 @@
+../devkitPro/devkitARM/bin/grit media/tile_sheet.png -gu8 -gt -gB8 -ab72 -p -pu16 -ftc -U8 -pn16

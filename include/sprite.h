@@ -3,7 +3,6 @@
 
 #include <nds.h>
 #include "entity.h"
-#include "renderable.h"
 #include "transformable.h"
 #include "spritedata.h"
 
