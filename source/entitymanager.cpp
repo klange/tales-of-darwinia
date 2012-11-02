@@ -32,6 +32,16 @@ void EntityManager::Destroy()
 	DynamicArrayDelete(&mEntities);
 }
 
+void EntityManager::NextFrame()
+{
+	for(u32 i=0; i<mNumEntities; i++)
+	{
+		Entity* current = (Entity*) DynamicArrayGet(&mEntities, i);
+		current->nextFrame();
+	}
+
+}
+
 void EntityManager::Add(Entity* entity)
 {
 	DynamicArraySet(&mEntities, mNumEntities++, entity);

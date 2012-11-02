@@ -3,7 +3,7 @@
 #include "audiomanager.h"
 
 EnemySpecification ENEMIES_ONE[] = {
-	EnemySpecification(6, 4, ENEMY_EMPLOYEE)
+	EnemySpecification(6, 4, ENEMY_EMPLOYEE, NULL)
 };
 
 ItemSpecification ITEMS_ONE[] = {
@@ -11,7 +11,7 @@ ItemSpecification ITEMS_ONE[] = {
 };
 
 GameLevel GAME_LEVEL_ONE(
-	map,
+	&map,
 	3, 4,
 	ENEMIES_ONE,
 	ITEMS_ONE,
