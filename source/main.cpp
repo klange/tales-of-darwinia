@@ -19,12 +19,22 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "man.h"
+#include "darwin.h"
+#include "inconsolata.h"
 #include "logo.h"
 #include "sprite.h"
 #include "entitymanager.h"
 #include "event.h"
 #include "eventdispatcher.h"
 #include "inputmanager.h"
+#include "playerentity.h"
+#include "enemyentity.h"
+#include "text.h"
+
+/* Maps */
+#include "maps.h"
+#include "map_data.h"
 
 #include "audiomanager.h"
 
@@ -35,6 +45,28 @@ void Vblank(void) {
 	
 }
 
+//SpriteData gTextSpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)inconsolataTiles, 27);
+	 
+void blitText(const char* text, int len, int x, int y, int width, int height) {
+  for (int i = 0; i < len; ++i) {
+          SpriteData* spriteData = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)inconsolataTiles, 27);
+    	  Sprite* charSprite = new Sprite(spriteData);
+	  charSprite->Init();
+	  charSprite->size = Vector3<s16>(1,1,0);
+	  charSprite->setPosition(Vector3<s16>(x+(i*20),y,1));
+	  int frame = 0;
+	  if (text[i] >= 0x30 && text[i] <= 0x39) {
+	    frame = text[i] - 0x30;
+	  }
+	  else if (text[i] >= 0x61 && text[i] <= 0x7A) {
+	    frame = text[i] - 0x61 + 27;
+	  }
+	  else if (text[i] >= 0x41 && text[i] <= 0x5A) {
+	    frame = text[i] - 0x41 + 54;
+	  }
+	  charSprite->setFrame(frame); //frame);
+  }
+}
 // HEY PEEPS - set this to 1 for PRINTF DEBUGGING GOODNESS!
 #define USE_TOP_SCREEN_FOR_CONSOLE 1
 PrintConsole* gpTopScreen = NULL;
@@ -75,7 +107,7 @@ void init(void) {
 	/* Initialize the event dispatcher */
 	gEventDispatcher.Init();
 
-	/* Set the default backgorund color */
+	/* Set the default background color */
 	setBackdropColor(0xF);
 
 	//oamInit(&oamMain, SpriteMapping_1D_128, false);
@@ -98,6 +130,26 @@ int main(void) {
 	REG_BG0VOFS = 64;
 
 	/* Decompress and show the logo */
+	bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
+	decompress(logoBitmap, BG_GFX, LZ77Vram);
+
+	/* Make the darwin sprite */
+	SpriteData* gfx = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)darwinTiles, 3);
+
+	/* Make a man enemy sprite */
+	SpriteData* gfx2 = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)manTiles, 3);
+	dmaCopy(inconsolataPal, SPRITE_PALETTE_SUB, 512);
+
+	PlayerEntity* playerEntity = new PlayerEntity(gfx);
+	playerEntity->Init();
+	playerEntity->size = Vector3<s16>(16,16,0);
+	playerEntity->setPosition(Vector3<s16>(64,90,1));
+
+	EnemyEntity* enemyEntity = new EnemyEntity(gfx2);
+	enemyEntity->Init();
+	enemyEntity->size = Vector3<s16>(16,16,0);
+	enemyEntity->setPosition(Vector3<s16>(192,90,0));
+
 	if(!USE_TOP_SCREEN_FOR_CONSOLE)
 	{
 		bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
@@ -107,6 +159,8 @@ int main(void) {
 	audioManager.initialize();
 
 	levelLoader.load(GAME_LEVELS[0]);
+
+	blitText("BARK0123456789", 10, 1, 1, 0, 0);
 
 	touchPosition touchXY;
 
