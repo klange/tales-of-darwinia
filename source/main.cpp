@@ -52,7 +52,6 @@ TextChar* gTextChars[16];
 void blitText(const char* text, int len) {
   if (len > 16) len = 16;
   for (int i = 0; i < len; ++i) {
-    iprintf(text);
     gTextChars[i]->setFrame(text[i]);
   }
 }
@@ -135,16 +134,16 @@ int main(void) {
 	// Set up the text display
 
 	for (int i = 0; i < 16; ++i) {
-          gSpriteData[i] = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)inconsolataTiles, 16);
+          gSpriteData[i] = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)inconsolataTiles, 255);
     	  gTextChars[i] = new TextChar(gSpriteData[i]);
 	  gTextChars[i]->isAnimated = false;
 	  gTextChars[i]->Init();
 	  gTextChars[i]->size = Vector3<s16>(1,1,0);
-	  gTextChars[i]->setPosition(Vector3<s16>(i*20,1,1));
+	  gTextChars[i]->setPosition(Vector3<s16>(40+(i*12),20,1));
 	  gTextChars[i]->setFrame(0x9);
 	}
 
-	blitText("BARK0123456789", 10);
+	blitText("BARK0123456789", 14);
 
 	touchPosition touchXY;
 
