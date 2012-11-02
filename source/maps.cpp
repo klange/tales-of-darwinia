@@ -76,19 +76,19 @@ bool MapEngine::collisionAbsolute(int abs_x, int abs_y) {
 	 * and so on, so its not exactly a linear x/y array of map so the
 	 * extended 32x32 maps wont work but this will work for the (0,0) map..
 	 */
-	int map_y_offset = 0;
+	int map_offset = 0;
 	if (tile_x > 32) { // TODO: hardcoding, this is bad
-		map_y_offset += 32;
+		map_offset += 1024;
 		tile_x = 64 - tile_x;
 	}
 	if (tile_y > 32) { // TODO: hardcoding, this is bad
-		map_y_offset += 32;
+		map_offset += 2048;
 		tile_y = 64 - tile_y;
 	}
 
 	// Generate the initial offset to point to the correct (32x32) map then
 	// puck the data out of that map
-	int offset = tile_x + (tile_y * MAP_WIDTH) + (map_y_offset * MAP_WIDTH);
+	int offset = tile_x + (tile_y * MAP_WIDTH) + map_offset;
 
 	if (collision_memory[offset] == NOWALK) {
 		return true;
