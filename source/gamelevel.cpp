@@ -109,17 +109,17 @@ GameLevel::GameLevel(map_t* map, u16 playerX, u16 playerY, EnemySpecification** 
 	this->music = music;
 }
 
-MapEngine LevelLoader::load(GameLevel* level)
+MapEngine* LevelLoader::load(GameLevel* level)
 {
 	/* Load data from map_data.h into the map engine */
-	MapEngine mapEngine = MapEngine(
+	MapEngine* mapEngine = new MapEngine(
 		&tile_palette,
 		&tile_set,
 		level->map
 	);
 
 	/* Load the relevant data into the VRAM */
-	mapEngine.initVRAM(
+	mapEngine->initVRAM(
 		&BG_PALETTE_SUB[0],
 		(u8*)BG_TILE_RAM_SUB(1),
 		(u16*)BG_MAP_RAM_SUB(0)

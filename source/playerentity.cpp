@@ -141,8 +141,12 @@ void PlayerEntity::BlitStatus()
 	blitText(status, 15);
 }
 
+
+extern bool gReset;
+
 void PlayerEntity::OnDeath()
 {
 	shouldBeRemoved = true;
 	printf("\n\nGAME OVER :-(\n\n");
+	gReset = true;
 }
