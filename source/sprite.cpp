@@ -13,8 +13,21 @@ void Sprite::Render(void) {
 	s16 drawY = position.y() + anchor.y();
 	if(isScrollable)
 	{
-		drawX -= gpMapEngine->getScrollX();
-		drawY -= gpMapEngine->getScrollY();
+		s16 mapMinX = gpMapEngine->getScrollX();
+		s16 mapMaxX = mapMinX + 255;
+		s16 mapMinY = gpMapEngine->getScrollY();
+		s16 mapMaxY = mapMinY + 255;
+		if(drawX + 32 < mapMinX || drawX > mapMaxX || drawY + 32 < mapMinY || drawY > mapMaxY)
+		{
+			// force them off screen
+			drawX = 256;
+			drawY = 0;
+		}
+		else
+		{
+			drawX -= mapMinX;
+			drawY -= mapMinY;
+		}
 	}
 
 	oamSet(
@@ -110,6 +123,9 @@ bool Sprite::IsTouchedByNearbyPlayer()
 	Vector3<s16> touchPos;
 	if(gInputManager.getCurrentTouchPosition(touchPos))
 	{
+		// adjust screen space point to world space
+		touchPos += Vector3<s16>((s16)gpMapEngine->getScrollX(), (s16)gpMapEngine->getScrollY(), 0);
+
 		BoundingBox<s16> bb;
 		getBoundingBox(bb, 1);
 		if (bb.PointInside(touchPos))
