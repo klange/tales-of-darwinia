@@ -14,8 +14,7 @@ public:
 	void setTargetPosition(Vector3<s16>);
 	Vector3<s16> getTargetPosition(void);
 
-protected:
-	LivingStats mStats;
+	LivingStats* mStats;
 	Vector3<s16> targetPosition;
 	float32 speed;
 };

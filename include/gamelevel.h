@@ -5,7 +5,7 @@
 #include <nds.h>
 #include "map_type.h"
 
-
+// NOTE: if you add a new type here, make sure you add to the corresponding mappings in gamelevel.cpp
 typedef enum _EnemyType
 {
 	ENEMY_UNKNOWN,
@@ -13,6 +13,7 @@ typedef enum _EnemyType
 	ENEMY_EMPLOYEE,
 } EnemyType;
 
+// NOTE: if you add a new type here, make sure you add to the corresponding mappings in gamelevel.cpp
 typedef enum _ItemType
 {
 	ITEM_UNKNOWN,
