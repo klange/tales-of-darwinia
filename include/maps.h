@@ -2,6 +2,7 @@
 #define MAPS_H_
 
 #include <nds.h>
+#include "map_type.h"
 
 /**
  * A class that deals with the loading and unloading of viewable map
@@ -10,17 +11,13 @@
 class MapEngine {
 	private:
 		/* The palette for all loaded tiles */
-		const int palette_len;
-		const u16* palette;
+		const palette_t* palette;
 
 		/* The list of all tiles used */
-		const int tiles_len;
-		const u8** tiles;
+		const tile_list_t* tiles;
 
 		/* The actual map data itself */
-		const int map_height;
-		const int map_width;
-		const u16* map;
+		const map_t* map;
 
 		/* Current "player" location in tiles unit */
 		int x, y;
@@ -30,13 +27,9 @@ class MapEngine {
 
 	public:
 		MapEngine(
-			const int palette_len,
-			const u16* palette,
-			const int tiles_len,
-			const u8** tiles,
-			const int map_height,
-			const int map_width,
-			const u16* map
+			const palette_t* a_palette,
+			const tile_list_t* a_tiles,
+			const map_t* a_map
 		);
 
 		int dumpPaletteToVRAM(u16* palette_memory);

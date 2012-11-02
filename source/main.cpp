@@ -54,14 +54,10 @@ void init(void) {
 	lcdMainOnTop();
 
 	/* Set the mode for 2 text layers and two extended background layers */
-	videoSetMode(MODE_5_2D | DISPLAY_BG0_ACTIVE | DISPLAY_BG1_ACTIVE | DISPLAY_BG3_ACTIVE);
+//	videoSetMode(MODE_5_2D | DISPLAY_BG0_ACTIVE | DISPLAY_BG1_ACTIVE | DISPLAY_BG3_ACTIVE);
+	videoSetMode(MODE_5_2D | DISPLAY_BG0_ACTIVE );
 	vramSetBankA(VRAM_A_MAIN_BG);
 	vramSetBankB(VRAM_B_MAIN_BG);
-
-	//set video mode and map vram to the background
-	videoSetMode(MODE_0_2D | DISPLAY_BG0_ACTIVE);
-	vramSetBankA(VRAM_A_MAIN_BG_0x06000000);
-
 
 	/* Set the mode for sprite display */
 	videoSetModeSub(MODE_5_2D | DISPLAY_SPR_ACTIVE);
@@ -84,18 +80,14 @@ int main(void) {
 
 	/* Load data from map_data.h into the map engine */
 	MapEngine mapEngine = MapEngine(
-		tile_palette_len,
-		tile_palette,
-		tile_list_len,
-		tile_list,
-		map_height,
-		map_width,
-		map
+		&tile_palette,
+		&tile_set,
+		&map
 	);
 
 	/* Tile engine is going to claim BG0 */
-//	REG_BG0CNT = BG_64x64 | BG_COLOR_256 | BG_MAP_BASE(0) | BG_TILE_BASE(1);
 	int tile = bgInit(0, BgType_Text8bpp, BgSize_T_512x512, 0, 1);
+//	REG_BG0CNT = BG_64x64 | BG_COLOR_256 | BG_MAP_BASE(0) | BG_TILE_BASE(1);
 
 	/* Access the addresses for tile, palette, maps */
 	u8* tileMemory = (u8*)BG_TILE_RAM(1); // v Any equiv?
@@ -107,10 +99,11 @@ int main(void) {
 	mapEngine.dumpTilesToVRAM(tileMemory);
 	mapEngine.dumpMapToVRAM(mapMemory);
 
+	REG_BG0VOFS = 64;
 
 	/* Decompress and show the logo */
-	int bg3 = bgInitSub(3, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
-	decompress(logoBitmap, BG_GFX_SUB, LZ77Vram);
+//	int bg3 = bgInitSub(3, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
+//	decompress(logoBitmap, BG_GFX_SUB, LZ77Vram);
 
 	/* Set up the console */
 //	PrintConsole topScreen;
@@ -130,7 +123,7 @@ int main(void) {
 	Vector3<u16> touchPosition;
 
 	/* Hide title */
-	bool bg3_hidden = false;
+//	bool bg3_hidden = false;
 	mmInitDefaultMem((mm_addr)soundbank_bin);
 	mmLoad(MOD_TECHNO_MOZART);
 	mmStart(MOD_TECHNO_MOZART, MM_PLAY_LOOP);
@@ -153,16 +146,14 @@ int main(void) {
 		//globalDispatcher->addEvent(drawEvent);
 
 		SPRITE_PALETTE_SUB[1] = RGB15(0, frame % 32, 0);
-		if (keysUp() & KEY_START) bg3_hidden = !bg3_hidden;
-		if (bg3_hidden) {
-			bgHide(bg3);
+//		if (keysUp() & KEY_START) bg3_hidden = !bg3_hidden;
+//		if (bg3_hidden) {
+//			bgHide(bg3);
 //			bgShow(bg1);
-			bgShow(tile);
-		} else {
+//		} else {
 //			bgHide(bg1);
-			bgHide(tile);
-			bgShow(bg3);
-		}
+//			bgShow(bg3);
+//		}
 		// This section below is for touch screen sprite
 		if (keysHeld() & KEY_TOUCH) {
 			touchRead(&touchXY);
