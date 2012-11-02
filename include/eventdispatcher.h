@@ -46,9 +46,8 @@ class EventDispatcher {
 		 * Called on the end of the game loop. Parses the Event buffer and performs the
 		 * event logic for each Event
 		 *
-		 * Returns something I haven't decided yet
 		 */
-		int8 dispatchEvents(void);
+		void dispatchEvents(void);
 
 		/**
 		 * Is the queue of Events empty?

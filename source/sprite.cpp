@@ -3,8 +3,8 @@
 #include "spritedata.h"
 #include <stdio.h>
 
+
 void Sprite::draw(void) {
-	iprintf("   \x1b[32;1m%d\x1b[39m\n", currentFrame);
 	oamSet(
 		&oamSub,
 		spriteData->oamIndex, // oam index
@@ -58,3 +58,9 @@ void Sprite::prevFrame(void) {
 	boundFrameNumber();
 	copyToGfxBuffer();
 }
+
+void Sprite::Render(void) {
+	printf("what\n");
+	draw();
+}
+

@@ -32,7 +32,7 @@ int8 EventDispatcher::addEvent(Event *event) {
 	return endPointer;
 }
 
-int8 EventDispatcher::dispatchEvents(void) {
+void EventDispatcher::dispatchEvents(void) {
 	Event* currentEvent;
 	uint32 downKeys = keysDown();
 	uint32 heldKeys = keysHeld();

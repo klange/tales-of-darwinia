@@ -4,3 +4,6 @@ build
 *.swp
 .DS_STORE
 prototype
+media/build
+*.h~
+*.cpp~
