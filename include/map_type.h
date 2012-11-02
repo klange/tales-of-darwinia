@@ -16,8 +16,8 @@
 #define TILE_SIZE (TILE_WIDTH * TILE_HEIGHT)
 
 // TODO: should not need these
-#define TILE_ENTRIES 6
-#define PALETTE_ENTRIES 6
+#define TILE_ENTRIES 96
+#define PALETTE_ENTRIES 16
 
 #define MAP_WIDTH 64
 #define MAP_HEIGHT 64

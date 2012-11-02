@@ -1,14 +1,16 @@
 #ifndef TRASHCAN_ENTITY_H_
 #define TRASHCAN_ENTITY_H_
 
-#include "livingentity.h"
+#include "enemyentity.h"
 
 class TrashCanEntity : public EnemyEntity
 {
 public:
 	TrashCanEntity(SpriteData* gfx) : EnemyEntity(gfx){}
+
+	virtual void Update();
 	
 	// What else do we need?
-}
+};
 
-#endif
+#endif // TRASHCAN_ENTITY_H_
