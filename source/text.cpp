@@ -6,7 +6,7 @@
 #include "inconsolata.h"
 #include "enemyentity.h"
 
-extern EntityManager gEntityManager;
+//extern EntityManager gEntityManager;
 
 /**
  * Performs the actual text rendering operation
