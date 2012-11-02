@@ -4,14 +4,12 @@
 touchPosition* InputManager::getCurrentTouchPosition(){
 	
 	touchPosition* tap = new touchPosition();
-	//Choose some default value outside of the ds x,y pixel range
-	tap->px = NO_POSITION_FOUND;
-	tap->py = NO_POSITION_FOUND;
 
 	if(keysDown() & KEY_TOUCH){
 		touchRead(tap);
+		return tap;
 	}
-	return tap;
+	return NULL;
 }
 
 //TODO: Let speed be controlled by a variable, right now it's clamped
@@ -21,10 +19,6 @@ touchPosition* InputManager::moveToPosition(Vector3<u16>* currentPosition){
 
 	touchPosition heldPosition;
 	touchPosition* moveToPosition = new touchPosition();
-	
-	//Choose some default value outside of the ds x,y pixel range
-	moveToPosition->px = NO_POSITION_FOUND;
-	moveToPosition->py = NO_POSITION_FOUND;
 
 	if(keysHeld() & KEY_TOUCH){
 		touchRead(&heldPosition);
@@ -36,10 +30,10 @@ touchPosition* InputManager::moveToPosition(Vector3<u16>* currentPosition){
 
 		moveToPosition->px = (u16)(from_x + diff_x);
 		moveToPosition->py = (u16)(from_y + diff_y);
-
+		return moveToPosition;
 	}
 
-	return moveToPosition;
+	return NULL;
 }
 
 // This is really shitty...figure out a way to move once per X frames w/o clamping

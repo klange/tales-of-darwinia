@@ -4,7 +4,6 @@
 #include <nds.h>
 #include <vector3.h>
 
-#define NO_POSITION_FOUND 1000
 /**
  * InputManager class that manages inputs and delegates to appropriate entities.
  */

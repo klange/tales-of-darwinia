@@ -11,7 +11,7 @@ void PlayerEntity::Update(InputManager* inputManager)
 	Vector3<u16> touchPosition;
 
 	// This section below is for touch screen sprite
-	if (touchXY->px != NO_POSITION_FOUND && touchXY->py != NO_POSITION_FOUND) {
+	if (touchXY != NULL){
 		touchPosition.setX(touchXY->px);
 		touchPosition.setY(touchXY->py);
 		setPosition(touchPosition);
