@@ -5,11 +5,19 @@
 
 
 // this might actually have common methods in it someday
+void LivingEntity::Init(){
+	Entity::Init();
+	
+	mStats->health = 4;
+	mStats->attack = 1;
+}
 
 void LivingEntity::Damage(u16 damage){
-	mStats->health -= damage;
-	if (mStats->health <= 0){
+	if (damage > mStats->health){
+		mStats->health = 0;
 		OnDeath();
+	} else {
+		mStats->health -= damage;
 	}
 }
 
