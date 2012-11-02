@@ -39,7 +39,11 @@ void MapEngine::initVRAM(
 void MapEngine::dumpPaletteToVRAM(u16* palette_memory) {
 	// Load the palette
 	// dmaCopy copies in halfword (16bits)
-	dmaCopy(palette, palette_memory, sizeof((*palette)[0])*PALETTE_ENTRIES);
+	dmaCopy(
+		palette,
+		palette_memory,
+		(sizeof((*palette)[0]) * PALETTE_ENTRIES)
+	);
 }
 
 void MapEngine::dumpTilesToVRAM(u8* tile_memory) {
@@ -47,14 +51,22 @@ void MapEngine::dumpTilesToVRAM(u8* tile_memory) {
 		tile_t* ptrToTile = (*tiles)[i];
 
 		// dmaCopy copies in halfword (16bits), a tile entry is 8bit
-		dmaCopy(ptrToTile, (tile_memory + (TILE_SIZE * i)), TILE_SIZE);
+		dmaCopy(
+			ptrToTile,
+			(tile_memory + (TILE_SIZE * i)),
+			(sizeof((*ptrToTile)[0]) * TILE_SIZE)
+		);
 	}
 }
 
 void MapEngine::dumpMapToVRAM(u16* map_memory) {
 	// Load the map for now we assume 64x64
-	// dmaCopy copies in halfword (16bits), a map is 16bit
-	dmaCopy(map, map_memory, MAP_SIZE);
+	// dmaCopy copies in halfword (16bits)
+	dmaCopy(
+		map,
+		map_memory,
+		(sizeof((*map)[0]) * MAP_SIZE)
+	);
 }
 
 int MapEngine::getTileX(int screen_pixel_x) {
