@@ -77,20 +77,57 @@ int MapEngine::getTileY(int screen_pixel_y) {
 	return 0;
 }
 
-// TODO: support scrollMapRelative so that its easier for folks to
-// move the map around as needed.
-void MapEngine::scrollMapAbsolute(int bg, int pixel_x, int pixel_y) {
-	/*
-	 * Need to experiment with offsets limits, cos apparently it
-	 * wraps in text mode, so need to limit/bound it...
-	 */
-	int offset_x = pixel_x - scroll_x;
-	int offset_y = pixel_y - scroll_y;
+void MapEngine::scrollMapAbsolute(int bg, int abs_x, int abs_y) {
+	int move_x = abs_x - scroll_x;
+	int move_y = abs_y - scroll_y;
 
-	bgScroll(bg, offset_x, offset_y);
+	// Check the boundaries of the new abs value
+	if (abs_x < 0) {
+		move_x = -scroll_x;
+	}
+	if (abs_x > MAP_SCREEN_WIDTH) {
+		move_x = MAP_SCREEN_WIDTH - scroll_x;
+	}
+	if (abs_y < 0) {
+		move_y = -scroll_y;
+	}
+	if (abs_y > MAP_SCREEN_HEIGHT) {
+		move_y = MAP_SCREEN_HEIGHT - scroll_y;
+	}
 
-	scroll_x = pixel_x;
-	scroll_y = pixel_y;
+	// Now actually move the background
+	bgScroll(bg, move_x, move_y);
+
+	// Store the new scroll_value
+	scroll_x += move_x;
+	scroll_y += move_y;
+}
+
+void MapEngine::scrollMapRelative(int bg, int rel_x, int rel_y) {
+	int move_x = rel_x;
+	int move_y = rel_y;
+
+	// Check the boundaries of the new_scroll and if it exceed limits
+	// cap it
+	if ((scroll_x + rel_x) < 0) {
+		move_x = -scroll_x;
+	}
+	if ((scroll_x + rel_x) > MAP_SCREEN_WIDTH) {
+		move_x = MAP_SCREEN_WIDTH - scroll_x;
+	}
+	if ((scroll_y + rel_y) < 0) {
+		move_y = -scroll_y;
+	}
+	if ((scroll_y + rel_y) > MAP_SCREEN_HEIGHT) {
+		move_y = MAP_SCREEN_HEIGHT - scroll_y;
+	}
+
+	// Now actually move the background
+	bgScroll(bg, move_x, move_y);
+
+	// Store the new scroll_value
+	scroll_x += move_x;
+	scroll_y += move_y;
 }
 
 /*
