@@ -5,9 +5,11 @@
 #include "entity.h"
 #include "renderable.h"
 #include "transformable.h"
-#include "sprite.h"
+#include "textchar.h"
 
-/*r*
+#define MAX_TEXT_SPRITES 64
+
+/**
  * Represents a text object
  */
 class TextRenderable : public Entity, public Renderable, public Transformable { // Once the renderable API is better defined, we'll want to call through it
@@ -15,11 +17,11 @@ class TextRenderable : public Entity, public Renderable, public Transformable { 
 	private:
 		void draw(void);
 		const char* mText; // The text contained within this renderable
-		Sprite* mSprites; // The array of sprites we'll be maintaining
-		int mIndex; // Which renderable am I?
-		static int sNextIndex; // The next renderable to be allocated
+		int mLen; // The length of the text in this buffer
+		SpriteData* mSpriteData; // The data used for our font array
+		TextChar* mSprites[MAX_TEXT_SPRITES]; // Our fixed array of Sprite pointers
 	public:
-		TextRenderable(const char* text, const int left, const int up, const int right, const int down); 
+		TextRenderable(const char* text, int len, int left, int up, int right, int down); 
 		~TextRenderable(void);
 };
 

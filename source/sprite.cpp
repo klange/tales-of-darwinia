@@ -59,6 +59,16 @@ void Sprite::prevFrame(void) {
 	copyToGfxBuffer();
 }
 
+void Sprite::setFrame(int8 givenFrame) {
+	currentFrame = givenFrame;
+	boundFrameNumber();
+	copyToGfxBuffer();
+}
+
+int8 Sprite::getFrame(void) {
+  	return currentFrame;
+}
+
 void Sprite::Render(void) {
 	draw();
 }

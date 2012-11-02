@@ -29,6 +29,7 @@
 #include "inputmanager.h"
 #include "playerentity.h"
 #include "enemyentity.h"
+#include "text.h"
 
 /* Maps */
 #include "maps.h"
@@ -115,11 +116,13 @@ int main(void) {
 
 	EnemyEntity* enemyEntity = new EnemyEntity(gfx2);
 	enemyEntity->Init();
-	playerEntity->size = Vector3<s16>(16,16,0);
+	enemyEntity->size = Vector3<s16>(16,16,0);
 	enemyEntity->setPosition(Vector3<s16>(192,90,0));
 
 	audioManager.initialize();
 	audioManager.playMusic(MOD_TECHNO_MOZART);
+
+	TextRenderable("This is test text. <>!", 22, 64, 90, 0, 0);
 
 	touchPosition touchXY;
 
