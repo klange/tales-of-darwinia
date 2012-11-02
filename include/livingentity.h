@@ -20,6 +20,7 @@ public:
 	virtual void Damage(u16 damage);
 	virtual void OnDeath() {};
 
+	virtual EntityType getType();
 	virtual void Update(void);
 	void setTargetPosition(Vector3<s16>);
 	Vector3<s16> getTargetPosition(void);
