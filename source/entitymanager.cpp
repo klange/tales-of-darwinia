@@ -1,5 +1,9 @@
 #include "entity.h"
 #include "entitymanager.h"
+#include "sprite.h"
+#include "transformable.h"
+#include "boundingbox.h"
+#include <vector3.h>
 
 // Singleton
 EntityManager gEntityManager;
@@ -21,6 +25,30 @@ void EntityManager::Update()
 			current->Update();
 		}
 	}
+}
+
+bool EntityManager::IsMoveLegal(Entity* input)
+{
+	Sprite* entity = static_cast<Sprite*>(input);
+	BoundingBox<s16> entitybb;
+	entity->getBoundingBox(entitybb);
+	for(LinkedList* node = mEntities; node != NULL; node = node->next)
+	{
+		Entity* entity_to_check = (Entity*) node->data;
+		
+		// Ugly casting but it's needed...
+		if(entity_to_check->getType() != LIVINGENTITY || input == entity_to_check || entity_to_check->hidden)
+			continue;
+
+		Sprite* current = static_cast<Sprite*>(entity_to_check);
+
+		BoundingBox<s16> bb;
+		current->getBoundingBox(bb);
+		if(entitybb.Intersects(bb))
+			return false;
+	}
+
+	return true;
 }
 
 void EntityManager::Render()
