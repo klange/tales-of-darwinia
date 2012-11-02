@@ -6,6 +6,7 @@
 #include "darwin.h"
 #include "man.h"
 #include "trashcan.h"
+#include "peanut_butter.h"
 
 #include "sprite.h"
 #include "spritedata.h"
@@ -17,6 +18,7 @@
 #include "playerentity.h"
 #include "enemyentity.h"
 #include "trashcanentity.h"
+#include "itementity.h"
 
 #include "audiomanager.h"
 
@@ -38,10 +40,16 @@ u8 SPRITE_FRAMES_BY_ENEMY_TYPE[] = {
 	0,
 	3,
 };
-// TODO: map from item type to sprite buffer
+//  map from item type to sprite buffer
 u8* SPRITE_TILES_BY_ITEM_TYPE[] = {
+	NULL, // ITEM_UNKNOWN
+	(u8*) peanut_butterTiles,
+	(u8*) peanut_butterTiles,
+	(u8*) peanut_butterTiles,
 	NULL,
 };
+
+// HEALTH, ATTACK, SPEED, MAXHEALTH, POINTS
 
 // map from EnemyType to stats
 // NOTE: must parallel EnemyType order
@@ -49,12 +57,17 @@ LivingStats* STATS_BY_ENEMY_TYPE[] = {
 	NULL, // ENEMY_UNKNOWN
 	new LivingStats(8, 0, 0, 8, 8), // ENEMY_TRASH_CAN
 	new LivingStats(8, 8, 8, 8, 16), // ENEMY_EMPLOYEE
-	NULL
+	NULL,
 };
 
-// TODO: map from ItemType to stats
+// map from ItemType to stats
+// NOTE: must parallel ItemType order
 LivingStats* STATS_BY_ITEM_TYPE[] = {
-
+	NULL, // UNKNOWN
+	new LivingStats(4, 16, 0, 0, 50), // PEANUT_BUTTER
+	new LivingStats(-200, -200, 0, 0, -5000), // CHOCOLATE
+	new LivingStats(8, 8, 0, 0, 15), // DRUMSTICK
+	NULL,
 };
 
 
@@ -81,9 +94,9 @@ EnemySpecification::EnemySpecification(u16 x, u16 y, EnemyType type, ItemSpecifi
 	this->rewards = rewards;
 }
 
-ItemSpecification::ItemSpecification(TilePosition* position, ItemType type)
+ItemSpecification::ItemSpecification(u16 x, u16 y, ItemType type)
 {
-	this->position = position;
+	this->position = new TilePosition(x, y);
 	this->type = type;
 }
 
@@ -125,26 +138,44 @@ MapEngine LevelLoader::load(GameLevel* level)
 	EnemySpecification** enemies = level->enemies;
 	while (*enemies)
 	{
-		EnemySpecification* enemySpec = *enemies;
-		SpriteData* enemySprite = new SpriteData(
+		EnemySpecification* spec = *enemies;
+		SpriteData* sprite = new SpriteData(
 			SpriteSize_32x32,
 			SpriteColorFormat_256Color,
-			SPRITE_TILES_BY_ENEMY_TYPE[enemySpec->type],
-			SPRITE_FRAMES_BY_ENEMY_TYPE[enemySpec->type]
+			SPRITE_TILES_BY_ENEMY_TYPE[spec->type],
+			SPRITE_FRAMES_BY_ENEMY_TYPE[spec->type]
 		);
-		enemySprite->paletteIndex=1;
-		EnemyEntity* enemyEntity;
-		if (enemySpec->type == ENEMY_TRASH_CAN){
-			enemyEntity = new TrashCanEntity(enemySprite);
+		sprite->paletteIndex=1;
+		EnemyEntity* entity;
+		if (spec->type == ENEMY_TRASH_CAN){
+			entity = new TrashCanEntity(sprite);
 		} else {
-			enemyEntity = new EnemyEntity(enemySprite);
+			entity = new EnemyEntity(sprite);
 		}		
-		enemyEntity->Init();
-		enemyEntity->size = Vector3<s16>(32,32,0);
-		enemyEntity->setPosition(Vector3<s16>(enemySpec->position->pixelX(), enemySpec->position->pixelY(), 0));
+		entity->Init();
+		entity->size = Vector3<s16>(32,32,0);
+		entity->setPosition(Vector3<s16>(spec->position->pixelX(), spec->position->pixelY(), 0));
 		enemies++;
 	}
 	dmaCopy(manPal, &SPRITE_PALETTE_SUB[8], 512);
+
+	ItemSpecification** items = level->items;
+	while (*items)
+	{
+		ItemSpecification* spec = *items;
+		SpriteData* sprite = new SpriteData(
+			SpriteSize_32x32,
+			SpriteColorFormat_256Color,
+			SPRITE_TILES_BY_ITEM_TYPE[spec->type],
+			0 // all items are single-frame
+		);
+		sprite->paletteIndex=0;
+		ItemEntity* entity = new ItemEntity(sprite, STATS_BY_ITEM_TYPE[spec->type]);
+		entity->Init();
+		entity->size = Vector3<s16>(32,32,0);
+		entity->setPosition(Vector3<s16>(spec->position->pixelX(), spec->position->pixelY(), 0));
+		items++;
+	}
 
 	audioManager.playMusic(level->music);
 

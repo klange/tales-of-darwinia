@@ -18,8 +18,9 @@ typedef enum _EnemyType
 typedef enum _ItemType
 {
 	ITEM_UNKNOWN,
-	ITEM_CHOCOLATE,
 	ITEM_PEANUT_BUTTER,
+	ITEM_CHOCOLATE,
+	ITEM_DRUMSTICK,
 	ITEM_KIBBLE,
 	ITEM_BIT,
 	ITEM_BONE,
@@ -39,7 +40,7 @@ public:
 class ItemSpecification
 {
 public:
-	ItemSpecification(TilePosition* position, ItemType type);
+	ItemSpecification(u16 x, u16 y, ItemType type);
 	TilePosition* position;
 	ItemType type;
 };
