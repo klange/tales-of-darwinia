@@ -15,6 +15,7 @@ void PlayerEntity::Update(InputManager* inputManager)
 		touchPosition.setX(touchXY->px);
 		touchPosition.setY(touchXY->py);
 		setPosition(touchPosition);
+
 		audioManager.playSound(SFX_PLAYER_MOVE);
 	}
 
