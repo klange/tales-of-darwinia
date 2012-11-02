@@ -26,7 +26,6 @@
 #include "entitymanager.h"
 #include "event.h"
 #include "eventdispatcher.h"
-#include "text.h"
 #include "inputmanager.h"
 #include "playerentity.h"
 #include "enemyentity.h"
@@ -54,6 +53,7 @@ void init(void) {
 	vramSetBankB(VRAM_B_MAIN_BG);
 		
 	/* Set the mode for sprite display */
+	videoSetModeSub(MODE_5_2D | DISPLAY_BG0_ACTIVE | DISPLAY_SPR_ACTIVE);
 	vramSetBankC(VRAM_C_SUB_BG);
 	vramSetBankD(VRAM_D_SUB_SPRITE);
 
@@ -110,14 +110,18 @@ int main(void) {
 
 	PlayerEntity* playerEntity = new PlayerEntity(gfx);
 	playerEntity->Init();
+	playerEntity->size = Vector3<s16>(16,16,0);
 	playerEntity->setPosition(Vector3<s16>(64,90,1));
 
 	EnemyEntity* enemyEntity = new EnemyEntity(gfx2);
 	enemyEntity->Init();
+	playerEntity->size = Vector3<s16>(16,16,0);
 	enemyEntity->setPosition(Vector3<s16>(192,90,0));
 
 	audioManager.initialize();
 	audioManager.playMusic(MOD_TECHNO_MOZART);
+
+	touchPosition touchXY;
 
 	int lolcounter = 0;
 	while(1) {
@@ -126,7 +130,6 @@ int main(void) {
 			touchRead(&touchXY);
 		}
 
-		playerEntity->setPosition(Vector3<s16>(touchXY.px, touchXY.py, 0));
 
 		gEntityManager.Update();
 		gEntityManager.Render();
