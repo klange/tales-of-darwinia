@@ -19,6 +19,7 @@ class Sprite: public Renderable, public Entity, public Transformable {
 		void boundFrameNumber(void);
 		void copyToGfxBuffer(void);
 	public:
+		u8 spriteOffset;
 		bool vflip;
 		bool hflip;
 

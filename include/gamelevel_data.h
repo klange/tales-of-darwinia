@@ -3,6 +3,6 @@
 
 #include "gamelevel.h"
 
-extern GameLevel GAME_LEVELS[];
+extern GameLevel* GAME_LEVELS[];
 
 #endif // GAME_LEVEL_DATA_H_

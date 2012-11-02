@@ -17,20 +17,18 @@ class Vector3 {
 		// copy constructor
 		Vector3(const Vector3<T> &);
 
-		T x(void) const;
-		T y(void) const;
-		T w(void) const;
+		inline T x(void) const;
+		inline T y(void) const;
+		inline T w(void) const;
 		void setX(T);
 		void setY(T);
 		void setW(T);
 
 		void normalize(void);
-
 		T magnitude(void);
 
 		// assignment operator
 		Vector3<T>& operator=(const Vector3<T> &);
-
 
 		Vector3<T> &operator+=(const Vector3<T> &);
 		const Vector3<T> operator+(const Vector3<T> &) const;
@@ -73,17 +71,17 @@ Vector3<T>& Vector3<T>::operator=(const Vector3<T>& other) {
 }
 
 template <typename T>
-T Vector3<T>::x(void) const {
+inline T Vector3<T>::x(void) const {
 	return data[0];
 }
 
 template <typename T>
-T Vector3<T>::y(void) const {
+inline T Vector3<T>::y(void) const {
 	return data[1];
 }
 
 template <typename T>
-T Vector3<T>::w(void) const {
+inline T Vector3<T>::w(void) const {
 	return data[2];
 }
 
@@ -110,9 +108,8 @@ void Vector3<T>::normalize(void) {
 }
 
 template <typename T>
-T Vector3<T>::magnitude(void)
-{
-	return sqrt32(x() * x() + y() * y());
+T Vector3<T>::magnitude(void) {
+	return (T)sqrt32(x() * x() + y() * y());
 }
 
 template <typename T>

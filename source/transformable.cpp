@@ -11,17 +11,12 @@ void Transformable::rotate(s16 rotValue) {
 	rotation += rotValue;
 }
 
-void Transformable::translateRotationAnchor(Vector3<s16> rotAnchorPos) {
-	/* how would this even work? */
+void Transformable::translateRotationAnchor(Vector3<s16> anchorPos) {
+	anchor = anchorPos;
 }
 
 void Transformable::setPosition(Vector3<s16> newPosition) {
 	position = newPosition;
-}
-
-//TODO: Make stuff use pointers instead later
-Vector3<s16>* Transformable::getPosition() {
-	return &position;
 }
 
 void Transformable::setRotation(s16 rotValue) {
@@ -33,3 +28,4 @@ void Transformable::getBoundingBox(BoundingBox<s16>& bbOut)
 	bbOut.mTopLeft = position;
 	bbOut.mBottomRight = position + size;
 }
+

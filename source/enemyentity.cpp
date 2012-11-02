@@ -9,6 +9,8 @@ void EnemyEntity::Update()
 	if(shouldBeRemoved)
 		return;
 
+	speed = 1.0;
+	LivingEntity::Update();
 	Vector3<s16> touchPos;
 	if(gInputManager.getCurrentTouchPosition(touchPos))
 	{
