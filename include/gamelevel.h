@@ -3,8 +3,9 @@
 
 
 #include <nds.h>
+#include "map_type.h"
 
-
+// NOTE: if you add a new type here, make sure you add to the corresponding mappings in gamelevel.cpp
 typedef enum _EnemyType
 {
 	ENEMY_UNKNOWN,
@@ -12,6 +13,7 @@ typedef enum _EnemyType
 	ENEMY_EMPLOYEE,
 } EnemyType;
 
+// NOTE: if you add a new type here, make sure you add to the corresponding mappings in gamelevel.cpp
 typedef enum _ItemType
 {
 	ITEM_UNKNOWN,
@@ -27,16 +29,10 @@ class TilePosition
 {
 public:
 	TilePosition(u16 x, u16 y);
+	u16 pixelX();
+	u16 pixelY();
 	u16 x;
 	u16 y;
-};
-
-class EnemySpecification
-{
-public:
-	EnemySpecification(u16 x, u16 y, EnemyType type);
-	TilePosition* position;
-	EnemyType type;
 };
 
 class ItemSpecification
@@ -47,15 +43,23 @@ public:
 	ItemType type;
 };
 
+class EnemySpecification
+{
+public:
+	EnemySpecification(u16 x, u16 y, EnemyType type, ItemSpecification* rewards);
+	TilePosition* position;
+	EnemyType type;
+	ItemSpecification* rewards;
+};
+
 class GameLevel
 {
 public:
-	GameLevel(u16* map, u16 playerX, u16 playerY, EnemySpecification* enemies, ItemSpecification* items, int music);
-private:
-	u16* map;
+	GameLevel(map_t* map, u16 playerX, u16 playerY, EnemySpecification** enemies, ItemSpecification** items, int music);
+	map_t* map;
 	TilePosition* playerPosition;
-	EnemySpecification* enemies;
-	ItemSpecification* items;
+	EnemySpecification** enemies;
+	ItemSpecification** items;
 	int music;
 };
 
@@ -64,5 +68,7 @@ class LevelLoader
 public:
 	void load(GameLevel* level);
 };
+
+extern LevelLoader levelLoader;
 
 #endif // GAME_LEVEL_H_
