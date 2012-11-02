@@ -21,3 +21,19 @@ void PlayerEntity::Update(InputManager* inputManager)
 
 	delete touchXY;
 }
+
+void PlayerEntity::Collect(ItemEntity* item)
+{
+	// in the future we might add this item to our inventory (e.g. weapon, tradable item).
+	// for now items are consumables that just change our stats
+
+	LivingStats* statsDelta = item->Consume();
+	this->mStats.attack += statsDelta->attack;
+	this->mStats.maxHealth += statsDelta->maxHealth;
+	this->mStats.health += statsDelta->health;
+	this->mStats.speed += statsDelta->speed;
+	if (this->mStats.health > this->mStats.maxHealth)
+	{
+		this->mStats.health = this->mStats.maxHealth;
+	}
+}
