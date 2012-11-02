@@ -65,6 +65,7 @@ void init(void) {
 	oamInit(&oamMain, SpriteMapping_1D_128, false);
 	oamInit(&oamSub, SpriteMapping_1D_128, false);
 
+<<<<<<< HEAD
 	/* Set the vertical blank event */
 	irqSet(IRQ_VBLANK, Vblank);
 }
@@ -118,6 +119,8 @@ int main(void) {
 
 	audioManager.initialize();
 	audioManager.playMusic(MOD_TECHNO_MOZART);
+
+	//consoleDemoInit();
 
 	while(1) {
 		gEntityManager.Update();
