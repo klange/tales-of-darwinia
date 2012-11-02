@@ -1,6 +1,8 @@
 #include <nds.h>
 #include "inputmanager.h"
 
+#include <stdio.h>
+
 // Singleton
 InputManager gInputManager;
 
@@ -8,15 +10,16 @@ void InputManager::Update()
 {
 }
 
-touchPosition* InputManager::getCurrentTouchPosition(){
-	
-	touchPosition* tap = new touchPosition();
-
+bool InputManager::getCurrentTouchPosition(Vector3<s16>& posOut)
+{
+	touchPosition tap;
 	if(keysDown() & KEY_TOUCH){
-		touchRead(tap);
-		return tap;
+		touchRead(&tap);
+		posOut.setX(tap.px);
+		posOut.setY(tap.py);
+		return true;
 	}
-	return NULL;
+	return false;
 }
 
 bool InputManager::moveToPosition(Vector3<s16>* currentPosition, float32 speed, Vector3<s16>& destinationOut)
@@ -28,13 +31,13 @@ bool InputManager::moveToPosition(Vector3<s16>* currentPosition, float32 speed, 
 
 	if(keysHeld() & KEY_TOUCH){
 		touchRead(&heldPosition);
-		s16 to_x = heldPosition.px;
-		s16 to_y = heldPosition.py;
+		s16 diff_x = (heldPosition.px - from_x);
+		s16 diff_y = (heldPosition.py - from_y);
 
-		s16 diff_x = (to_x - from_x);
-		s16 diff_y = (to_y - from_y);
+		u32 magnitude = sqrt32(diff_x * diff_x + diff_y * diff_y);
 
-		u32 magnitude = sqrt32(diff_x*diff_x + diff_y*diff_y);
+		if (magnitude < 2)
+			return NULL;
 
 		diff_x = round(diff_x * speed / magnitude);
 		diff_y = round(diff_y * speed / magnitude);

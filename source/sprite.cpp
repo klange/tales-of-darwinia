@@ -5,11 +5,15 @@
 
 
 void Sprite::draw(void) {
+	draw(true);
+}
+
+void Sprite::draw(bool shouldDraw) {
 	oamSet(
 		&oamSub,
 		spriteData->oamIndex, // oam index
-		position.x(),
-		position.y(),
+		position.x() + anchor.x(),
+		position.y() + anchor.y(),
 		spriteData->priority, // priority
 		spriteData->paletteIndex,
 		spriteData->spriteSize,
@@ -17,7 +21,7 @@ void Sprite::draw(void) {
 		spriteData->spriteGfxMem, // grahpics data
 		-1, // affine transformation context
 		false, //double size when rotating
-		false, //hidden
+		!shouldDraw, //hidden
 		vflip, //vflip
 		hflip, //hflip
 		false //mosaic?
@@ -27,8 +31,10 @@ void Sprite::draw(void) {
 Sprite::Sprite(SpriteData* inSpriteData) {
 	spriteData = inSpriteData;
 	currentFrame = 0;
+	spriteOffset = 0;
 	vflip = false;
 	hflip = false;
+	anchor = Vector3<s16>(-16, -16, 0);
 
 	copyToGfxBuffer();
 }
@@ -43,7 +49,7 @@ void Sprite::boundFrameNumber(void) {
 }
 
 void Sprite::copyToGfxBuffer(void) {
-	u8* offset = spriteData->spriteTilesMem + (currentFrame+1*spriteData->maxNumFrames) * 32*32;
+	u8* offset = spriteData->spriteTilesMem + (currentFrame+spriteOffset*spriteData->maxNumFrames) * 32*32;
 	dmaCopy(offset, spriteData->spriteGfxMem, 32*32);
 }
 
@@ -57,6 +63,16 @@ void Sprite::prevFrame(void) {
 	currentFrame--;
 	boundFrameNumber();
 	copyToGfxBuffer();
+}
+
+void Sprite::setFrame(int8 givenFrame) {
+	currentFrame = givenFrame;
+	boundFrameNumber();
+	copyToGfxBuffer();
+}
+
+int8 Sprite::getFrame(void) {
+  	return currentFrame;
 }
 
 void Sprite::Render(void) {

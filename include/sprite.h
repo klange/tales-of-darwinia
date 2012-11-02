@@ -19,13 +19,17 @@ class Sprite: public Renderable, public Entity, public Transformable {
 		void boundFrameNumber(void);
 		void copyToGfxBuffer(void);
 	public:
+		u8 spriteOffset;
 		bool vflip;
 		bool hflip;
 
 		Sprite(SpriteData*);
 		void nextFrame(void);
 		void prevFrame(void);
+		void setFrame(int8 givenFrame);
+		int8 getFrame(void);
 		void draw(void);
+		void draw(bool shouldDraw);
 		virtual void Render(void);
 };
 
