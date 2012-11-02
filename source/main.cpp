@@ -43,14 +43,34 @@ void Vblank(void) {
 	
 }
 
+// HEY PEEPS - set this to 1 for PRINTF DEBUGGING GOODNESS!
+#define USE_TOP_SCREEN_FOR_CONSOLE 0
+PrintConsole* gpTopScreen = NULL;
+
 void init(void) {
 	/* Force the main engine to top screen */
 	lcdMainOnTop();
 
-	/* Set the mode for 2 text layers and two extended background layers */
-	videoSetMode(MODE_5_2D | DISPLAY_BG2_ACTIVE);
-	vramSetBankA(VRAM_A_MAIN_BG);
-	vramSetBankB(VRAM_B_MAIN_BG);
+	if(USE_TOP_SCREEN_FOR_CONSOLE)
+	{
+		gpTopScreen = new PrintConsole();
+	
+		videoSetMode(MODE_0_2D);
+		//videoSetModeSub(MODE_0_2D);
+
+		vramSetBankA(VRAM_A_MAIN_BG);
+		//vramSetBankC(VRAM_C_SUB_BG);
+
+		consoleInit(gpTopScreen, 3,BgType_Text4bpp, BgSize_T_256x256, 31, 0, true, true);
+		consoleSelect(gpTopScreen);
+	}
+	else
+	{
+		/* Set the mode for 2 text layers and two extended background layers */
+		videoSetMode(MODE_5_2D | DISPLAY_BG2_ACTIVE);
+		vramSetBankA(VRAM_A_MAIN_BG);
+		vramSetBankB(VRAM_B_MAIN_BG);
+	}
 		
 	/* Set the mode for sprite display */
 	videoSetModeSub(MODE_5_2D | DISPLAY_BG0_ACTIVE | DISPLAY_SPR_ACTIVE);
@@ -98,8 +118,11 @@ int main(void) {
 	REG_BG0VOFS = 64;
 
 	/* Decompress and show the logo */
-	bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
-	decompress(logoBitmap, BG_GFX, LZ77Vram);
+	if(!USE_TOP_SCREEN_FOR_CONSOLE)
+	{
+		bgInit(2, BgType_Bmp16, BgSize_B16_256x256, 0, 0);
+		decompress(logoBitmap, BG_GFX, LZ77Vram);
+	}
 
 	/* Make the darwin sprite */
 	SpriteData* gfx = new SpriteData(SpriteSize_32x32, SpriteColorFormat_256Color, (u8*)darwinTiles, 3);
@@ -110,12 +133,12 @@ int main(void) {
 
 	PlayerEntity* playerEntity = new PlayerEntity(gfx);
 	playerEntity->Init();
-	playerEntity->size = Vector3<s16>(16,16,0);
+	playerEntity->size = Vector3<s16>(32,32,0);
 	playerEntity->setPosition(Vector3<s16>(64,90,1));
 
 	EnemyEntity* enemyEntity = new EnemyEntity(gfx2);
 	enemyEntity->Init();
-	playerEntity->size = Vector3<s16>(16,16,0);
+	enemyEntity->size = Vector3<s16>(32,32,0);
 	enemyEntity->setPosition(Vector3<s16>(192,90,0));
 
 	audioManager.initialize();

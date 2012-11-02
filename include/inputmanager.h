@@ -17,7 +17,7 @@ class InputManager{
 		InputManager();
 
 		// Gets the current position for a tap
-		touchPosition* getCurrentTouchPosition();
+		bool getCurrentTouchPosition(Vector3<s16>& posOut);
 
 		// Gets the position to update to if you want to move
 		bool moveToPosition(Vector3<s16>* currentPosition, float32 speed, Vector3<s16>& destinationOut);

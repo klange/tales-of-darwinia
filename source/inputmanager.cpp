@@ -1,6 +1,8 @@
 #include <nds.h>
 #include "inputmanager.h"
 
+#include <stdio.h>
+
 // Singleton
 InputManager gInputManager;
 
@@ -8,15 +10,16 @@ void InputManager::Update()
 {
 }
 
-touchPosition* InputManager::getCurrentTouchPosition(){
-	
-	touchPosition* tap = new touchPosition();
-
+bool InputManager::getCurrentTouchPosition(Vector3<s16>& posOut)
+{
+	touchPosition tap;
 	if(keysDown() & KEY_TOUCH){
-		touchRead(tap);
-		return tap;
+		touchRead(&tap);
+		posOut.setX(tap.px);
+		posOut.setY(tap.py);
+		return true;
 	}
-	return NULL;
+	return false;
 }
 
 bool InputManager::moveToPosition(Vector3<s16>* currentPosition, float32 speed, Vector3<s16>& destinationOut)
