@@ -9,6 +9,8 @@
 
 PlayerEntity* gpPlayerEntity = NULL;
 
+void blitText(const char* text, int len);
+
 void PlayerEntity::Init(){
 	LivingEntity::Init();
 
@@ -16,7 +18,7 @@ void PlayerEntity::Init(){
 	mStats->attack = 1;
 }
 
-PlayerEntity::PlayerEntity(SpriteData* gfx) : LivingEntity(gfx)
+PlayerEntity::PlayerEntity(SpriteData* gfx, LivingStats* stats) : LivingEntity(gfx, stats)
 {
 	gpPlayerEntity = this;
 	maxSpeed = 3;
@@ -92,16 +94,25 @@ void PlayerEntity::Collect(ItemEntity* item)
 	// for now items are consumables that just change our stats
 
 	LivingStats* statsDelta = item->Consume();
-	this->mStats->attack += statsDelta->attack;
-	this->mStats->maxHealth += statsDelta->maxHealth;
-	this->mStats->health += statsDelta->health;
-	this->mStats->speed += statsDelta->speed;
-	if (this->mStats->health > this->mStats->maxHealth)
+	mStats->attack += statsDelta->attack;
+	mStats->maxHealth += statsDelta->maxHealth;
+	mStats->health += statsDelta->health;
+	mStats->speed += statsDelta->speed;
+	mStats->points += statsDelta->points;
+	if (mStats->health > mStats->maxHealth)
 	{
-		this->mStats->health = this->mStats->maxHealth;
+		mStats->health = mStats->maxHealth;
 	}
+	if (mStats->health <= 0)
+		mStats->health = 0;
+	if (mStats->attack <= 1)
+		mStats->attack = 1;
+	if (mStats->speed <= 1)
+		mStats->speed = 1;
+	if (mStats->points <= 0)
+		mStats->points = 0;
 
-	mStats->Print("DARWIN");
+	BlitStatus();
 
 	if (mStats->health <= 0)
 	{
@@ -113,6 +124,23 @@ void PlayerEntity::Collect(ItemEntity* item)
 	{
 		audioManager.playSound(SFX_CHOMP);
 	}
+}
+
+void PlayerEntity::BlitStatus()
+{
+	mStats->Print("DARWIN");
+	char status[17];
+	sprintf(status, "%05d      ", mStats->points);
+	s16 stars = 5 * mStats->health / mStats->maxHealth;
+	printf("stars: %d\n", stars);
+	for (s16 i = 0; i < 5; i++)
+	{
+		s16 ixStatus = 10 + i;
+		status[ixStatus] = i < stars ? '\1' : '\2';
+	}
+	status[16] = 0;
+	printf("%s\n", status);
+	blitText(status, 15);
 }
 
 void PlayerEntity::OnDeath()
